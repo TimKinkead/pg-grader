@@ -1,0 +1,32 @@
+.btn-filter {
+  .btn-default();
+  &.active {
+    .btn-info();
+  }
+}
+
+.btn-group-custom {
+  .btn-group();
+  .btn {
+    .btn-default();
+    &:hover,
+    &:focus {
+      color: #fff;
+      background-color: #5cb85c;
+      border-color: #4cae4c;
+    }
+    &:active,
+    &.active {
+      color: #fff;
+      background-color: #449d44;
+      border-color: #398439;
+    }
+  }
+  @media(max-width: @screen-xs-max) {
+    .btn-group-vertical();
+    button {
+      width: 100% !important;
+      height: auto !important;
+    }
+  }
+}

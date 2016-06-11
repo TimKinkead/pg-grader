@@ -1,0 +1,28 @@
+<!-- Home Page -->
+
+<div class="jumbotron text-center"
+     style="margin-bottom: 0; background-color: darkseagreen">
+    <h1>Score Sheet</h1>
+    <h4 style="color:gray">A Preva Group Project</h4>
+</div>
+
+<div class="jumbotron text-center img-responsive"
+     style="min-height: 500px; margin-bottom: 0; background-size: cover; background-image: url(http://mbrittingham.com/wp-content/uploads/2016/04/classroom-shot.jpg);">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+        <p ng-if="!user._id"
+           style="background-color: white; opacity: 0.9; font-weight: bold; color: black; padding: 15px;">
+            Please
+            <a ui-sref="user.signup">sign up</a>
+            or
+            <a ui-sref="user.login">login</a>
+            to get started.
+        </p>
+        <p ng-if="user._id"
+           style="background-color: white; opacity: 0.9; font-weight: bold; color: black; padding: 15px;">
+            Please go to
+            <a ui-sref="graded-work">graded work</a>
+            to get started.
+        </p>
+    </div>
+</div>
