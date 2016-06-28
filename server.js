@@ -86,7 +86,7 @@ console.log(chalk.blue.bold('\nENVIRONMENT VARIABLES'));
     {var: 'PORT', default: '3000'},
     {var: 'DB_CONNECTION', default: 'localhost'},
     {var: 'LOGGER', default: 'on'}
-].forEach(env => {
+].forEach(function(env) {
     if (!process.env[env.var]) {process.env[env.var] = env.default;}
     console.log(chalk.blue(' '+env.var+'='+process.env[env.var]));
 });
