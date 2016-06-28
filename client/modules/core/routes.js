@@ -76,6 +76,15 @@ angular.module('app').config([
             controller: 'GradedWorkController',
             data: {memberOnly: true}
         });
+
+        // -- Download --
+
+        $stateProvider.state('download', {
+            url: '/download',
+            templateUrl: 'modules/main/download/view.html',
+            controller: 'DownloadController',
+            data: {adminOnly: true}
+        });
         
     }
 ]);

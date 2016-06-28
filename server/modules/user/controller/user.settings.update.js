@@ -15,20 +15,6 @@ var error = require('../../error'),
 //----------------------------------------------------------------------------------------------------------------------
 // Methods
 
-/**
- * Check if password is correct.
- * @param userId - a user's _id
- * @param password - the password to be checked
- * @param clbk - return clbk(err, wrongPassword)
- */
-function checkPassword(userId, password, clbk) {
-    if (!userId) {return clbk(new Error('!userId'));}
-    if (!password) {return clbk();}
-
-    // get user
-    
-}
-
 //----------------------------------------------------------------------------------------------------------------------
 // Main
 
@@ -60,14 +46,13 @@ exports.updateSettings = function(req, res) {
         if (req.body.email) { req.user.email = req.body.email; }
         if (req.body.newPassword) { 
             req.user.password = req.body.newPassword;
-            req.user.newPassword = true;
         }
         
         req.user.save(function(err) {
             if (err) {err = new Error(err); error.log(err); errorMessage(err); return; }
 
             // done
-            logger.result('user settings updated');
+            logger.arrow('user settings updated');
             return res.sendStatus(200);
         });
     }

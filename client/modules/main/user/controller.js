@@ -11,6 +11,7 @@ angular.module('app').controller('UserController', [
         
         var user = $scope.user = {},
             status = $scope.status = {},
+            params = $scope.params = {},
 
             emailRegex = $scope.emailRegex = /.*\@.*\..*/,
             passwordRegex = $scope.passwordRegex = /.{6}/;
@@ -182,7 +183,7 @@ angular.module('app').controller('UserController', [
             user = $scope.user = $resource('data/user/settings').get(
                 function() {
                     status.processing = false;
-                    fullUser = angular.copy(user);
+                    fullUser = $scope.fullUser = angular.copy(user);
                 },
                 function(err) {
                     status.processing = false;
@@ -192,56 +193,44 @@ angular.module('app').controller('UserController', [
             );
         }
 
-        // display edit mode
-        var showEdit = $scope.showEdit = function (field, cancel) {
-            $scope['edit' + field] = cancel ? false : true;
-        };
-
         // update settings
-        $scope.update = function(field) {
+        $scope.updateSettings = function() {
+            status.successMessage = null;
+            status.errorMessage = null;
 
-            function updated() {
-                showEdit(field, true);
-                if (field === 'Email') {
-                    fullUser.email = user.email;
-                    CurrentUser.data.username = user.email.slice(0, user.email.indexOf('@'));
-                    successMessage('Email address updated!');
-                } else if (field === 'Password') {
-                    successMessage('Password changed!');
-                }
-                status.processing = false;
+            // check params
+            if (fullUser.firstName !== user.firstName) {
+                params.firstName = fullUser.firstName;
+            }
+            if (fullUser.lastName !== user.lastName) {
+                params.lastName = fullUser.lastName;
+            }
+            if (fullUser.email !== user.email) {
+                params.email = fullUser.email;
+            }
+            if (fullUser.newPassword && !fullUser.password) {
+                status.errorMessage = 'Please provide your current password if you want to set a new password.';
+                return;
+            }
+            if (fullUser.newPassword && fullUser.password) {
+                params.newPassword = fullUser.newPassword;
+                params.password = fullUser.password;
             }
 
-            var params = {};
-            switch (field) {
-                case 'Email':
-                    if (!user.email || user.email === fullUser.email) {
-                        user.email = fullUser.email;
-                        showEdit('Email', true);
-                        return;
-                    }
-                    params.email = user.email;
-                    break;
-                case 'Password':
-                    if (!user.password && !user.newPassword) {
-                        showEdit('Password', true);
-                        return;
-                    } else if (!user.password) {
-                        status.message = 'Please provide your current password.';
-                        return;
-                    } else if (!user.newPassword) {
-                        status.message = 'Please provide a new password.';
-                        return;
-                    }
-                    params.password = user.password;
-                    params.newPassword = user.newPassword;
-            }
-
+            // update settings
             status.processing = true;
             $http
                 .put('/data/user/settings', params)
-                .success(updated)
-                .error(errorMessage);
+                .success(function() {
+                    status.processing = false;
+                    status.successMessage = 'Settings Updated';
+                    fullUser.newPassword = null;
+                    fullUser.password = null;
+                })
+                .error(function(err) {
+                    status.processing = false;
+                    status.errorMessage = (err && err.message) ? err.message : 'We had trouble updating your settings. Please try again';
+                });
         };
     }
 ]);

@@ -67,7 +67,7 @@
         <tbody>
             <tr ng-repeat="sheet in scoresheets | orderBy:'-created'"
                 ng-init="sheetIndex = $index+1"
-                ng-click="editSheet(sheet)"
+                ng-click="editScoreSheet(sheet, $index)"
                 style="cursor: pointer;"
                 uib-tooltip="click to view/edit"
                 tooltip-placement="right">

@@ -66,10 +66,33 @@ angular.module('app').controller('GradedWorkController', [
                 size: 'xl'
             });
             modalInstance.result.then(
-                function(sheet) { // close
-                    scoresheets.push(sheet);
+                function(scoresheet) { // close
+                    scoresheets.push(scoresheet);
                 },
                 function(msg) { // dismiss
+                    console.log(msg || 'dismiss');
+                }
+            );
+        };
+
+        // edit existing score sheet
+        $scope.editScoreSheet = function(scoresheet, index) {
+            var modalInstance = $modal.open({
+                templateUrl: 'modules/main/graded-work/edit/view.html',
+                controller: 'GradedWorkEditController',
+                backdrop: 'static',
+                size: 'xl',
+                resolve: {
+                    scoresheet: function() {
+                        return scoresheet;
+                    }
+                }
+            });
+            modalInstance.result.then(
+                function(scoresheet) { // close
+                    scoresheets[index] = scoresheet;
+                },
+                function(msg) { //dismiss
                     console.log(msg || 'dismiss');
                 }
             );
@@ -78,7 +101,7 @@ angular.module('app').controller('GradedWorkController', [
         // -------------------------------------------------------------------------------------------------------------
         // Watch Parameter Changes
 
-        $scope.$watch('params.minDate', function(nV, oV) {
+        $scope.$watch('params.param', function(nV, oV) {
             if (nV !== oV) { console.log(nV); }
         });
     }
