@@ -1,6 +1,5 @@
-'use strict';
+"use strict";
 
-exports.logout = function (req, res) {
-    req.logout();
-    res.redirect('/');
+exports.logout = function(a, b) {
+    a.logout(), b.redirect("/");
 };

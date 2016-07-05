@@ -1,73 +1,23 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Variables
+var auth = require("../../../../auth.js"), config = require("../../../../config.js"), sendgrid = require("sendgrid")(auth.sendgridSecretKey), handlebars = require("handlebars"), logError = require("./error.log.js").log, logger = require("../../logger");
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-var auth = require('../../../../auth.js'),
-    config = require('../../../../config.js');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Dependencies
-
-var sendgrid = require('sendgrid')(auth.sendgridSecretKey),
-    handlebars = require('handlebars');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Controllers
-
-var logError = require('./error.log.js').log,
-    logger = require('../../logger');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Methods
-
-/**
- * ERROR.PRIORITY
- * - Send email to errors@<domain>.com
- * - Not in email module b/c scoping issues when they reference each other.
- */
-exports.priority = function (errObj) {
-    logger.filename(__filename);
-
-    if (!errObj || errObj.constructor !== Error && (typeof errObj === 'undefined' ? 'undefined' : _typeof(errObj)) !== 'object') {
-        return;
+exports.priority = function(a) {
+    if (logger.filename(__filename), a && (a.constructor === Error || "object" == typeof a)) {
+        a.priority = !0, logError(a);
+        var b = new Date(), c = handlebars.compile(require("../email/error.email.html")), d = new sendgrid.Email({
+            to: config.email.error.address,
+            toname: config.email.error.name,
+            from: config.email.server.address,
+            fromname: config.email.server.name,
+            subject: config.project.name + " Priority Error (" + (b.getMonth() + 1) + "/" + b.getDate() + "/" + b.getFullYear() + ")",
+            html: c({
+                err: a
+            })
+        });
+        "cloud" === process.env.SERVER ? (d.addCategory(config.project.id), d.addCategory(config.project.id + "-error")) : d.addCategory(config.project.id + "-dev"), 
+        logger.dash("sending email"), sendgrid.send(d, function(a, b) {
+            return a ? (a = new Error(a), b && (a.info = b), void logError(a)) : void logger.arrow("email sent");
+        });
     }
-
-    // save error
-    errObj.priority = true;
-    logError(errObj);
-
-    // build email
-    var d = new Date(),
-        template = handlebars.compile(require('../email/error.email.html')),
-        email = new sendgrid.Email({
-        to: config.email.error.address,
-        toname: config.email.error.name,
-        from: config.email.server.address,
-        fromname: config.email.server.name,
-        subject: config.project.name + ' Priority Error (' + (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear() + ')',
-        html: template({ err: errObj })
-    });
-    if (process.env.SERVER === 'cloud') {
-        email.addCategory(config.project.id);
-        email.addCategory(config.project.id + '-error');
-    } else {
-        email.addCategory(config.project.id + '-dev');
-    }
-
-    // send email
-    logger.dash('sending email');
-    sendgrid.send(email, function (err, info) {
-        if (err) {
-            err = new Error(err);
-            if (info) {
-                err.info = info;
-            }
-            logError(err);
-            return;
-        }
-        logger.arrow('email sent');
-    });
 };

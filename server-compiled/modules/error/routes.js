@@ -1,14 +1,7 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Controllers
+var error = require("../error");
 
-var error = require('../error');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Routes
-
-module.exports = function (app) {
-
-    app.route('/data/error').post(error.save);
+module.exports = function(a) {
+    a.route("/data/error").post(error.save);
 };

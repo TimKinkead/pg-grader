@@ -1,33 +1,29 @@
-'use strict';
+"use strict";
 
-exports.getData = function (user, type) {
-    if (!user) {
-        return null;
-    }
+exports.getData = function(a, b) {
+    if (!a) return null;
+    switch (b) {
+      case "settings":
+        return {
+            _id: a._id,
+            id: a.id,
+            firstName: a.firstName,
+            lastName: a.lastName,
+            email: a.email,
+            admin: a.admin
+        };
 
-    switch (type) {
-
-        case 'settings':
-            return {
-                _id: user._id,
-                id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                admin: user.admin
-            };
-
-        default:
-            return {
-                _id: user._id,
-                id: user.id,
-                name: user.name,
-                initials: user.initials,
-                admin: user.admin,
-                rubricSide: user.rubricSide,
-                rubricElements: user.rubricElements,
-                scoresheets: user.scoresheets,
-                consensusScores: user.consensusScores
-            };
+      default:
+        return {
+            _id: a._id,
+            id: a.id,
+            name: a.name,
+            initials: a.initials,
+            admin: a.admin,
+            rubricSide: a.rubricSide,
+            rubricElements: a.rubricElements,
+            scoresheets: a.scoresheets,
+            consensusScores: a.consensusScores
+        };
     }
 };

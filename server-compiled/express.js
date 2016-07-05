@@ -1,184 +1,46 @@
-'use strict';
+"use strict";
 
-var config = require('../config.js');
+var config = require("../config.js"), fs = require("fs"), http = require("http"), https = require("https"), path = require("path"), express = require("express"), morgan = require("morgan"), bodyParser = require("body-parser"), session = require("express-session"), compress = require("compression"), methodOverride = require("method-override"), cookieParser = require("cookie-parser"), helmet = require("helmet"), passport = require("passport"), MongoStore = require("connect-mongo")(session), consolidate = require("consolidate"), file = require("./modules/file"), error;
 
-//----------------------------------------------------------------------------------------------------------------------
-// Dependencies
-
-var fs = require('fs'),
-    http = require('http'),
-    https = require('https'),
-    path = require('path'),
-    // resolve file paths
-express = require('express'),
-    // express application
-morgan = require('morgan'),
-    // console logger (using in dev)
-bodyParser = require('body-parser'),
-    // parse request body
-session = require('express-session'),
-    // sessions
-compress = require('compression'),
-    // gzip response data if browser is compatible
-methodOverride = require('method-override'),
-    // enables app.put & app.delete requests
-cookieParser = require('cookie-parser'),
-    // parse session cookies
-helmet = require('helmet'),
-    // security
-passport = require('passport'),
-    // authentication
-MongoStore = require('connect-mongo')(session),
-    // mongo specific sessions
-consolidate = require('consolidate'); // template engine consolidation library
-
-//----------------------------------------------------------------------------------------------------------------------
-// Controllers
-
-var file = require('./modules/file'),
-    error; // = require('./modules/error'); // must be after models loaded
-
-//----------------------------------------------------------------------------------------------------------------------
-// Initialize Application
-
-module.exports = function (mongoose) {
-
-    // -- MODELS --
-
-    // glob model files
-    file.globber('server/models/*.js').forEach(function (modelPath) {
-        require(path.resolve(modelPath));
+module.exports = function(a) {
+    file.globber("server/models/*.js").forEach(function(a) {
+        require(path.resolve(a));
     });
-
-    // -- INITIALIZATION --
-
-    // initialize express app
-    var app = express();
-
-    // -- COMPRESSION --
-
-    // compress (gzip) response data if browser is compatible (before express.static)
-    app.use(compress());
-
-    // -- VIEWS --
-
-    // views static directory & views cache
-    var staticDirectory;
+    var b = express();
+    b.use(compress());
+    var c;
     switch (process.env.NODE_ENV) {
-        case 'development':
-            staticDirectory = './client';
-            app.set('views', staticDirectory);
-            app.set('view cache', false);
-            break;
-        //case 'production':
-        default:
-            staticDirectory = './client-compiled';
-            app.set('views', staticDirectory);
-            app.locals.cache = 'memory';
-            break;
+      case "development":
+        c = "./client", b.set("views", c), b.set("view cache", !1);
+        break;
+
+      default:
+        c = "./client-compiled", b.set("views", c), b.locals.cache = "memory";
     }
-
-    // set .html as the default extension
-    app.set('view engine', 'html');
-
-    // assign the handlebars engine to .html files
-    app.engine('.html', consolidate.handlebars);
-
-    /*
-    var Handlebars = require('handlebars');
-    Handlebars.registerHelper('json',
-        function(obj) {
-            return JSON.stringify(obj);
-        }
-    );
-    */
-
-    // -- REQUEST, BODY, COOKIES --
-
-    // body parsing middleware (before methodOverride)
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
-
-    // enable http method override for app.put & app.delete
-    app.use(methodOverride());
-
-    // cookie parsing middleware (before session)
-    app.use(cookieParser());
-
-    // -- SESSIONS --
-
-    // express mongodb session storage
-    app.use(session({
+    return b.set("view engine", "html"), b.engine(".html", consolidate.handlebars), 
+    b.use(bodyParser.urlencoded({
+        extended: !0
+    })), b.use(bodyParser.json()), b.use(methodOverride()), b.use(cookieParser()), b.use(session({
         name: config.project.id,
         store: new MongoStore({
-            mongooseConnection: mongoose.connection,
-            collection: 'sessions',
-            autoReconnect: true
-            //stringify: false
+            mongooseConnection: a.connection,
+            collection: "sessions",
+            autoReconnect: !0
         }),
-        saveUninitialized: true,
-        resave: true,
-        secret: 'keyboardcatmeowza'
-    }));
-
-    // use passport
-    require('./config/passport')();
-    app.use(passport.initialize());
-    app.use(passport.session());
-
-    // -- SECURITY --
-
-    // use helmet to secure express headers
-    app.use(helmet());
-
-    // -- LOGGING --
-
-    // show stack errors
-    app.set('showStackError', true);
-
-    // enable logger
-    if (process.env.LOGGER === 'on') {
-        app.use(morgan('dev', { immediate: true })); // log @ req
-        app.use(morgan('dev')); // log @ res
-    }
-
-    // -- ROUTING --
-
-    app.route('/').get(require('./main/index.js'));
-    app.route('/unsupported').get(require('./main/unsupported.js'));
-
-    // glob routing files
-    file.globber(['server/modules/**/routes.js', 'server/modules/**/routes/*.js']).forEach(function (routePath) {
-        require(path.resolve(routePath))(app);
-    });
-
-    // set app router & static folder
-    // - permission checked in server/modules/core/routes.js
-    app.use(express.static(path.resolve(staticDirectory)));
-
-    // routing error
-    error = require('./modules/error');
-    app.use(function (req, res, next) {
-        if (req.originalUrl.indexOf('/data/') > -1) {
-            error.log(new Error('routing error: "' + req.originalUrl + '" not found'));
-            return res.sendStatus(404);
-        }
-        next();
-    });
-
-    // remove '/' from end of path
-    app.use(function (req, res, next) {
-        if (req.path.length > 1 && req.path.lastIndexOf('/') + 1 === req.path.length) {
-            return res.redirect(req.path.substr(0, req.path.length - 1));
-        }
-        next();
-    });
-
-    // return index.html
-    app.use(require('./main/index.js'));
-
-    // -- DONE --
-
-    // return express server instance
-    return app;
+        saveUninitialized: !0,
+        resave: !0,
+        secret: "keyboardcatmeowza"
+    })), require("./config/passport")(), b.use(passport.initialize()), b.use(passport.session()), 
+    b.use(helmet()), b.set("showStackError", !0), "on" === process.env.LOGGER && (b.use(morgan("dev", {
+        immediate: !0
+    })), b.use(morgan("dev"))), b.route("/").get(require("./main/index.js")), b.route("/unsupported").get(require("./main/unsupported.js")), 
+    file.globber([ "server/modules/**/routes.js", "server/modules/**/routes/*.js" ]).forEach(function(a) {
+        require(path.resolve(a))(b);
+    }), b.use(express["static"](path.resolve(c))), error = require("./modules/error"), 
+    b.use(function(a, b, c) {
+        return a.originalUrl.indexOf("/data/") > -1 ? (error.log(new Error('routing error: "' + a.originalUrl + '" not found')), 
+        b.sendStatus(404)) : void c();
+    }), b.use(function(a, b, c) {
+        return a.path.length > 1 && a.path.lastIndexOf("/") + 1 === a.path.length ? b.redirect(a.path.substr(0, a.path.length - 1)) : void c();
+    }), b.use(require("./main/index.js")), b;
 };

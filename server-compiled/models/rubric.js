@@ -1,67 +1,40 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Dependencies
-
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
-
-//----------------------------------------------------------------------------------------------------------------------
-// Schema
-
-var RubricSchema = new Schema({
-
-    //_id: {type: ObjectId} // automatically created for each document
-
-    // unique rubric name
+var mongoose = require("mongoose"), Schema = mongoose.Schema, RubricSchema = new Schema({
     name: {
         type: String,
-        required: true,
-        unique: true
+        required: !0,
+        unique: !0
     },
-
-    // table headers
-    headers: [{
+    headers: [ {
         type: String
-    }],
-
-    fields: [{
-        _id: false,
-        name: { type: String },
-        optional: { type: Boolean },
-        details: [{
-            _id: false,
-            score: { type: Number },
-            text: { type: String }
-        }]
-    }],
-
-    // timestamp - when rubric was updated
+    } ],
+    fields: [ {
+        _id: !1,
+        name: {
+            type: String
+        },
+        optional: {
+            type: Boolean
+        },
+        details: [ {
+            _id: !1,
+            score: {
+                type: Number
+            },
+            text: {
+                type: String
+            }
+        } ]
+    } ],
     modified: {
         type: Date,
-        default: Date.now
+        "default": Date.now
     },
-
-    // timestamp - when rubric was created
     created: {
         type: Date,
-        default: Date.now
+        "default": Date.now
     }
 });
 
-//----------------------------------------------------------------------------------------------------------------------
-// Virtual Fields
-
-//----------------------------------------------------------------------------------------------------------------------
-// Instance Methods
-
-//----------------------------------------------------------------------------------------------------------------------
-// Static Methods
-
-//----------------------------------------------------------------------------------------------------------------------
-// Pre & Post Methods
-
-//----------------------------------------------------------------------------------------------------------------------
-// Initialize Model
-
-mongoose.model('Rubric', RubricSchema);
+mongoose.model("Rubric", RubricSchema);

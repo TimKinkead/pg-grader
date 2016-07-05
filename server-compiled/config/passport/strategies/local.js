@@ -1,43 +1,17 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Dependencies
+var passport = require("passport"), LocalStrategy = require("passport-local").Strategy, mongoose = require("mongoose"), User = mongoose.model("User");
 
-var passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy;
-
-//----------------------------------------------------------------------------------------------------------------------
-// Models
-
-var mongoose = require('mongoose'),
-    User = mongoose.model('User');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Main
-
-/**
- * Local Authentication Strategy
- * - Sign Up / Login
- */
-module.exports = function () {
-
-  // custom username / password options
-  var passportOptions = {
-    usernameField: 'email',
-    passwordField: 'password'
-  };
-
-  // local strategy
-  passport.use('local', new LocalStrategy(passportOptions, function (username, password, clbk) {
-
-    // find user by email
-    User.findOne({ email: username }, function (err, user) {
-      if (err) {
-        return clbk(new Error(err));
-      }
-
-      // done
-      return clbk(null, user, user && user.authenticate(password));
-    });
-  }));
+module.exports = function() {
+    var a = {
+        usernameField: "email",
+        passwordField: "password"
+    };
+    passport.use("local", new LocalStrategy(a, function(a, b, c) {
+        User.findOne({
+            email: a
+        }, function(a, d) {
+            return a ? c(new Error(a)) : c(null, d, d && d.authenticate(b));
+        });
+    }));
 };

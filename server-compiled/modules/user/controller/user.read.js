@@ -1,23 +1,7 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Controllers
+var logger = require("../../logger"), userUtil = require("./util/user.get.data");
 
-var logger = require('../../logger');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Methods
-
-var userUtil = require('./util/user.get.data');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Main
-
-/**
- * Return basic user data.
- */
-exports.read = function (req, res) {
-    logger.filename(__filename);
-
-    return res.status(200).send(userUtil.getData(req.user, 'default'));
+exports.read = function(a, b) {
+    return logger.filename(__filename), b.status(200).send(userUtil.getData(a.user, "default"));
 };

@@ -1,44 +1,16 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Dependencies
+var _ = require("lodash"), glob = require("glob");
 
-var _ = require('lodash'),
-    glob = require('glob');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Methods
-
-exports.globber = function (globPatterns, removeRoot) {
-
-	// For context switching
-	var _this = this;
-
-	// URL paths regex
-	var urlRegex = new RegExp('^(?:[a-z]+:)?\/\/', 'i');
-
-	// The output array
-	var output = [];
-
-	// if glob pattern is an array, use each pattern in a recursive way
-	if (_.isArray(globPatterns)) {
-		globPatterns.forEach(function (globPattern) {
-			output = _.union(output, _this.globber(globPattern, removeRoot));
-		});
-	}
-
-	// if glob pattern is a string, use the globber
-	else if (_.isString(globPatterns)) {
-			if (urlRegex.test(globPatterns)) {
-				output.push(globPatterns);
-			} else {
-				var files = glob.sync(globPatterns);
-				files = files.map(function (file) {
-					return file.replace(removeRoot, '');
-				});
-				output = _.union(output, files);
-			}
-		}
-
-	return output;
+exports.globber = function(a, b) {
+    var c = this, d = new RegExp("^(?:[a-z]+:)?//", "i"), e = [];
+    if (_.isArray(a)) a.forEach(function(a) {
+        e = _.union(e, c.globber(a, b));
+    }); else if (_.isString(a)) if (d.test(a)) e.push(a); else {
+        var f = glob.sync(a);
+        f = f.map(function(a) {
+            return a.replace(b, "");
+        }), e = _.union(e, f);
+    }
+    return e;
 };

@@ -1,43 +1,17 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Dependencies
+var passport = require("passport"), path = require("path"), mongoose = require("mongoose"), User = mongoose.model("User"), file = require("../../modules/file");
 
-var passport = require('passport'),
-    path = require('path');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Models
-
-var mongoose = require('mongoose'),
-    User = mongoose.model('User');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Controllers
-
-var file = require('../../modules/file');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Methods
-
-module.exports = function () {
-
-	// Serialize sessions
-	passport.serializeUser(function (user, done) {
-		done(null, user._id);
-	});
-
-	// Deserialize sessions
-	passport.deserializeUser(function (_id, done) {
-		User.findOne({
-			_id: _id
-		}, '-salt -password', function (err, user) {
-			done(err, user);
-		});
-	});
-
-	// Initialize strategies
-	file.globber('server/config/passport/strategies/*.js').forEach(function (strategy) {
-		require(path.resolve(strategy))();
-	});
+module.exports = function() {
+    passport.serializeUser(function(a, b) {
+        b(null, a._id);
+    }), passport.deserializeUser(function(a, b) {
+        User.findOne({
+            _id: a
+        }, "-salt -password", function(a, c) {
+            b(a, c);
+        });
+    }), file.globber("server/config/passport/strategies/*.js").forEach(function(a) {
+        require(path.resolve(a))();
+    });
 };

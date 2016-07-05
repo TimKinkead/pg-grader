@@ -1,49 +1,16 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Controllers
+var logError = require("./error.log.js").log, priorityError = require("./error.priority.js").priority;
 
-var logError = require('./error.log.js').log,
-    priorityError = require('./error.priority.js').priority;
-
-//----------------------------------------------------------------------------------------------------------------------
-// Methods
-
-/**
- * ERROR.SAVE
- * - Log error to database & return success.
- * - Called externally. (POST /data/error)
- */
-exports.save = function (req, res) {
-
-    // construct error object
-    var errObj = {
-        name: req.body.name,
-        message: req.body.message,
-        stack: req.body.stack,
-        type: 'client',
-        priority: req.body.priority,
+exports.save = function(a, b) {
+    var c = {
+        name: a.body.name,
+        message: a.body.message,
+        stack: a.body.stack,
+        type: "client",
+        priority: a.body.priority,
         info: {}
     };
-
-    // grab other error object fields
-    for (var key in req.body) {
-        if (['name', 'message', 'stack'].indexOf(key) < 0 && req.body.hasOwnProperty(key)) {
-            if (req.body[key].constructor === Array || req.body[key].constructor === Object) {
-                errObj.info[key] = JSON.stringify(req.body[key], null, 4);
-            } else {
-                errObj.info[key] = req.body[key];
-            }
-        }
-    }
-
-    // save error
-    if (errObj.priority) {
-        priorityError(errObj);
-    } else {
-        logError(errObj);
-    }
-
-    // done
-    return res.sendStatus(200);
+    for (var d in a.body) [ "name", "message", "stack" ].indexOf(d) < 0 && a.body.hasOwnProperty(d) && (a.body[d].constructor === Array || a.body[d].constructor === Object ? c.info[d] = JSON.stringify(a.body[d], null, 4) : c.info[d] = a.body[d]);
+    return c.priority ? priorityError(c) : logError(c), b.sendStatus(200);
 };

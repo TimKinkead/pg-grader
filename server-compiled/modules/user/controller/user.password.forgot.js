@@ -1,127 +1,51 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Variables
-
-var auth = require('../../../../auth.js'),
-    config = require('../../../../config.js');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Dependencies
-
-var fs = require('fs'),
-    sendgrid = require('sendgrid')(auth.sendgridSecretKey),
-    handlebars = require('handlebars');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Models
-
-var mongoose = require('mongoose'),
-    User = mongoose.model('User');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Controllers
-
-var error = require('../../error'),
-    logger = require('../../logger');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Methods
-
-/**
- * Generate a random password reset code.
- * @returns {string} - combination of letters and numbers
- */
 function resetCode() {
-    var numbers = ['1', '2', '3', '4', '5'],
-        letters = ['A', 'B', 'C', 'D', 'E'],
-        code = '';
-    for (var i = 0; i < 10; i++) {
-        var num = Math.random() < 0.5;
-        if (num) {
-            code += numbers[Math.floor(Math.random() * numbers.length)];
-        } else {
-            code += letters[Math.floor(Math.random() * letters.length)];
-        }
+    for (var a = [ "1", "2", "3", "4", "5" ], b = [ "A", "B", "C", "D", "E" ], c = "", d = 0; 10 > d; d++) {
+        var e = Math.random() < .5;
+        c += e ? a[Math.floor(Math.random() * a.length)] : b[Math.floor(Math.random() * b.length)];
     }
-    return code;
+    return c;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Main
+var auth = require("../../../../auth.js"), config = require("../../../../config.js"), fs = require("fs"), sendgrid = require("sendgrid")(auth.sendgridSecretKey), handlebars = require("handlebars"), mongoose = require("mongoose"), User = mongoose.model("User"), error = require("../../error"), logger = require("../../logger");
 
-/**
- * USER.PASSWORD.FORGOT
- * - Save reset password token for user.
- */
-exports.forgotPassword = function (req, res) {
-    logger.filename(__filename);
-
-    if (!req.body.email) {
-        return res.status(400).send({ message: '!email' });
-    }
-
-    req.body.email = req.body.email.toLowerCase();
-
-    // get user
-    User.findOne({ email: req.body.email }).select('firstName lastName email').exec(function (err, userDoc) {
-        if (err) {
-            error.log(new Error(err));
-            return res.status(500).send({ error: err });
-        }
-        if (!userDoc) {
-            return res.status(404).send({ message: '!user' });
-        }
-
-        // save reset code
-        userDoc.passwordResetCode = resetCode();
-        userDoc.passwordResetExp = function () {
-            var d = new Date();d.setDate(d.getDate() + 1);return d;
-        }();
-        userDoc.save(function (err) {
-            if (err) {
-                error.log(new Error(err));
-                return res.status(500).send({ error: err });
-            }
-
-            // build email
-            var html = fs.readFileSync('server/modules/user/email/user.email.password.forgot.html'),
-                template = handlebars.compile(html.toString()),
-                email = new sendgrid.Email({
-                to: userDoc.email,
-                toname: userDoc.name,
+exports.forgotPassword = function(a, b) {
+    return logger.filename(__filename), a.body.email ? (a.body.email = a.body.email.toLowerCase(), 
+    void User.findOne({
+        email: a.body.email
+    }).select("firstName lastName email").exec(function(c, d) {
+        return c ? (error.log(new Error(c)), b.status(500).send({
+            error: c
+        })) : d ? (d.passwordResetCode = resetCode(), d.passwordResetExp = function() {
+            var a = new Date();
+            return a.setDate(a.getDate() + 1), a;
+        }(), void d.save(function(c) {
+            if (c) return error.log(new Error(c)), b.status(500).send({
+                error: c
+            });
+            var e = fs.readFileSync("server/modules/user/email/user.email.password.forgot.html"), f = handlebars.compile(e.toString()), g = new sendgrid.Email({
+                to: d.email,
+                toname: d.name,
                 from: config.email.support.address,
                 fromname: config.email.support.name,
-                subject: config.project.name + ' Password Reset',
-                html: template({
-                    user: userDoc,
+                subject: config.project.name + " Password Reset",
+                html: f({
+                    user: d,
                     config: config,
-                    host: req.get('host')
+                    host: a.get("host")
                 })
             });
-            if (process.env.SERVER === 'cloud') {
-                email.addCategory(config.project.id);
-                email.addCategory(config.project.id + '-forgot');
-            } else {
-                email.addCategory(config.project.id + '-dev');
-            }
-
-            // send email
-            logger.dash('sending email');
-            sendgrid.send(email, function (err, info) {
-                if (err) {
-                    err = new Error(err);
-                    if (info) {
-                        err.info = info;
-                    }
-                    error.log(err);
-                    return res.status(500).send({ error: err });
-                }
-
-                // done
-                logger.arrow('email sent');
-                return res.sendStatus(200);
+            "cloud" === process.env.SERVER ? (g.addCategory(config.project.id), g.addCategory(config.project.id + "-forgot")) : g.addCategory(config.project.id + "-dev"), 
+            logger.dash("sending email"), sendgrid.send(g, function(a, c) {
+                return a ? (a = new Error(a), c && (a.info = c), error.log(a), b.status(500).send({
+                    error: a
+                })) : (logger.arrow("email sent"), b.sendStatus(200));
             });
+        })) : b.status(404).send({
+            message: "!user"
         });
+    })) : b.status(400).send({
+        message: "!email"
     });
 };

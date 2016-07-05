@@ -1,43 +1,15 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Mongoose Models
+var mongoose = require("mongoose"), ScoreSheet = mongoose.model("ScoreSheet"), error = require("../../error"), logger = require("../../logger");
 
-var mongoose = require('mongoose'),
-    ScoreSheet = mongoose.model('ScoreSheet');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Controllers
-
-var error = require('../../error'),
-    logger = require('../../logger');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Methods
-
-//----------------------------------------------------------------------------------------------------------------------
-// Main
-
-/**
- * SCORESHEET.LIST
- * - List a user's score sheets. (or all score sheets if admin)
- */
-exports.list = function (req, res) {
-    logger.filename(__filename);
-
-    if (!req.user) {
-        return res.sendStatus(403);
-    }
-
-    // get score sheets
-    var query = req.user.admin ? {} : { user: req.user._id };
-    ScoreSheet.find(query).select().populate('user', '_id id name').populate('essay', 'id link').populate('rubric', 'name').exec(function (err, scoresheetDocs) {
-        if (err) {
-            error.log(new Error(err));
-            return res.status(500).send({ error: err });
-        }
-
-        // done
-        return res.status(200).send(scoresheetDocs || []);
+exports.list = function(a, b) {
+    if (logger.filename(__filename), !a.user) return b.sendStatus(403);
+    var c = a.user.admin ? {} : {
+        user: a.user._id
+    };
+    ScoreSheet.find(c).select().populate("user", "_id id name").populate("essay", "id link").populate("rubric", "name").exec(function(a, c) {
+        return a ? (error.log(new Error(a)), b.status(500).send({
+            error: a
+        })) : b.status(200).send(c || []);
     });
 };

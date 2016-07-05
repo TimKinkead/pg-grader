@@ -1,54 +1,34 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Dependencies
-
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema,
-    crypto = require('crypto');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Schema
-
-var UserSchema = new Schema({
-
-    //_id: {type: ObjectId} // automatically created for each document
-
-    // simple unique id
+var mongoose = require("mongoose"), Schema = mongoose.Schema, crypto = require("crypto"), UserSchema = new Schema({
     id: {
         type: Number,
-        required: true,
-        unique: true
+        required: !0,
+        unique: !0
     },
-
-    // name
     name: {
         type: String,
-        required: true
+        required: !0
     },
     firstName: {
         type: String,
-        required: true
+        required: !0
     },
     lastName: {
         type: String,
-        required: true
+        required: !0
     },
-
-    // email
     email: {
         type: String,
-        trim: true,
-        lowercase: true,
+        trim: !0,
+        lowercase: !0,
         match: /.+\@.+\..+/,
-        required: true,
-        unique: true
+        required: !0,
+        unique: !0
     },
-
-    // password
     password: {
         type: String,
-        required: false // not required if admin creates grader
+        required: !1
     },
     salt: {
         type: String
@@ -59,173 +39,76 @@ var UserSchema = new Schema({
     passwordResetExp: {
         type: Date
     },
-
-    // permissions
     admin: {
         type: Boolean,
-        default: false
+        "default": !1
     },
-
-    // settings
     rubricSide: {
         type: String,
-        enum: ['right', 'left'],
-        default: 'right'
+        "enum": [ "right", "left" ],
+        "default": "right"
     },
     rubricElements: {
         type: String,
-        enum: ['show all', 'one at a time'],
-        default: 'show all'
+        "enum": [ "show all", "one at a time" ],
+        "default": "show all"
     },
     lastRubric: {
         type: Schema.ObjectId,
-        ref: 'Rubric'
+        ref: "Rubric"
     },
     lastPrompt: {
         type: String
     },
     currentEssay: {
         type: Schema.ObjectId,
-        ref: 'Essay'
+        ref: "Essay"
     },
-
-    // counters
     scoresheets: {
         type: Number,
-        default: 0
+        "default": 0
     },
     consensusScores: {
         type: Number,
-        default: 0
+        "default": 0
     },
-
-    // timestamp - when user signed up
     created: {
         type: Date,
-        default: Date.now
+        "default": Date.now
     }
 });
 
-//----------------------------------------------------------------------------------------------------------------------
-// Virtual Fields
-
-/**
- * Virtual field for name.
- */
-/*UserSchema.virtual('name').get(function() {
-    return (this.firstName && this.lastName) ? this.firstName+' '+this.lastName : this.firstName;
-});*/
-
-/**
- * Virtual field for initials.
- */
-UserSchema.virtual('initials').get(function () {
+UserSchema.virtual("initials").get(function() {
     return this.firstName.slice(0, 1).toUpperCase() + this.lastName.slice(0, 1).toUpperCase();
-});
-
-//----------------------------------------------------------------------------------------------------------------------
-// Instance Methods
-
-/**
- * Instance method for hashing a password.
- */
-UserSchema.methods.hashPassword = function (password) {
-    if (this.salt && password) {
-        return crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');
-    } else {
-        return password;
-    }
-};
-
-/**
- * Instance method for authenticating user.
- */
-UserSchema.methods.authenticate = function (password) {
-    return this.password === this.hashPassword(password);
-};
-
-//----------------------------------------------------------------------------------------------------------------------
-// Static Methods
-
-/**
- * Check if email is new to user collection.
- * @param email - email address
- * @param clbk - return clbk(err, true/false)
- */
-UserSchema.statics.checkNewEmail = function (email, clbk) {
-    if (!email) {
-        return clbk(new Error('!email'));
-    }
-
-    var User = this;
-
-    User.count({ email: email }).exec(function (err, qty) {
-        if (err) {
-            return clbk(new Error(err));
-        }
-        return clbk(null, qty === 0);
+}), UserSchema.methods.hashPassword = function(a) {
+    return this.salt && a ? crypto.pbkdf2Sync(a, this.salt, 1e4, 64).toString("base64") : a;
+}, UserSchema.methods.authenticate = function(a) {
+    return this.password === this.hashPassword(a);
+}, UserSchema.statics.checkNewEmail = function(a, b) {
+    if (!a) return b(new Error("!email"));
+    var c = this;
+    c.count({
+        email: a
+    }).exec(function(a, c) {
+        return a ? b(new Error(a)) : b(null, 0 === c);
     });
-};
-
-/**
- * Return unique user id. (number id, not mongodb _id)
- * @param clbk - return clbk(err, id)
- */
-UserSchema.statics.uniqueId = function (clbk) {
-
-    var User = this,
-        length = 4,
-        checks = 0;
-
-    function generateId() {
-        var id = '';
-        for (var i = 0; i < length; i++) {
-            id += Math.floor(Math.random() * 10);
-        }
-        if (id.charAt(0) === '0') {
-            id = '1' + id;
-        }
-        return Number(id);
+}, UserSchema.statics.uniqueId = function(a) {
+    function b() {
+        for (var a = "", b = 0; e > b; b++) a += Math.floor(10 * Math.random());
+        return "0" === a.charAt(0) && (a = "1" + a), Number(a);
     }
-
-    function checkUniqueId(id) {
-        User.count({ id: id }).exec(function (err, qty) {
-            if (err) {
-                return clbk(new Error(err));
-            }
-            if (qty === 0) {
-                return clbk(null, id);
-            }
-
-            checks++;
-            if (checks > 10) {
-                length++;
-                checks = 0;
-            }
-
-            checkUniqueId(generateId());
+    function c(g) {
+        d.count({
+            id: g
+        }).exec(function(d, h) {
+            return d ? a(new Error(d)) : 0 === h ? a(null, g) : (f++, f > 10 && (e++, f = 0), 
+            void c(b()));
         });
     }
-
-    checkUniqueId(generateId());
-};
-
-//----------------------------------------------------------------------------------------------------------------------
-// Pre & Post Methods
-
-/**
- * Pre validation hook to hash the password.
- */
-UserSchema.pre('validate', function (next) {
-    if (this.password) {
-        this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
-        this.password = this.hashPassword(this.password);
-    }
-    this.name = this.firstName + ' ' + this.lastName;
-    next();
-});
-
-//----------------------------------------------------------------------------------------------------------------------
-// Initialize Model
-
-mongoose.model('User', UserSchema);
+    var d = this, e = 4, f = 0;
+    c(b());
+}, UserSchema.pre("validate", function(a) {
+    this.password && (this.salt = new Buffer(crypto.randomBytes(16).toString("base64"), "base64"), 
+    this.password = this.hashPassword(this.password)), this.name = this.firstName + " " + this.lastName, 
+    a();
+}), mongoose.model("User", UserSchema);

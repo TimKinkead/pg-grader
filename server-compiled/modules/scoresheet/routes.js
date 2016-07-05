@@ -1,22 +1,8 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Controllers
+var scoresheet = require("../scoresheet");
 
-var scoresheet = require('../scoresheet');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Routes
-
-module.exports = function (app) {
-
-    // CRUD for a scoresheet
-    app.route('/data/scoresheet').post(scoresheet.save) // create & updated
-    .get(scoresheet.read).delete(scoresheet.delete);
-
-    // list score sheets
-    app.route('/data/scoresheet/list').get(scoresheet.list);
-
-    // list consensus score sheets
-    app.route('/data/scoresheet/list-consensus').get(scoresheet.listConsensus);
+module.exports = function(a) {
+    a.route("/data/scoresheet").post(scoresheet.save).get(scoresheet.read)["delete"](scoresheet["delete"]), 
+    a.route("/data/scoresheet/list").get(scoresheet.list), a.route("/data/scoresheet/list-consensus").get(scoresheet.listConsensus);
 };

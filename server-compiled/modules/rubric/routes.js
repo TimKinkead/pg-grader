@@ -1,18 +1,7 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Controllers
+var rubric = require("../rubric");
 
-var rubric = require('../rubric');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Routes
-
-module.exports = function (app) {
-
-    // list rubrics
-    app.route('/data/rubric/list').get(rubric.list);
-
-    // initialize rubrics
-    app.route('/data/rubric/init').get(rubric.init);
+module.exports = function(a) {
+    a.route("/data/rubric/list").get(rubric.list), a.route("/data/rubric/init").get(rubric.init);
 };

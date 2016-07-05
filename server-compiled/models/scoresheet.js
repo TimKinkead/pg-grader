@@ -1,71 +1,33 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Dependencies
-
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
-
-//----------------------------------------------------------------------------------------------------------------------
-// Schema
-
-var ScoreSheetSchema = new Schema({
-
-    //_id: {type: ObjectId} // automatically created for each document
-
-    // user/grader
+var mongoose = require("mongoose"), Schema = mongoose.Schema, ScoreSheetSchema = new Schema({
     user: {
         type: Schema.ObjectId,
-        ref: 'User',
-        required: true
+        ref: "User",
+        required: !0
     },
-
-    // essay
     essay: {
         type: Schema.ObjectId,
-        ref: 'Essay',
-        required: true
+        ref: "Essay",
+        required: !0
     },
-
-    // rubric
     rubric: {
         type: Schema.ObjectId,
-        ref: 'Rubric',
-        required: true
+        ref: "Rubric",
+        required: !0
     },
-
-    // score
     score: {
         type: Object,
-        required: true
+        required: !0
     },
-
-    // timestamp - when scoreSheet was updated
     modified: {
         type: Date,
-        default: Date.now
+        "default": Date.now
     },
-
-    // timestamp - when scoreSheet was created
     created: {
         type: Date,
-        default: Date.now
+        "default": Date.now
     }
 });
 
-//----------------------------------------------------------------------------------------------------------------------
-// Virtual Fields
-
-//----------------------------------------------------------------------------------------------------------------------
-// Instance Methods
-
-//----------------------------------------------------------------------------------------------------------------------
-// Static Methods
-
-//----------------------------------------------------------------------------------------------------------------------
-// Pre & Post Methods
-
-//----------------------------------------------------------------------------------------------------------------------
-// Initialize Model
-
-mongoose.model('ScoreSheet', ScoreSheetSchema);
+mongoose.model("ScoreSheet", ScoreSheetSchema);

@@ -1,59 +1,23 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Mongoose Models
+var mongoose = require("mongoose"), User = mongoose.model("User"), ScoreSheet = mongoose.model("ScoreSheet"), error = require("../../error"), logger = require("../../logger");
 
-var mongoose = require('mongoose'),
-    User = mongoose.model('User'),
-    ScoreSheet = mongoose.model('ScoreSheet');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Controllers
-
-var error = require('../../error'),
-    logger = require('../../logger');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Methods
-
-//----------------------------------------------------------------------------------------------------------------------
-// Main
-
-/**
- * GRADER.DELETE
- * - Delete a grader
- */
-exports.delete = function (req, res) {
-    logger.filename(__filename);
-
-    if (!req.user || !req.user.admin) {
-        return res.sendStatus(403);
-    }
-    if (!req.body.grader) {
-        return res.status(400).send({ error: '!req.body.grader' });
-    }
-
-    // count grader's score sheets
-    ScoreSheet.count({ user: req.body.grader }).exec(function (err, qty) {
-        if (err) {
-            error.log(new Error(err));
-            return res.status(500).send({ error: err });
-        }
-
-        // check qty
-        if (qty) {
-            return res.status(403).send({ message: 'You cannot delete this grader because they have score sheets.' });
-        }
-
-        // delete grader
-        User.remove({ _id: req.body.grader }, function (err) {
-            if (err) {
-                error.log(new Error(err));
-                return res.status(500).send({ error: err });
-            }
-
-            // done
-            return res.sendStatus(200);
+exports["delete"] = function(a, b) {
+    return logger.filename(__filename), a.user && a.user.admin ? a.body.grader ? void ScoreSheet.count({
+        user: a.body.grader
+    }).exec(function(c, d) {
+        return c ? (error.log(new Error(c)), b.status(500).send({
+            error: c
+        })) : d ? b.status(403).send({
+            message: "You cannot delete this grader because they have score sheets."
+        }) : void User.remove({
+            _id: a.body.grader
+        }, function(a) {
+            return a ? (error.log(new Error(a)), b.status(500).send({
+                error: a
+            })) : b.sendStatus(200);
         });
-    });
+    }) : b.status(400).send({
+        error: "!req.body.grader"
+    }) : b.sendStatus(403);
 };

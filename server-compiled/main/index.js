@@ -1,35 +1,19 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Variables
+var auth = require("../../auth.js"), config = require("../../config.js"), user = require("../modules/user");
 
-var auth = require('../../auth.js'),
-    config = require('../../config.js');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Controllers
-
-var user = require('../modules/user');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Main
-
-/**
- * Render index.html (the angular application skeleton).
- */
-module.exports = function (req, res) {
-
-    res.render('index', {
+module.exports = function(a, b) {
+    b.render("index", {
         title: config.project.title,
         description: config.project.description,
         keywords: config.project.keywords,
-        files: process.env.NODE_ENV === 'production' ? ['lib.min.js', 'app.min.js', 'templates.min.js'] : require('../../config').jsFiles,
-        favicon: 'favicon.ico',
-        user: req.user ? user.getData(req.user, 'default') : null,
-        googleBrowserKey: process.env.NODE_ENV === 'production' ? '?key=' + auth.googleBrowserKey : '',
+        files: "production" === process.env.NODE_ENV ? [ "lib.min.js", "app.min.js", "templates.min.js" ] : require("../../config").jsFiles,
+        favicon: "favicon.ico",
+        user: a.user ? user.getData(a.user, "default") : null,
+        googleBrowserKey: "production" === process.env.NODE_ENV ? "?key=" + auth.googleBrowserKey : "",
         helpers: {
-            json: function json(obj) {
-                return JSON.stringify(obj);
+            json: function(a) {
+                return JSON.stringify(a);
             }
         }
     });

@@ -1,111 +1,30 @@
-'use strict';
+"use strict";
 
-//----------------------------------------------------------------------------------------------------------------------
-// Models
+var mongoose = require("mongoose"), User = mongoose.model("User"), error = require("../../error"), logger = require("../../logger");
 
-var mongoose = require('mongoose'),
-    User = mongoose.model('User');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Controllers
-
-var error = require('../../error'),
-    logger = require('../../logger');
-
-//----------------------------------------------------------------------------------------------------------------------
-// Methods
-
-//----------------------------------------------------------------------------------------------------------------------
-// Main
-
-/**
- * USER.SETTINGS.UPDATE
- * - Update a user's settings.
- */
-exports.updateSettings = function (req, res) {
-    logger.filename(__filename);
-
-    // error message
-    function errorMessage(code, alert, message, err) {
-        if (typeof code !== 'number') {
-            err = code;code = null;
-        }
-        return res.status(code || 500).send({
-            alert: alert || 'danger',
-            message: message || 'We had trouble updating your settings. Please try again.',
-            error: err
+exports.updateSettings = function(a, b) {
+    function c(a, c, d, e) {
+        return "number" != typeof a && (e = a, a = null), b.status(a || 500).send({
+            alert: c || "danger",
+            message: d || "We had trouble updating your settings. Please try again.",
+            error: e
         });
     }
-
-    if (!req.user) {
-        res.redirect('/login');return;
-    }
-
-    // update settings
-    function updateUserSettings() {
-        logger.dash('updating settings');
-
-        if (req.body.firstName) {
-            req.user.firstName = req.body.firstName;
-        }
-        if (req.body.lastName) {
-            req.user.lastName = req.body.lastName;
-        }
-        if (req.body.email) {
-            req.user.email = req.body.email;
-        }
-        if (req.body.newPassword) {
-            req.user.password = req.body.newPassword;
-        }
-        if (req.body.rubricSide) {
-            req.user.rubricSide = req.body.rubricSide;
-        }
-        if (req.body.rubricElements) {
-            req.user.rubricElements = req.body.rubricElements;
-        }
-        if (req.body.lastRubric) {
-            req.user.lastRubric = req.body.lastRubric;
-        }
-        if (req.body.lastPrompt) {
-            req.user.lastPrompt = req.body.lastPrompt;
-        }
-
-        req.user.save(function (err) {
-            if (err) {
-                err = new Error(err);error.log(err);errorMessage(err);return;
-            }
-
-            // done
-            logger.arrow('user settings updated');
-            return res.sendStatus(200);
+    function d() {
+        logger.dash("updating settings"), a.body.firstName && (a.user.firstName = a.body.firstName), 
+        a.body.lastName && (a.user.lastName = a.body.lastName), a.body.email && (a.user.email = a.body.email), 
+        a.body.newPassword && (a.user.password = a.body.newPassword), a.body.rubricSide && (a.user.rubricSide = a.body.rubricSide), 
+        a.body.rubricElements && (a.user.rubricElements = a.body.rubricElements), a.body.lastRubric && (a.user.lastRubric = a.body.lastRubric), 
+        a.body.lastPrompt && (a.user.lastPrompt = a.body.lastPrompt), a.user.save(function(a) {
+            return a ? (a = new Error(a), error.log(a), void c(a)) : (logger.arrow("user settings updated"), 
+            b.sendStatus(200));
         });
     }
-
-    // check password
-    function checkPassword() {
-        logger.dash('checking password');
-        if (!req.body.password) {
-            errorMessage(401, 'danger', 'Please provide your current password if you want to set a new password.');return;
-        }
-        User.findById(req.user._id).select('password salt').exec(function (err, userDoc) {
-            if (err) {
-                err = new Error(err);error.log(err);errorMessage(err);return;
-            }
-            if (!userDoc) {
-                err = new Error('!userDoc');error.log(err);errorMessage(err);return;
-            }
-            if (!userDoc.authenticate(req.body.password)) {
-                errorMessage(401, 'danger', 'Your existing password is incorrect. Please try again.');
-                return;
-            }
-            updateUserSettings();
-        });
+    function e() {
+        return logger.dash("checking password"), a.body.password ? void User.findById(a.user._id).select("password salt").exec(function(b, e) {
+            return b ? (b = new Error(b), error.log(b), void c(b)) : e ? e.authenticate(a.body.password) ? void d() : void c(401, "danger", "Your existing password is incorrect. Please try again.") : (b = new Error("!userDoc"), 
+            error.log(b), void c(b));
+        }) : void c(401, "danger", "Please provide your current password if you want to set a new password.");
     }
-
-    // start
-    if (req.body.newPassword) {
-        checkPassword();
-    } else {
-        updateUserSettings();
-    }
+    return logger.filename(__filename), a.user ? void (a.body.newPassword ? e() : d()) : void b.redirect("/login");
 };
