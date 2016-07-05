@@ -12,6 +12,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
+    "glob": "^7.0.5",
     "handlebars": "^4.0.5",
     "helmet": "^2.1.0",
     "lodash": "^4.13.1",
