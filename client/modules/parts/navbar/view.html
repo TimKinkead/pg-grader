@@ -1,6 +1,7 @@
 <!-- Navigation Bar -->
 
-<nav class="navbar navbar-default"
+<nav ng-hide="'grade' | isState"
+     class="navbar navbar-default"
      style="margin-bottom: 0;">
     <div class="container-fluid">
 
@@ -38,6 +39,15 @@
                     <a href ui-sref="graded-work">
                         <i class="glyphicon glyphicon-pencil"></i>
                         Graded Work
+                    </a>
+                </li>
+
+                <!-- consensus scores -->
+                <li ng-if="user.consensusScores"
+                    ui-sref-active="active">
+                    <a href ui-sref="consensus-scores">
+                        <i class="glyphicon glyphicon-equalizer"></i>
+                        Consensus Scores
                     </a>
                 </li>
 

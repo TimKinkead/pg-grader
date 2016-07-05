@@ -10,13 +10,13 @@
 </div>
 
 <!-- new button -->
-<div class="container text-center"
+<!--<div class="container text-center"
      style="margin-bottom: 15px;">
     <button ng-click="newGrader()"
             class="btn btn-success">
         + Add Grader
     </button>
-</div>
+</div>-->
 
 <!-- total count -->
 <div class="container text-center">
@@ -55,7 +55,7 @@
 
 <!-- table -->
 <div class="container">
-    <table class="table table-bordered table-hover">
+    <table class="table table-bordered">
         <thead>
             <th ng-repeat="field in fields">
                 {{field|capitalize}}
@@ -63,11 +63,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="grader in graders | orderBy:'-created'"
-                ng-init="graderIndex = $index+1"
-                ng-click="editGrader(grader)"
-                style="cursor: pointer;"
-                uib-tooltip="click to view/edit"
-                tooltip-placement="right">
+                ng-init="graderIndex = $index+1">
                 <td ng-repeat="field in fields">
                     <div ng-if="['no', 'joined', 'admin'].indexOf(field) < 0">
                         {{grader[field]}}

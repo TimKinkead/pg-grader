@@ -16,15 +16,18 @@ angular.module('app').controller('UserController', [
             emailRegex = $scope.emailRegex = /.*\@.*\..*/,
             passwordRegex = $scope.passwordRegex = /.{6}/;
 
-        /*
         $scope.$on('$stateChangeStart',
             function(event, toState, toParams, fromState, fromParams){
-                console.log(toState);
-                console.log(toParams);
+                [status].forEach(function(item) {
+                    for (var key in item) {
+                        if (item.hasOwnProperty(key)) {
+                            delete item[key];
+                        }
+                    }
+                });
+                user.password = null;
             }
         );
-        */
-
 
         $scope.closeErrorMessage = function() {
             status.errorMessage = null;

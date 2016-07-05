@@ -10,9 +10,10 @@
   .btn {
     .btn-default();
     &:hover,
-    &:focus {
+    &:focus,
+    &:visited {
       color: #fff;
-      background-color: #5cb85c;
+      background-color: #5cb85c !important;
       border-color: #4cae4c;
     }
     &:active,
@@ -23,11 +24,19 @@
     }
     float:none;
   }
-  @media(max-width: @screen-xs-max) {
+  /*@media(max-width: @screen-xs-max) {
     .btn-group-vertical();
     button {
       width: 100% !important;
       height: auto !important;
     }
+  }*/
+}
+
+.btn-group-custom-vertical {
+  .btn-group-vertical();
+  button {
+    width: 100% !important;
+    height: auto !important;
   }
 }

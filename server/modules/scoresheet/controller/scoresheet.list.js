@@ -32,6 +32,7 @@ exports.list = function(req, res) {
     ScoreSheet.find(query)
         .select()
         .populate('user', '_id id name')
+        .populate('essay', 'id link')
         .populate('rubric', 'name')
         .exec(function(err, scoresheetDocs) {
             if (err) {

@@ -33,7 +33,7 @@ exports.read = function (req, res) {
     }
 
     // get score sheet
-    ScoreSheet.find({ _id: req.query.scoresheet }).exec(function (err, scoresheetDoc) {
+    ScoreSheet.findById(req.query.scoresheet).populate('user', '_id name').populate('essay', '_id id name module prompt link').populate('rubric', '_id name headers fields').exec(function (err, scoresheetDoc) {
         if (err) {
             error.log(new Error(err));
             return res.status(500).send({ error: err });

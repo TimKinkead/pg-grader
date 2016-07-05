@@ -9,8 +9,9 @@ angular.module('app').controller('GradedWorkController', [
     '$http',
     '$timeout',
     '$uibModal',
+    '$state',
     'CurrentUser',
-    function ($scope, $resource, $http, $timeout, $modal, CurrentUser) {
+    function ($scope, $resource, $http, $timeout, $modal, $state, CurrentUser) {
 
         // variables
         var status = $scope.status = {},
@@ -19,13 +20,13 @@ angular.module('app').controller('GradedWorkController', [
             errorMessages = $scope.errorMessages = [],
             successMessages = $scope.successMessages = [],
             
-            fields = $scope.fields = ['no', 'date', 'grader id', 'grader name', 'student work id', 'rubric', 'average score'];
+            fields = $scope.fields = ['no', 'date', 'grader', 'essay', 'rubric', 'score'];
 
         // -------------------------------------------------------------------------------------------------------------
         // User
 
         // get user
-        $scope.user = CurrentUser.data;
+        var user = $scope.user = CurrentUser.data;
         
         // -------------------------------------------------------------------------------------------------------------
         // Success/Error Messages
@@ -75,6 +76,29 @@ angular.module('app').controller('GradedWorkController', [
             );
         };
 
+        // edit/view existing score sheet
+        $scope.editOrView = function(scoresheet) {
+            // edit
+            if (scoresheet.user._id === user._id) {
+                $state.go('grade', {scoresheet: scoresheet._id});
+            }
+            // view
+            else {
+                var modalInstance = $modal.open({
+                    templateUrl: 'modules/main/graded-work/preview/view.html',
+                    controller: 'GradedWorkPreviewController',
+                    size: 'xl',
+                    resolve: {
+                        scoresheet: function() { return scoresheet; }
+                    }
+                });
+                modalInstance.result.then(
+                    function() { console.log('close'); },
+                    function() { console.log('dismiss'); }
+                );
+            }
+        };
+
         // edit existing score sheet
         $scope.editScoreSheet = function(scoresheet, index) {
             var modalInstance = $modal.open({
@@ -92,11 +116,17 @@ angular.module('app').controller('GradedWorkController', [
                 function(scoresheet) { // close
                     scoresheets[index] = scoresheet;
                 },
-                function(msg) { //dismiss
+                function(msg) { // dismiss
                     console.log(msg || 'dismiss');
                 }
             );
         };
+
+        // -------------------------------------------------------------------------------------------------------------
+        // Essays
+
+        // get skipped essays
+        $scope.skippedEssays = $resource('data/essay/list-skipped').query();
         
         // -------------------------------------------------------------------------------------------------------------
         // Watch Parameter Changes

@@ -1,0 +1,86 @@
+<!-- Text -->
+
+<div style="height: 100%; width: 100%; overflow-y: hidden; background-color: lightgray;">
+
+    <!-- flex box display -->
+    <div style="display: flex; flex-direction: column; height: 100%;">
+
+        <!-- show prompt -->
+        <div ng-if="!status.hidePrompt"
+             style="margin: 15px 15px 0 15px;">
+
+            <!-- new prompt alert -->
+            <div ng-if="status.newPrompt"
+                 class="alert alert-success text-center">
+                heads up
+                &nbsp;
+                <i class="glyphicon glyphicon-hand-down"></i>
+                &nbsp;
+                new prompt
+            </div>
+
+            <!-- prompt -->
+            <h3 style="text-align: center;">
+                Prompt
+                <span ng-if="!status.hidePrompt"
+                      class="badge">
+                    {{docs.essay.module}}
+                </span>
+            </h3>
+            <div ng-if="!status.processingEssay"
+                 class="well"
+                 style="margin-bottom: 0;">
+                {{docs.essay.prompt}}
+            </div>
+            <button ng-click="switchPrompt()"
+                    class="btn btn-xs btn-default pull-right"
+                    style="margin: -10px 10px 0 0;">
+                hide prompt
+            </button>
+            <div ng-if="status.processingEssay"
+                 class="spinner-sm"
+                 style="margin: auto;">
+            </div>
+        </div>
+
+        <!-- hide prompt -->
+        <div ng-if="status.hidePrompt"
+             class="text-center">
+            <button ng-click="switchPrompt()"
+                    class="btn btn-xs btn-default"
+                    style="margin: 10px 0 5px 0;">
+                show prompt
+            </button>
+        </div>
+
+        <!-- text -->
+        <h3 ng-if="!status.hidePrompt"
+            style="text-align: center; margin: 20px 15px 5px 15px;">
+            Text
+            <span ng-if="!status.hidePrompt"
+                  class="badge">
+                {{docs.essay.id}}
+            </span>
+            <a href="{{'https://docs.google.com/viewerng/viewer?url='+docs.essay.link}}"
+               target="_blank">
+                <i class="glyphicon glyphicon-new-window"
+                   style="font-size: 60%;">
+                </i>
+            </a>
+        </h3>
+        <div ng-if="status.processingEssay"
+             class="spinner-sm"
+             style="margin: auto; margin-top: 5px; z-index: 0;">
+        </div>
+        <iframe ng-if="docs.essay.iframeLink"
+                id="iframe-text"
+                ng-src="{{docs.essay.iframeLink}}"
+                frameborder="0"
+                scrolling="no"
+                height="100%"
+                width="100%"
+                style="flex: 1; z-index: 1;">
+        </iframe>
+    </div>
+
+</div>

@@ -8,11 +8,19 @@
 <div ng-if="status.errorMessage"
      class="alert alert-danger"
      style="max-width: 500px; margin: auto; margin-bottom: 10px;">
-        <span ng-click="closeErrorMessage()"
-              class="close">
-            &times
-        </span>
-    {{status.errorMessage}}
+    <span ng-click="closeErrorMessage()"
+          class="close">
+        &times
+    </span>
+    <span ng-if="['!newEmail'].indexOf(status.errorMessage) < 0">
+        {{status.errorMessage}}
+    </span>
+    <span ng-if="status.errorMessage === '!newEmail'">
+        You already have an account. Please
+        <a ui-sref="user.login"
+           style="cursor: pointer;">
+            login</a>.
+    </span>
 </div>
 
 <!-- outer div for mobile padding -->

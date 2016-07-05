@@ -28,6 +28,9 @@ exports.delete = function (req, res) {
     if (!req.user) {
         return res.status(403).send({ error: '!req.user' });
     }
+    if (!req.user.admin) {
+        return res.status(403).send({ error: '!req.user.admin' });
+    }
     if (!req.body.scoresheet) {
         return res.status(400).send({ error: '!req.body.scoresheet' });
     }

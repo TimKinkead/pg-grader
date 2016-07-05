@@ -31,7 +31,7 @@ exports.list = function (req, res) {
 
     // get score sheets
     var query = req.user.admin ? {} : { user: req.user._id };
-    ScoreSheet.find(query).select().populate('user', '_id id name').populate('rubric', 'name').exec(function (err, scoresheetDocs) {
+    ScoreSheet.find(query).select().populate('user', '_id id name').populate('essay', 'id link').populate('rubric', 'name').exec(function (err, scoresheetDocs) {
         if (err) {
             error.log(new Error(err));
             return res.status(500).send({ error: err });

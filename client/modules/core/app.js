@@ -15,7 +15,9 @@ try {
         'ui.router',
         'ui.bootstrap',
         'ngResource',
-        'ngSanitize'
+        'ngSanitize',
+        'divResizer', // custom directive
+        'angularResizable'
     ]);
 
     // configure angular app

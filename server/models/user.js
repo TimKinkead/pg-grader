@@ -66,6 +66,39 @@ var UserSchema = new Schema({
         default: false
     },
 
+    // settings
+    rubricSide: {
+        type: String,
+        enum: ['right', 'left'],
+        default: 'right'
+    },
+    rubricElements: {
+        type: String,
+        enum: ['show all', 'one at a time'],
+        default: 'show all'
+    },
+    lastRubric: {
+        type: Schema.ObjectId,
+        ref: 'Rubric'
+    },
+    lastPrompt: {
+        type: String
+    },
+    currentEssay: {
+        type: Schema.ObjectId,
+        ref: 'Essay'
+    },
+
+    // counters
+    scoresheets: {
+        type: Number,
+        default: 0
+    },
+    consensusScores: {
+        type: Number,
+        default: 0
+    },
+    
     // timestamp - when user signed up
 	created: {
 		type: Date,

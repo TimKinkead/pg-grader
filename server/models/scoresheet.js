@@ -13,16 +13,17 @@ var ScoreSheetSchema = new Schema({
 
     //_id: {type: ObjectId} // automatically created for each document
 
-    // unique scoreSheet name
+    // user/grader
     user: {
         type: Schema.ObjectId,
         ref: 'User',
         required: true
     },
 
-    // student work id
-    studentWorkId: {
-        type: String,
+    // essay
+    essay: {
+        type: Schema.ObjectId,
+        ref: 'Essay',
         required: true
     },
 

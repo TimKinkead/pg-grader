@@ -57,6 +57,18 @@ exports.updateSettings = function (req, res) {
         if (req.body.newPassword) {
             req.user.password = req.body.newPassword;
         }
+        if (req.body.rubricSide) {
+            req.user.rubricSide = req.body.rubricSide;
+        }
+        if (req.body.rubricElements) {
+            req.user.rubricElements = req.body.rubricElements;
+        }
+        if (req.body.lastRubric) {
+            req.user.lastRubric = req.body.lastRubric;
+        }
+        if (req.body.lastPrompt) {
+            req.user.lastPrompt = req.body.lastPrompt;
+        }
 
         req.user.save(function (err) {
             if (err) {

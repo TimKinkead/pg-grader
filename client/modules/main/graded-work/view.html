@@ -9,12 +9,21 @@
     </h2>
 </div>
 
-<!-- new button -->
+<!-- new button
 <div class="container text-center"
      style="margin-bottom: 15px;">
     <button ng-click="newScoreSheet()"
             class="btn btn-success">
         + New Score Sheet
+    </button>
+</div> -->
+
+<!-- start grading button -->
+<div class="container text-center"
+     style="margin-bottom: 15px;">
+    <button ui-sref="grade"
+            class="btn btn-success">
+        Start Grading
     </button>
 </div>
 
@@ -57,7 +66,8 @@
 </div>
 
 <!-- table -->
-<div class="container">
+<div ng-if="scoresheets.length"
+     class="container">
     <table class="table table-bordered table-hover">
         <thead>
             <th ng-repeat="field in fields">
@@ -67,12 +77,12 @@
         <tbody>
             <tr ng-repeat="sheet in scoresheets | orderBy:'-created'"
                 ng-init="sheetIndex = $index+1"
-                ng-click="editScoreSheet(sheet, $index)"
+                ng-click="editOrView(sheet)"
                 style="cursor: pointer;"
-                uib-tooltip="click to view/edit"
+                uib-tooltip="{{(sheet.user._id === user._id) ? 'click to edit' : 'click to view'}}"
                 tooltip-placement="right">
                 <td ng-repeat="field in fields">
-                    <div ng-if="['no', 'date', 'grader id', 'grader name', 'student work id', 'rubric', 'average score'].indexOf(field) < 0">
+                    <div ng-if="['no', 'date', 'grader', 'essay', 'rubric', 'score'].indexOf(field) < 0">
                         {{sheet[field]}}
                     </div>
                     <div ng-if="field === 'no'">
@@ -81,22 +91,45 @@
                     <div ng-if="field === 'date'">
                         {{sheet.created|date:'short'}}
                     </div>
-                    <div ng-if="field === 'grader id'">
-                        {{sheet.user.id}}
-                    </div>
-                    <div ng-if="field === 'grader name'">
+                    <div ng-if="field === 'grader'">
                         {{sheet.user.name}}
                     </div>
-                    <div ng-if="field === 'student work id'">
-                        {{sheet.studentWorkId}}
+                    <div ng-if="field === 'essay'">
+                        {{sheet.essay.id}}
                     </div>
                     <div ng-if="field === 'rubric'">
                         {{sheet.rubric.name}}
                     </div>
-                    <div ng-if="field === 'average score'">
+                    <div ng-if="field === 'score'">
                         {{sheet.score|averageScore}}
                     </div>
                 </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div ng-if="skippedEssays.$resolved && skippedEssays.length"
+     class="container text-center">
+    <hr>
+    <h3 style="color: red;">
+        Skipped Essays
+    </h3>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <th>Grader</th>
+            <th>Essay</th>
+            <th>Skip Reason</th>
+        </thead>
+        <tbody ng-repeat="essay in skippedEssays"
+               ui-sref="grade({essay: essay._id})"
+               style="cursor: pointer;"
+               uib-tooltip="click to grade"
+               tooltip-placement="right">
+            <tr ng-repeat="skipObj in essay.skip">
+                <td>{{skipObj.user.name}}</td>
+                <td>{{essay.id}}</td>
+                <td>{{skipObj.reason}}</td>
             </tr>
         </tbody>
     </table>

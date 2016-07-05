@@ -77,6 +77,24 @@ angular.module('app').config([
             data: {memberOnly: true}
         });
 
+        // -- Grade --
+
+        $stateProvider.state('grade', {
+            url: '/grade?scoresheet&essay',
+            templateUrl: 'modules/main/grade/view.html',
+            controller: 'GradeController',
+            data: {memberOnly: true}
+        });
+
+        // -- Consensus Scores --
+
+        $stateProvider.state('consensus-scores', {
+            url: '/consensus-scores',
+            templateUrl: 'modules/main/consensus-scores/view.html',
+            controller: 'ConsensusScoresController',
+            data: {memberOnly: true}
+        });
+
         // -- Download --
 
         $stateProvider.state('download', {

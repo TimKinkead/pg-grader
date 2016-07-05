@@ -23,7 +23,11 @@ exports.getData = function (user, type) {
                 id: user.id,
                 name: user.name,
                 initials: user.initials,
-                admin: user.admin
+                admin: user.admin,
+                rubricSide: user.rubricSide,
+                rubricElements: user.rubricElements,
+                scoresheets: user.scoresheets,
+                consensusScores: user.consensusScores
             };
     }
 };

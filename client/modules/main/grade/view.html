@@ -1,0 +1,77 @@
+<!-- Grade -->
+
+<!-- top controls -->
+<div ng-init="initializeGradeDashboard()"
+     class="text-center"
+     style="height: 65px; padding: 15px; border-top: thin solid; border-bottom: thin solid; background-color: lightblue;">
+
+    <!-- back to graded work -->
+    <button ui-sref="graded-work"
+            class="btn btn-default pull-left">
+        <i class="glyphicon glyphicon-arrow-left"></i>
+        &nbsp;back to graded work
+    </button>
+
+    <!-- switch sides -->
+    <button ng-click="switchSides()"
+            class="btn btn-default text-center">
+        <i class="glyphicon glyphicon-share-alt"
+           style="transform: rotate(90deg) scaleY(-1);">
+        </i>
+        Switch
+        <i class="glyphicon glyphicon-share-alt"
+           style="transform: rotate(90deg);">
+        </i>
+    </button>
+
+    <!-- next essay -->
+    <button ng-if="params.scoresheet"
+            ng-click="nextEssay()"
+            class="btn btn-default pull-right"
+            style="margin-left: 5px;">
+        next essay&nbsp;
+        <i class="glyphicon glyphicon-arrow-right"></i>
+    </button>
+
+    <!-- save -->
+    <button ng-click="clickSave() && save()"
+            class="btn btn-success pull-right"
+            style="margin-left: 5px;">
+        save
+    </button>
+
+    <!-- skip -->
+    <button ng-if="!params.scoresheet"
+            ng-click="skip()"
+            class="btn btn-default pull-right">
+        skip
+    </button>
+
+</div>
+
+<!-- resizable divs -->
+<div style="display: flex; position: fixed; top: 65px; left: 0; right: 0; bottom: 0;">
+
+    <!-- left side -->
+    <div resizable r-directions="['right']"
+         r-flex="true"
+         class="resizable"
+         r-grabber="<div style='height: 100%; width: 100%; border-left: thin solid; border-right: thin solid; background-color: lightblue;'></div>"
+         style="width: 50%; max-width: 80%; min-width: 200px;">
+
+        <!-- left side content -->
+        <ng-include src="user.rubricSide === 'right' ? 'modules/main/grade/views/text.html' : 'modules/main/grade/views/rubric.html'">
+        </ng-include>
+
+    </div>
+
+    <!-- right side -->
+    <div style="flex: 1; margin-left: 14px;">
+
+        <!-- right side content -->
+        <ng-include src="user.rubricSide === 'right' ? 'modules/main/grade/views/rubric.html' : 'modules/main/grade/views/text.html'">
+        </ng-include>
+
+    </div>
+
+</div>
