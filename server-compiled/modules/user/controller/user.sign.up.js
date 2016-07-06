@@ -13,8 +13,7 @@ exports.signUp = function(a, b) {
         firstName: a.body.firstName,
         lastName: a.body.lastName,
         email: a.body.email.toLowerCase(),
-        password: a.body.password,
-        admin: Boolean(a.body.email.indexOf("@prevagroup.com") > -1)
+        password: a.body.password
     });
     logger.dash("checking email"), User.checkNewEmail(c.email, function(d, e) {
         return d ? (error.log(d), b.status(500).send({
