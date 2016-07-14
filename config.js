@@ -6,33 +6,38 @@ var config = {};
 
 // project info
 config.project = {
-    id: 'score-sheet',
-    name: 'Score Sheet',
-    description: 'A Preva Group Project',
-    keywords: 'score sheet, preva group',
+    id: 'grader',
+    name: 'Grader',
+    description: 'An online platform for scoring student work.',
+    keywords: 'grader, grading, score, scoring, essay, student work, preva group',
     owner: 'Preva Group',
-    domain: 'scoresheet.prevagroup.com',
-    subDomain: 'scoresheet',
+    domain: 'grader.prevagroup.com',
+    subDomain: 'grader',
     rootDomain: 'prevagroup.com'
+};
+
+// database
+config.database = {
+    name: 'grader'
 };
 
 // email addresses
 config.email = {
     error: {
         address: 'dsoike@prevagroup.com',
-        name: 'Preva Group Errors'
+        name: 'Grader Platform Errors'
     },
     help: {
         address: 'dsoike@prevagroup.com',
-        name: 'Preva Group Help'
+        name: 'Grader Platform Help'
     },
     server: {
         address: 'server@prevagroup.com',
-        name: 'Preva Group Server'
+        name: 'Grader Platform Server'
     },
     support: {
         address: 'support@prevagroup.com',
-        name: 'Preva Group Support'
+        name: 'Grader Platform Support'
     }
 };
 

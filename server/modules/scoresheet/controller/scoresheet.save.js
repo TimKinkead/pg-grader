@@ -31,12 +31,15 @@ exports.save = function(req, res) {
     if (!req.body.essay || !req.body.rubric || !req.body.score) { return res.sendStatus(400); }
 
     var newScoreSheet,
+        checkScore,
         consensusScore,
+        masterScore = (req.user.admin) ? req.body.masterScore : null,
         params = {
             user: req.user._id,
             essay: req.body.essay,
             rubric: req.body.rubric,
-            score: req.body.score
+            score: req.body.score,
+            masterScore: masterScore
         };
 
     // look for existing score sheet
@@ -67,12 +70,36 @@ exports.save = function(req, res) {
                 }
 
                 // find/update essay
+                var update = (masterScore) ?
+                {
+                    $set: {
+                        masterScore: true,
+                        gradeAll: true,
+                        modified: new Date()
+                    },
+                    $addToSet: {
+                        scoresheets: scoresheetDoc._id
+                    },
+                    $pull: {
+                        graders: req.user._id
+                    }
+                } :
+                {
+                    $set: {
+                        modified: new Date()
+                    },
+                    $addToSet: {
+                        scoresheets: scoresheetDoc._id,
+                        gradedBy: req.user._id
+                    },
+                    $pull: {
+                        skip: {user: req.user._id},
+                        graders: req.user._id
+                    }
+                };
                 Essay.findOneAndUpdate(
                     {_id: params.essay},
-                    {
-                        $addToSet: {scoresheets: scoresheetDoc._id},
-                        $pull: {skip: {user: req.user._id}}
-                    },
+                    update,
                     function(err, essayDoc) {
                         if (err) {
                             error.log(new Error(err));
@@ -83,8 +110,13 @@ exports.save = function(req, res) {
                             return res.status(500).send({error: '!essayDoc'});
                         }
 
+                        // check if master scored essay
+                        if (essayDoc.masterScore) {
+                            checkScore = true;
+                        }
+
                         // check if consensus score
-                        if (essayDoc.scoresheets && essayDoc.scoresheets.length) {
+                        if (!essayDoc.masterScore && essayDoc.scoresheets && essayDoc.scoresheets.length) {
                             consensusScore = true;
                             for (var i=0, x=essayDoc.scoresheets.length; i<x; i++) {
                                 if (essayDoc.scoresheets[i] && essayDoc.scoresheets[i].toString() === scoresheetDoc._id.toString()) {
@@ -101,6 +133,10 @@ exports.save = function(req, res) {
                         }
                         if (newScoreSheet) {
                             update.$inc = {scoresheets: 1};
+                        }
+                        if (checkScore) {
+                            if (!update.$inc) { update.$inc = {}; }
+                            update.$inc.checkScores = 1;
                         }
                         if (consensusScore) {
                             if (!update.$inc) { update.$inc = {}; }

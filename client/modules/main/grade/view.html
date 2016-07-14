@@ -5,11 +5,11 @@
      class="text-center"
      style="height: 65px; padding: 15px; border-top: thin solid; border-bottom: thin solid; background-color: lightblue;">
 
-    <!-- back to graded work -->
-    <button ui-sref="graded-work"
+    <!-- back to essays -->
+    <button ui-sref="essays"
             class="btn btn-default pull-left">
         <i class="glyphicon glyphicon-arrow-left"></i>
-        &nbsp;back to graded work
+        &nbsp;back to essays
     </button>
 
     <!-- switch sides -->
@@ -25,7 +25,7 @@
     </button>
 
     <!-- next essay -->
-    <button ng-if="params.scoresheet"
+    <button ng-if="params.scoresheet && status.saved"
             ng-click="nextEssay()"
             class="btn btn-default pull-right"
             style="margin-left: 5px;">

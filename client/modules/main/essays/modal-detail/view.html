@@ -1,0 +1,107 @@
+<!-- essay detail modal -->
+
+<!-- modal header -->
+<div class="modal-header">
+    <span ng-click="cancel()"
+          class="close"
+          style="margin: -10px -10px; padding: 10px 10px;">
+        &times;
+    </span>
+    <h3 class="modal-title"
+        style="margin: 20px 15px 5px 15px;">
+        Essay Details
+        <div class="badge">
+            {{essay.id}}
+        </div>
+        <a href="{{'https://docs.google.com/viewerng/viewer?url='+essay.link}}"
+           target="_blank">
+            <i class="glyphicon glyphicon-new-window"
+               style="font-size: 60%;">
+            </i>
+        </a>
+    </h3>
+</div>
+
+<div class="modal-body">
+
+    <!-- in progress / skipped / graded -->
+    <div style="margin: 10px 20px;">
+        <div style="display: flex; flex-direction: row;">
+
+            <!-- being graded by -->
+            <div style="flex: 1;">
+                <p style="text-align: center; margin-bottom: 5px; text-decoration: underline; font-size: 110%;">
+                    Being Graded By
+                </p>
+                <p ng-repeat="user in essay.graders"
+                   style="text-align: center; margin-bottom: 2px;">
+                    {{user.name}}
+                </p>
+            </div>
+
+            <!-- skipped by -->
+            <div style="flex: 1;">
+                <p style="text-align: center; margin-bottom: 5px; text-decoration: underline; font-size: 110%;">
+                    Skipped By
+                </p>
+                <p ng-repeat="skip in essay.skip"
+                   style="text-align: center; margin-bottom: 2px;">
+                    {{skip.user.name}}
+                </p>
+            </div>
+
+            <!-- graded by -->
+            <div style="flex: 1;">
+                <p style="text-align: center; margin-bottom: 5px; text-decoration: underline; font-size: 110%;">
+                    Graded By
+                </p>
+                <p ng-repeat="user in essay.gradedBy"
+                   style="text-align: center; margin-bottom: 2px;">
+                    {{user.name}}
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- scores -->
+    <h3 style="text-align: center; text-decoration: underline;">
+        Scores
+    </h3>
+
+    <!-- no scores -->
+    <p ng-if="!essay.scoresheets.length"
+       style="text-align: center;">
+        - no scores -
+    </p>
+
+    <!-- scores table -->
+    <table ng-if="essay.scoresheets.length"
+           class="table table-bordered"
+           style="background-color: whitesmoke; margin-bottom: 0;">
+        <thead>
+        <th ng-repeat="field in fields"
+            class="text-center"
+            style="vertical-align: middle;"
+            ng-style="{width: ((['grader'].indexOf(field) > -1) ? '20%' : '')}">
+            {{field|capitalize}}
+        </th>
+        </thead>
+        <tbody>
+        <tr ng-repeat="sheet in scoresheets | orderBy: 'masterScore'">
+            <td ng-repeat="field in fields"
+                class="text-center">
+                <div ng-if="['grader', 'rubric'].indexOf(field) < 0">
+                    {{sheet.score[field]}}
+                </div>
+                <div ng-if="field === 'grader'">
+                    {{sheet.masterScore ? 'Master Score' : sheet.user.name}}
+                </div>
+                <div ng-if="field === 'rubric'">
+                    {{sheet.rubric.name}}
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

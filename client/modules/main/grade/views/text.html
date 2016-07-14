@@ -10,13 +10,13 @@
              style="margin: 15px 15px 0 15px;">
 
             <!-- new prompt alert -->
-            <div ng-if="status.newPrompt"
+            <div ng-if="status.newModule"
                  class="alert alert-success text-center">
                 heads up
                 &nbsp;
                 <i class="glyphicon glyphicon-hand-down"></i>
                 &nbsp;
-                new prompt
+                new module
             </div>
 
             <!-- prompt -->
@@ -24,13 +24,22 @@
                 Prompt
                 <span ng-if="!status.hidePrompt"
                       class="badge">
-                    {{docs.essay.module}}
+                    {{docs.essay.module.name}}
                 </span>
             </h3>
             <div ng-if="!status.processingEssay"
                  class="well"
                  style="margin-bottom: 0;">
-                {{docs.essay.prompt}}
+                <p style="margin-bottom: 0;">
+                    {{docs.essay.module.prompt}}
+                </p>
+                <div ng-if="docs.essay.module.promptExtra.length">
+                    <ul style="margin-top: 10px; margin-bottom: 0;">
+                        <li ng-repeat="bullet in docs.essay.module.promptExtra">
+                            {{bullet}}
+                        </li>
+                    </ul>
+                </div>
             </div>
             <button ng-click="switchPrompt()"
                     class="btn btn-xs btn-default pull-right"

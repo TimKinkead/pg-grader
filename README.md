@@ -1,17 +1,17 @@
-# Score Sheet
+# Grader
 
 *A Preva Group Project* - [prevagroup.com](http://prevagroup.com)
 
 ### Project Description
 
-A web tool for cataloging scores for student work. - [score.prevagroup.com](http://score.prevagroup.com)
+An online platform for scoring student work. - [grader.prevagroup.com](http://grader.prevagroup.com)
 
 ### Development Details
 This project uses a MEAN stack. (MongoDB, Express, Angular, Node)
 
 ### Getting Started
 * Download [GitHub Desktop](https://desktop.github.com/).
-  * Use GitHub Desktop to clone this repository (scoresheet) to your local machine.
+  * Use GitHub Desktop to clone this repository (grader) to your local machine.
 * Download an [IDE](http://paulb.gd/comparing-nodejs-ides/)
   * Use your IDE to open the project files.
 * Install [MongoDB](https://www.mongodb.org/downloads#production).
@@ -21,7 +21,7 @@ This project uses a MEAN stack. (MongoDB, Express, Angular, Node)
   * NodeJS comes with [NPM](https://www.npmjs.com/) (Node Package Manager).
 * Install the project dependencies.
   * Open a terminal.
-  * Change directory to the project root (wherever GitHub cloned the project). `cd C:\<yourname>\Documents\GitHub\scoresheet`
+  * Change directory to the project root (wherever GitHub cloned the project). `cd C:\<yourname>\Documents\GitHub\grader`
   * Install the node package dependencies using [NPM](https://www.npmjs.com/).
     * Run `npm install`.
     * The node package dependencies listed in `package.json` will be installed in the `node_modules` directory.
@@ -38,9 +38,9 @@ This project uses a MEAN stack. (MongoDB, Express, Angular, Node)
   * Open a terminal.
   * Change directory to MongoDB's install location. `cd C:\Program Files\MongoDB\Server\3.0\bin`
   * Start the mongod process with the command `mongod`.
-* Start the scoresheet application.
+* Start the grader application.
   * Open another terminal.
-  * Change directory to the project root (wherever GitHub cloned the project). `cd C:\<yourname>\Documents\GitHub\scoresheet`
+  * Change directory to the project root (wherever GitHub cloned the project). `cd C:\<yourname>\Documents\GitHub\grader`
   * Start the application with the command `grunt`.
 
 ### Accessing the Database through the MongoDB Shell
