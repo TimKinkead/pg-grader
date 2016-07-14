@@ -33,7 +33,8 @@ node_modules
 .node_repl_history
 
 # Temp directory
-temp
+temp/*
+!temp/README.md
 
 # WebStorm
 .idea
@@ -43,6 +44,4 @@ client/lib
 
 # Compiled Folders
 client-compiled
-#server-compiled
-
-
+server-compiled

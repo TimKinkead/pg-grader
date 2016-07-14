@@ -1,5 +1,5 @@
 {
-  "name": "pg-scoresheet",
+  "name": "pg-grader",
   "version": "1.0.0",
   "description": "Grader",
   "main": "server.js",
