@@ -20,30 +20,37 @@ var EssaySchema = new Schema({
         unique: true
     },
 
-    // document name (ex: BPA-001.docx)
-    name: {
-        type: String,
-        required: true,
-        unique: true
-    },
-
-    // module name (ex: BPA_MODULE)
+    // module
     module: {
-        type: String,
-        required: true
+        type: Schema.ObjectId,
+        ref: 'Module'
     },
 
+    /*
     // prompt
     prompt: {
         type: String,
         required: true
     },
+    
+    // prompt bullets
+    promptBullets: [{
+        type: String
+    }],
 
     // rubric
     rubric: {
         type: Schema.ObjectId,
         ref: 'Rubric',
         required: true
+    },
+    */
+
+    // document name (ex: BPA-001.docx)
+    filename: {
+        type: String,
+        required: true,
+        unique: true
     },
 
     // link (ex: https://s3-us-west-2.amazonaws.com/pg-scoresheet/student+work/BPA_MODULE/BPA-001.docx)
@@ -53,8 +60,42 @@ var EssaySchema = new Schema({
         unique: true
     },
 
-    // graders
+    /*
+    // grade (ex: 9-12)
+    grade: {
+        type: String
+    },
+
+    // subject (ex: HS Science)
+    subject: {
+        type: String
+    },
+    */
+
+    // master score (master score)
+    masterScore: {
+        type: Boolean
+    },
+
+    // all graders should grade this essay
+    gradeAll: {
+        type: Boolean
+    },
+
+    // how many graders should grade this essay
+    gradeQuota: {
+        type: Number,
+        default: 1
+    },
+
+    // graders (in progress)
     graders: [{
+        type: Schema.ObjectId,
+        ref: 'User'
+    }],
+    
+    // graded by (saved score sheet)
+    gradedBy: [{
         type: Schema.ObjectId,
         ref: 'User'
     }],
@@ -100,16 +141,6 @@ var EssaySchema = new Schema({
 
 //----------------------------------------------------------------------------------------------------------------------
 // Pre & Post Methods
-
-EssaySchema.pre('validate', function(next) {
-    if (this.name) {
-        this.id = this.name.slice(0, this.name.indexOf('.docx'));
-    }
-    if (this.module && this.name) {
-        this.link = 'https://s3-us-west-2.amazonaws.com/pg-scoresheet/student+work/'+this.module+'/'+this.name;
-    }
-    next();
-});
 
 //----------------------------------------------------------------------------------------------------------------------
 // Initialize Model

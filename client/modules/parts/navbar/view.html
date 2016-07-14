@@ -14,7 +14,15 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href ui-sref="home">
-                Score Sheet
+                GRADER
+                <span ng-if="window.location.host.indexOf('localhost') > -1"
+                      style="font-weight: bold; color: cornflowerblue;">
+                    localhost
+                </span>
+                <span ng-if="window.location.host.indexOf('demo') > -1"
+                      style="font-weight: bold; color: orange;">
+                    demo
+                </span>
             </a>
         </div>
 
@@ -25,8 +33,16 @@
             <ul class="nav navbar-nav"
                 ng-if="user._id">
 
+                <!-- essays -->
+                <li ui-sref-active="active">
+                    <a href ui-sref="essays">
+                        <i class="glyphicon glyphicon-file"></i>
+                        Essays
+                    </a>
+                </li>
+
                 <!-- graders -->
-                <li ng-if="user.admin"
+                <li ng-if="user.admin || user.facilitator"
                     ui-sref-active="active">
                     <a href ui-sref="graders">
                         <i class="glyphicon glyphicon-user"></i>
@@ -35,7 +51,8 @@
                 </li>
 
                 <!-- graded work -->
-                <li ui-sref-active="active">
+                <li ng-if="user.admin"
+                    ui-sref-active="active">
                     <a href ui-sref="graded-work">
                         <i class="glyphicon glyphicon-pencil"></i>
                         Graded Work
@@ -43,7 +60,7 @@
                 </li>
 
                 <!-- consensus scores -->
-                <li ng-if="user.consensusScores"
+                <li ng-if="user.admin"
                     ui-sref-active="active">
                     <a href ui-sref="consensus-scores">
                         <i class="glyphicon glyphicon-equalizer"></i>
@@ -61,14 +78,31 @@
                 </li>
             </ul>
 
+            <!-- admin dashboard -->
+            <ul ng-if="window.location.host.indexOf('localhost') > -1"
+                class="nav navbar-nav">
+
+                <!-- admin -->
+                <li ui-sref-active="active">
+                    <a href ui-sref="admin">
+                        <i class="glyphicon glyphicon-dashboard"></i>
+                        Admin
+                    </a>
+                </li>
+
+            </ul>
+
             <!-- navbar drop down -->
             <ul class="nav navbar-nav navbar-right">
 
                 <!-- user drop down -->
                 <li class="dropdown" uib-dropdown
                     ng-if="user._id">
-                    <a href="#" class="dropdown-toggle" uib-dropdown-toggle>
-                        {{user.name}} <span class="caret"></span>
+                    <a href="#" class="dropdown-toggle" uib-dropdown-toggle
+                       uib-tooltip="{{user.admin ? 'Administrator' : (user.facilitator ? 'Facilitator' : '')}}"
+                       tooltip-placement="left">
+                        {{user.name}}
+                        <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu">
                         <li><a href ui-sref="user.settings">Settings</a></li>

@@ -5,6 +5,8 @@ var config = require('../config.js');
 //----------------------------------------------------------------------------------------------------------------------
 // Dependencies
 
+// TODO - upgrade connect-mongo
+
 var fs = require('fs'),
     http = require('http'),
     https = require('https'),

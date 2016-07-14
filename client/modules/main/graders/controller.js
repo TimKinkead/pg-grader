@@ -9,16 +9,21 @@ angular.module('app').controller('GradersController', [
     '$http',
     '$timeout',
     '$uibModal',
-    function ($scope, $resource, $http, $timeout, $modal) {
+    'CurrentUser',
+    function ($scope, $resource, $http, $timeout, $modal, CurrentUser) {
 
         // variables
-        var status = $scope.status = {},
+        var user = $scope.user = CurrentUser.data,
+            
+            status = $scope.status = {},
             params = $scope.params = {},
             
             errorMessages = $scope.errorMessages = [],
             successMessages = $scope.successMessages = [],
             
-            fields = $scope.fields = ['no', 'joined', 'id', 'name', 'email', 'admin'];
+            fields = $scope.fields = (user.admin) ? 
+                ['no', 'id', 'name', 'email', 'graded essays', 'check scores', 'facilitator', 'admin'] :
+                ['no', 'id', 'name', 'email', 'graded essays', 'check scores'];
         
         // -------------------------------------------------------------------------------------------------------------
         // Success/Error Messages

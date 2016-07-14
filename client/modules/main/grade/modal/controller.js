@@ -21,6 +21,11 @@ angular.module('app').controller('GradeModalController', [
             $modalInstance.close();
         };
 
+        // back to essays
+        $scope.backToEssays = function() {
+            $modalInstance.close('essays');
+        };
+
         // click skip button
         $scope.clickSkip = function() {
             status.clicked = true;
@@ -30,6 +35,11 @@ angular.module('app').controller('GradeModalController', [
         // skip with reason
         $scope.skip = function() {
             $modalInstance.close(params.reason);
+        };
+
+        // review master scores
+        $scope.reviewMasterScores = function() {
+            $modalInstance.close('check-scores');
         };
 
         // review consensus scores

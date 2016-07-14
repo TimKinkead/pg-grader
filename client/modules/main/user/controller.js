@@ -12,6 +12,8 @@ angular.module('app').controller('UserController', [
         var user = $scope.user = {},
             status = $scope.status = {},
             params = $scope.params = {},
+            
+            groups = $scope.groups = [],
 
             emailRegex = $scope.emailRegex = /.*\@.*\..*/,
             passwordRegex = $scope.passwordRegex = /.{6}/;
@@ -72,9 +74,42 @@ angular.module('app').controller('UserController', [
             $state.go('user.signup');
         };
         
+        // facilitator / grader sign up
+        $scope.toggleFacilitator = function() {
+            user.facilitator = !user.facilitator;  
+        };
+        
         // show password as password vs text
         $scope.toggleShowPassword = function() {
             status.showPassword = !status.showPassword;
+        };
+        
+        // get groups
+        status.processingGroups = true;
+        groups = $scope.groups = $resource('data/group/list').query(
+            {},
+            function() {
+                status.processingGroups = false;
+            },
+            function(err) {
+                status.processingGroups = false;
+                status.errorMessage = (err && err.message) ? err.message : 'We had trouble listing the groups. Please try refreshing the page.';
+            }
+        );
+
+        // select group
+        $scope.selectGroup = function(group) {
+            user.group = group;
+            if (group.modules) {
+                var moduleIds = [];
+                group.modules.forEach(function(module) {
+                    if (module._id) {
+                        moduleIds.push(module._id);
+                    }
+                });
+                user.group.modules = moduleIds;
+            }
+            status.showGroups = false;
         };
         
         // click sign up button
@@ -87,6 +122,7 @@ angular.module('app').controller('UserController', [
         $scope.signUp = function() {
             status.errorMessage = null;
             status.processing = true;
+            console.log(user);
             $http.post('/data/user/sign-up', user)
                 .success(function(newUserData) {
                     status.processing = false;

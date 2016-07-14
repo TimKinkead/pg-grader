@@ -50,5 +50,11 @@ module.exports = function(app) {
     app.route('/data/user/settings')
         .get(user.readSettings)
         .put(user.updateSettings);
-    
+
+    // -- OTHER --
+
+    // count users
+    app.route('/data/user/count')
+        .get(user.count);
+
 };

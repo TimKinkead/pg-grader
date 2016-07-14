@@ -34,4 +34,8 @@ module.exports = function(app) {
     app.route('/data/essay/init')
         .get(essay.init);
 
+    // count essays
+    app.route('/data/essay/count')
+        .get(essay.count);
+
 };

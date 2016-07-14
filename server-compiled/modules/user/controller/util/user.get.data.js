@@ -14,7 +14,9 @@ exports.getData = function (user, type) {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                admin: user.admin
+                group: user.group,
+                admin: user.admin,
+                facilitator: user.facilitator
             };
 
         default:
@@ -23,10 +25,13 @@ exports.getData = function (user, type) {
                 id: user.id,
                 name: user.name,
                 initials: user.initials,
+                group: user.group,
                 admin: user.admin,
+                facilitator: user.facilitator,
                 rubricSide: user.rubricSide,
                 rubricElements: user.rubricElements,
                 scoresheets: user.scoresheets,
+                checkScores: user.checkScores,
                 consensusScores: user.consensusScores
             };
     }

@@ -47,7 +47,9 @@ exports.signUp = function(req, res) {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email.toLowerCase(),
-        password: req.body.password
+        password: req.body.password,
+        group: req.body.group,
+        facilitator: req.body.facilitator
     });
 
     // check existing users

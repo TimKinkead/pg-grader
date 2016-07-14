@@ -11,9 +11,10 @@ var http = require('http'),
 //----------------------------------------------------------------------------------------------------------------------
 // Variables
 
-var initialConnection = true,
+var config = require('./config'),
+    initialConnection = true,
     connected = false,
-    databaseName = 'scoresheet',
+    databaseName = config.database.name,
     reconnectTries = 30,
     reconnectInterval = 1000;
 

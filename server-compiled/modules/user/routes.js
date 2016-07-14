@@ -41,4 +41,9 @@ module.exports = function (app) {
 
     // get & update settings
     app.route('/data/user/settings').get(user.readSettings).put(user.updateSettings);
+
+    // -- OTHER --
+
+    // count users
+    app.route('/data/user/count').get(user.count);
 };

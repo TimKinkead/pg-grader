@@ -25,12 +25,17 @@ var error = require('../../error'),
 exports.list = function (req, res) {
     logger.filename(__filename);
 
-    if (!req.user || !req.user.admin) {
+    if (!req.user || !req.user.admin && !req.user.facilitator) {
         return res.sendStatus(403);
     }
+    if (req.user.facilitator && !req.user.group) {
+        return res.sendStatus(500);
+    }
+
+    var query = req.user.admin ? {} : { 'group.modules': { $in: req.user.group.modules } };
 
     // get graders
-    User.find().select('_id id name email admin created').exec(function (err, userDocs) {
+    User.find(query).select('_id id name email scoresheets checkScores admin facilitator').exec(function (err, userDocs) {
         if (err) {
             error.log(new Error(err));
             return res.status(500).send({ error: err });

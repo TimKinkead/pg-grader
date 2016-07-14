@@ -20,8 +20,11 @@
 
 <!-- total count -->
 <div class="container text-center">
-    <p>
+    <p ng-if="user.admin">
         There are <strong>{{graders.length}}</strong> total graders.
+    </p>
+    <p ng-if="user.facilitator">
+        There are <strong>{{graders.length}}</strong> graders in your group.
     </p>
 </div>
 
@@ -65,14 +68,21 @@
             <tr ng-repeat="grader in graders | orderBy:'-created'"
                 ng-init="graderIndex = $index+1">
                 <td ng-repeat="field in fields">
-                    <div ng-if="['no', 'joined', 'admin'].indexOf(field) < 0">
+                    <div ng-if="['no', 'graded essays', 'check scores', 'facilitator', 'admin'].indexOf(field) < 0">
                         {{grader[field]}}
                     </div>
                     <div ng-if="field === 'no'">
                         {{graderIndex}}
                     </div>
-                    <div ng-if="field === 'joined'">
-                        {{grader.created|date:'short'}}
+                    <div ng-if="field === 'graded essays'">
+                        {{grader.scoresheets}}
+                    </div>
+                    <div ng-if="field === 'check scores'">
+                        {{grader.checkScores}}
+                    </div>
+                    <div ng-if="field === 'facilitator'">
+                        <i ng-if="grader.facilitator"
+                           class="glyphicon glyphicon-ok"></i>
                     </div>
                     <div ng-if="field === 'admin'">
                         <i ng-if="grader.admin"

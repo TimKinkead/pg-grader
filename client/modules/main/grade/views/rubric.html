@@ -3,16 +3,17 @@
 <div style="height: 100%; width: 100%; overflow-y: auto; padding: 15px; background-color: gainsboro;">
 
     <!-- new rubric alert -->
-    <div ng-if="status.newRubric"
+    <div ng-if="status.newModule"
          class="alert alert-success text-center">
         heads up
         &nbsp;
         <i class="glyphicon glyphicon-hand-down"></i>
         &nbsp;
-        new rubric
+        new module
     </div>
 
     <!-- rubric drop down -->
+    <!--
     <h3 style="text-align: center; margin-top: 10px;">
         Rubric
     </h3>
@@ -28,6 +29,46 @@
                     {{rubric.name}}
                 </option>
             </select>
+        </div>
+    </div>
+    <span ng-if="status.processingRubrics"
+          class="spinner-sm"
+          style="margin: auto;">
+    </span>
+    -->
+
+    <div ng-if="user.admin"
+         class="text-center">
+        <button ng-click="params.masterScore = !params.masterScore"
+                class="btn btn-default"
+                ng-class="{'btn-success': (params.masterScore), 'btn-info': (!params.masterScore)}">
+            <i ng-if="!params.masterScore"
+               class="glyphicon glyphicon-unchecked">
+            </i>
+            <i ng-if="params.masterScore"
+               class="glyphicon glyphicon-ok">
+            </i>
+            &nbsp;
+            Save as Master Score
+        </button>
+    </div>
+
+    <!-- rubric well -->
+    <h3 style="text-align: center; margin-top: 10px;">
+        Rubric
+    </h3>
+    <div ng-if="!status.processingRubrics && docs.rubrics.$resolved"
+         class="form-group">
+        <div class="well">
+            <p style="margin: 0; text-align: center; font-size: 110%;">
+                {{docs.rubric.name}}
+                <a href="{{'https://docs.google.com/viewerng/viewer?url='+docs.rubric.link}}"
+                   target="_blank">
+                    <i class="glyphicon glyphicon-new-window"
+                       style="font-size: 90%;">
+                    </i>
+                </a>
+            </p>
         </div>
     </div>
     <span ng-if="status.processingRubrics"
@@ -91,8 +132,8 @@
                  ng-style="{'background-color': (docs.rubric.fields[fieldIndex].visible) ? 'lightblue' : ''}">
 
                 <!-- scoring element title -->
-                <p ng-if="docs.rubric.fields[fieldIndex].visible"
-                   style="margin-bottom: 5px;">
+                <div ng-if="docs.rubric.fields[fieldIndex].visible"
+                   style="padding: 5px 0;">
                     <i ng-if="params.score[field.name]"
                        class="glyphicon glyphicon-ok"
                        style="color: green;">
@@ -101,10 +142,14 @@
                        class="glyphicon glyphicon-hand-right"
                        style="color: red;">
                     </i>&nbsp;
-                <span style="font-style: italic; font-weight: bold;">
-                    {{field.name|capitalize}}
-                </span>
-                </p>
+                    <span style="font-style: italic; font-weight: bold;">
+                        {{field.name|capitalize}}
+                    </span>
+                    <p ng-if="field.note"
+                       style="margin: 5px 10px 5px 20px; font-style: italic; padding: 5px 10px; border: solid thin;">
+                        {{field.note}}
+                    </p>
+                </div>
                 <div ng-if="!docs.rubric.fields[fieldIndex].visible">
                     <i ng-if="params.score[field.name]"
                        class="glyphicon glyphicon-ok"
@@ -138,17 +183,25 @@
                      class="btn-group-custom"
                      style="display: flex;"
                      ng-style="{'flex-direction': (status.rubricTableWidth > 700) ? 'row' : 'column'}">
-                    <button ng-repeat="detail in field.details"
+                    <button ng-repeat="detail in field.details | orderBy: '-score'"
                             ng-click="scoreField(fieldIndex, field.name, detail.score)"
                             class="btn"
                             ng-class="{active: params.score[field.name] === detail.score}"
-                            style="white-space: normal;"
-                            ng-style="{flex: (detail.text) ? 5 : 1, 'font-size': (detail.text) ? '100%' : '80%'}"
+                            style="white-space: normal; min-height: 60px;"
+                            ng-style="{flex: (detail.hasOwnProperty('text')) ? 5 : 1, 'text-align': (detail.hasOwnProperty('text')) ? 'left' : 'center', 'font-size': (detail.hasOwnProperty('text')) ? '100%' : '80%'}"
                             type="button"
                             uib-tooltip="{{detail.score}}">
-                            <span ng-style="{margin: (detail.text) ? 'auto' : '-10px'}">
-                                {{detail.text || detail.score}}
-                            </span>
+                            <div ng-style="{margin: (detail.text) ? 'auto' : '-10px'}">
+                                <div ng-if="detail.texts">
+                                    <p ng-repeat="text in detail.texts"
+                                       style="margin: 10px 0;">
+                                        {{text}}
+                                    </p>
+                                </div>
+                                <div ng-if="!detail.texts">
+                                    {{detail.text || detail.score}}
+                                </div>
+                            </div>
                     </button>
                 </div>
             </div>

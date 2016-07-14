@@ -59,21 +59,12 @@ angular.module('app').config([
             data: {guestOnly: true}
         });
 
-        // -- Graders --
+        // -- Essays --
 
-        $stateProvider.state('graders', {
-            url: '/graders',
-            templateUrl: 'modules/main/graders/view.html',
-            controller: 'GradersController',
-            data: {adminOnly: true}
-        });
-
-        // -- Graded Work --
-
-        $stateProvider.state('graded-work', {
-            url: '/graded-work',
-            templateUrl: 'modules/main/graded-work/view.html',
-            controller: 'GradedWorkController',
+        $stateProvider.state('essays', {
+            url: '/essays?all-essays-graded&modal-check&essay',
+            templateUrl: 'modules/main/essays/view.html',
+            controller: 'EssaysController',
             data: {memberOnly: true}
         });
 
@@ -83,6 +74,24 @@ angular.module('app').config([
             url: '/grade?scoresheet&essay',
             templateUrl: 'modules/main/grade/view.html',
             controller: 'GradeController',
+            data: {memberOnly: true}
+        });
+        
+        // -- Graders --
+
+        $stateProvider.state('graders', {
+            url: '/graders',
+            templateUrl: 'modules/main/graders/view.html',
+            controller: 'GradersController',
+            data: {adminOrFacilitator: true}
+        });
+        
+        // -- Graded Work --
+
+        $stateProvider.state('graded-work', {
+            url: '/graded-work',
+            templateUrl: 'modules/main/graded-work/view.html',
+            controller: 'GradedWorkController',
             data: {memberOnly: true}
         });
 
@@ -100,8 +109,16 @@ angular.module('app').config([
         $stateProvider.state('download', {
             url: '/download',
             templateUrl: 'modules/main/download/view.html',
-            controller: 'DownloadController',
-            data: {adminOnly: true}
+            controller: 'DownloadController'
+            //data: {adminOnly: true}
+        });
+
+        // -- Admin Page --
+
+        $stateProvider.state('admin', {
+            url: '/admin',
+            templateUrl: 'modules/main/admin/view.html',
+            controller: 'AdminController'
         });
         
     }

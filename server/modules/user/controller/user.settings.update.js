@@ -49,6 +49,7 @@ exports.updateSettings = function(req, res) {
         }
         if (req.body.rubricSide) { req.user.rubricSide = req.body.rubricSide; }
         if (req.body.rubricElements) { req.user.rubricElements = req.body.rubricElements; }
+        if (req.body.lastModule) { req.user.lastModule = req.body.lastModule; }
         if (req.body.lastRubric) { req.user.lastRubric = req.body.lastRubric; }
         if (req.body.lastPrompt) { req.user.lastPrompt = req.body.lastPrompt; }
         

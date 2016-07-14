@@ -13,6 +13,8 @@
 </div>
 
 <div class="modal-body">
+
+    <!-- next essay -->
     <div style="margin-bottom: 10px;">
         <p style="text-align: center; margin: 20px 0 10px 0; font-size: 120%;">
             Ready for the next one?
@@ -21,6 +23,21 @@
                 class="btn btn-lg btn-block btn-success"
                 style="max-width: 50%; margin: auto;">
             Grade Another Essay
+        </button>
+    </div>
+
+    <!-- back to essays -->
+    <div style="margin-bottom: 10px;">
+        <p style="text-align: center; margin: 20px 0 10px 0; font-size: 120%;">
+            - or -
+        </p>
+        <button ng-click="backToEssays()"
+                class="btn btn-lg btn-block btn-default"
+                style="max-width: 50%; margin: auto;">
+            <i class="glyphicon glyphicon-arrow-left"
+               style="font-size: 100%;">
+            </i>
+            &nbsp;Back to Essays
         </button>
     </div>
 </div>

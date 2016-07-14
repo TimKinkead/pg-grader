@@ -13,11 +13,23 @@ var RubricSchema = new Schema({
 
     //_id: {type: ObjectId} // automatically created for each document
 
+    // unique id
+    id: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    
     // unique rubric name
     name: {
         type: String,
         required: true,
         unique: true
+    },
+
+    // link
+    link: {
+        type: String
     },
 
     // table headers
@@ -28,6 +40,7 @@ var RubricSchema = new Schema({
     fields: [{
         _id: false,
         name: {type: String},
+        note: {type: String},
         optional: {type: Boolean},
         details: [{
             _id: false,

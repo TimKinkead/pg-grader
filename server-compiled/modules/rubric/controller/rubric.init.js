@@ -36,7 +36,7 @@ exports.init = function (req, res) {
 	rubrics.forEach(function (rubric, index) {
 
 		// look for existing rubric
-		Rubric.findOne({ name: rubric.name }).exec(function (err, rubricDoc) {
+		Rubric.findOne({ id: rubric.id }).exec(function (err, rubricDoc) {
 			if (err) {
 				error.log(new Error(err));return;
 			}

@@ -65,6 +65,16 @@ var UserSchema = new Schema({
         type: Boolean,
         default: false
     },
+    facilitator: {
+        type: Boolean,
+        default: false
+    },
+
+    // group info
+    group: {
+        type: Object,
+        required: true
+    },
 
     // settings
     rubricSide: {
@@ -77,13 +87,17 @@ var UserSchema = new Schema({
         enum: ['show all', 'one at a time'],
         default: 'show all'
     },
-    lastRubric: {
+    lastModule: {
+        type: Schema.ObjectId,
+        ref: 'Module'
+    },
+    /*lastRubric: {
         type: Schema.ObjectId,
         ref: 'Rubric'
     },
     lastPrompt: {
         type: String
-    },
+    },*/
     currentEssay: {
         type: Schema.ObjectId,
         ref: 'Essay'
@@ -91,6 +105,10 @@ var UserSchema = new Schema({
 
     // counters
     scoresheets: {
+        type: Number,
+        default: 0
+    },
+    checkScores: {
         type: Number,
         default: 0
     },

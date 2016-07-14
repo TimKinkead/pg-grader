@@ -21,8 +21,7 @@ angular.module('app').controller('GradeController', [
                 nextEssay: null,
                 hidePrompt: null,
                 saved: null,
-                newPrompt: null,
-                newRubric: null
+                newModule: null
             },
             params = $scope.params = {
                 scoresheet: null,
@@ -188,8 +187,10 @@ angular.module('app').controller('GradeController', [
             [status, params, docs].forEach(function(item) {
                 for (var key in item) {
                     if (item.hasOwnProperty(key)) {
-                        if (item === params && key === 'score') {
-                            item[key] = {};
+                        if (item === docs && key === 'rubrics') {
+                            docs.rubrics = docs.rubrics || null;
+                        } else if (item === params && key === 'score') {
+                            params.score = {};
                         } else {
                             item[key] = null;   
                         }
@@ -202,9 +203,8 @@ angular.module('app').controller('GradeController', [
         }
 
         function getEssay() {
-            //console.log('getEssay()');
             status.processingEssay = true;
-            $http.get('/data/essay?essay='+params.essay)
+            $http.get('/data/essay?essay='+params.essay+'&grading=true')
                 .success(function(essay) {
                     setTimeout(
                         function() {
@@ -213,11 +213,19 @@ angular.module('app').controller('GradeController', [
                         },
                         1000
                     );
+                    status.masterScore = essay.masterScore;
                     docs.essay = essay;
                     docs.essay.iframeLink = $sce.trustAsResourceUrl(
                         'https://docs.google.com/gview?url='+essay.link+'&embedded=true'
                     );
-                    if (!params.rubric) { params.rubric = essay.rubric._id; }
+                    if (!params.rubric) { params.rubric = essay.module.rubric; }
+                    if (!params.scoresheet && essay.scoresheets) {
+                        essay.scoresheets.forEach(function(scoresheet) {
+                            if (scoresheet.user && scoresheet.user.toString() === user._id.toString() && !scoresheet.masterScore) {
+                                params.scoresheet = scoresheet._id;
+                            }
+                        });
+                    }
                 })
                 .error(function(err) {
                     status.processingEssay = false;
@@ -230,6 +238,7 @@ angular.module('app').controller('GradeController', [
             status.processingEssay = true;
             $http.get('/data/essay/next')
                 .success(function(essay) {
+                    
                     // all essays graded
                     if (essay.message === 'all essays graded') {
                         var modalInstance = $modal.open({
@@ -238,14 +247,16 @@ angular.module('app').controller('GradeController', [
                             backdrop: 'static'
                         });
                         modalInstance.result.then(
-                            function() { $state.go('graded-work'); },
-                            function() { $state.go('graded-work'); }
+                            function() { $state.go('essays', {'all-essays-graded': true}); },
+                            function() { $state.go('essays', {'all-essays-graded': true}); }
                         );
                         return;
                     }
-                    status.newPrompt = essay.newPrompt;
-                    status.newRubric = essay.newRubric;
+                    
+                    status.newModule = essay.newModule;
+                    status.masterScore = essay.masterScore;
                     status.consensusScore = essay.consensusScore;
+                    
                     // trigger `getEssay()` via $watch
                     params.essay = essay._id;
                 })
@@ -273,11 +284,11 @@ angular.module('app').controller('GradeController', [
                     $http.put('/data/essay/skip', {essay: params.essay, reason: reason})
                         .success(function() {
                             status.processingSkip = false;
-                            status.nextEssay = true;
+                            $state.go('essays');
                         })
                         .error(function(err) {
                             status.processingSkip = false;
-                            status.nextEssay = true;
+                            $state.go('essays');
                         });
                 },
                 function(msg) { console.log(msg || 'dismiss'); }
@@ -293,6 +304,11 @@ angular.module('app').controller('GradeController', [
                 for (var i=0, x=docs.rubrics.length; i<x; i++) {
                     if (params.rubric === docs.rubrics[i]._id) {
                         docs.rubric = docs.rubrics[i];
+                        docs.rubric.fields.forEach(function(field) {
+                            field.details.forEach(function(detail) {
+                                detail.texts = (detail.text) ? detail.text.split('\n') : null; 
+                            });
+                        });
                         showRubricElements();
                         break;
                     }
@@ -390,21 +406,28 @@ angular.module('app').controller('GradeController', [
                     removeUnloadEvent();
                     var modalInstance;
                     
-                    // consensus modal
-                    if (status.consensusScore) {
+                    // check master score modal
+                    if (status.masterScore) {
                         modalInstance = $modal.open({
-                            templateUrl: 'modules/main/grade/modal/consensus.html',
+                            templateUrl: 'modules/main/grade/modal/check.html',
                             controller: 'GradeModalController',
                             backdrop: 'static'
                         });
                         modalInstance.result.then(
                             function(stateName) {
-                                user.consensusScores++;
-                                if (stateName) { $state.go(stateName); }
-                                else { status.nextEssay = true; }
+                                user.checkScores++;
+                                if (stateName) {
+                                    if (stateName === 'check-scores') {
+                                        $state.go('essays', {'modal-check': true, essay: scoresheet.essay});
+                                    } else {
+                                        $state.go(stateName);
+                                    }
+                                } else { 
+                                    status.nextEssay = true; 
+                                }
                             },
                             function() {
-                                user.consensusScores++;
+                                user.checkScores++;
                                 params.scoresheet = scoresheet._id;
                             }
                         );
@@ -418,7 +441,13 @@ angular.module('app').controller('GradeController', [
                         backdrop: 'static'
                     });
                     modalInstance.result.then(
-                        function() { status.nextEssay = true; },
+                        function(stateName) {
+                            if (stateName) {
+                                $state.go(stateName);
+                                return;
+                            }
+                            status.nextEssay = true;
+                        },
                         function() { params.scoresheet = scoresheet._id; }
                     );
                 })

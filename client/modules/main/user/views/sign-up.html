@@ -1,8 +1,31 @@
+<!-- SIGN UP -->
+
 <!-- title -->
-<h2 class="text-center"
-    style="margin-bottom: 15px;">
-    Sign Up
-</h2>
+<div class="jumbotron"
+     style="background: #677F71; padding-top: 12px; padding-bottom: 18px; margin-bottom: 20px;">
+    <h2 class="text-center"
+        style="color: whitesmoke;">
+        {{user.facilitator ? 'Facilitator' : 'Grader'}} Sign Up
+    </h2>
+</div>
+
+<!-- facilitator -->
+<p ng-if="!user.facilitator"
+   style="text-align: center; margin-bottom: 15px;">
+    Are you a facilitator? Sign up
+    <a ng-click="toggleFacilitator()"
+       style="cursor: pointer;">
+        here</a>.
+</p>
+
+<!-- grader -->
+<p ng-if="user.facilitator"
+   style="text-align: center; margin-bottom: 15px;">
+    Not a facilitator? Sign up
+    <a ng-click="toggleFacilitator()"
+       style="cursor: pointer;">
+        here</a>.
+</p>
 
 <!-- error message -->
 <div ng-if="status.errorMessage"
@@ -27,7 +50,8 @@
 <div style="padding: 0 1px;">
 
     <!-- container div for form -->
-    <div style="max-width: 500px; margin: auto; padding: 15px; border: 1px solid; border-radius: 5px; background-color: lightblue;">
+    <div style="max-width: 500px; margin: auto; padding: 15px; border: 1px solid; border-radius: 5px;"
+         ng-style="{'background-color': (!user.facilitator) ? 'lightblue' : 'skyblue'}">
 
         <!-- sign up form -->
         <form ng-submit="click() && form.$valid && signUp()"
@@ -35,6 +59,7 @@
               name="form"
               novalidate>
 
+            <!-- name -->
             <div class="form-group">
                 <label>name</label>
                 <div class="col-xs-12"
@@ -61,6 +86,7 @@
                 </div>
             </div>
 
+            <!-- email -->
             <div class="form-group">
                 <label>email</label>
                 <div style="padding: 1px;">
@@ -74,6 +100,7 @@
                 </div>
             </div>
 
+            <!-- password -->
             <div class="form-group has-feedback">
                 <label>password</label>
                 <div style="padding: 1px;">
@@ -103,6 +130,57 @@
                 </span>
             </div>
 
+            <!-- group drop down -->
+            <div class="form-group"
+                 style="margin-bottom: 0;">
+                <label>Group</label>
+                <select ng-if="!status.showGroups && groups && groups.$resolved"
+                        ng-click="status.showGroups = true"
+                        ng-model="user.group._id"
+                        class="form-control"
+                        name="group"
+                        required>
+                    <option ng-repeat="group in groups | orderBy:name"
+                            value="{{group._id}}">
+                        {{group.name}}
+                    </option>
+                </select>
+            </div>
+
+            <!-- group buttons -->
+            <div ng-if="status.showGroups && groups && groups.$resolved"
+                 style="display: flex; flex-direction: column;">
+                <div ng-repeat="group in groups | orderBy: 'name'"
+                     ng-click="selectGroup(group)"
+                     class="btn btn-default"
+                     style="flex: 1">
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <div style="flex: 1; font-weight: bold;">
+                            {{group.name}}
+                        </div>
+                        <div style="flex: 3; text-align: left; font-size: 90%; white-space: normal;">
+                            <ul style="margin: 10px 0;">
+                                <li>
+                                    <strong>Subject:</strong>
+                                    {{group.subject}}
+                                </li>
+                                <li>
+                                    <strong>Facilitator:</strong>
+                                    {{group.facilitator}}
+                                </li>
+                                <li>
+                                    <strong>Modules:</strong>
+                                    <span ng-repeat="module in group.modules">
+                                        {{module.name}}{{(group.modules[$index+1]) ? ', ' : ''}}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- sign up button -->
             <button type="submit"
                     class="btn btn-block btn-default"
                     ng-class="{'btn-success': (!form.$dirty && !status.clicked) || form.$valid}"
@@ -110,6 +188,7 @@
                 Sign Up!
             </button>
 
+            <!-- form validation warnings -->
             <div ng-if="status.clicked && !form.$valid"
                class="help-block text-center small"
                style="color: red; margin-top: 10px;">
@@ -117,6 +196,7 @@
                 <p ng-if="!form.lastName.$valid">* last name is required *</p>
                 <p ng-if="!form.email.$valid">* please provide a valid email address *</p>
                 <p ng-if="!form.password.$valid">* your password must be at least 6 characters *</p>
+                <p ng-if="!form.group.$valid">* please select a group *</p>
             </div>
 
         </form>

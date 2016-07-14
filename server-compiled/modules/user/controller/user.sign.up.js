@@ -48,7 +48,8 @@ exports.signUp = function (req, res) {
         lastName: req.body.lastName,
         email: req.body.email.toLowerCase(),
         password: req.body.password,
-        admin: Boolean(req.body.email.indexOf('@prevagroup.com') > -1)
+        group: req.body.group,
+        facilitator: req.body.facilitator
     });
 
     // check existing users

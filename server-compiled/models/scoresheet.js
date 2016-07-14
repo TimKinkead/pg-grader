@@ -40,6 +40,11 @@ var ScoreSheetSchema = new Schema({
         required: true
     },
 
+    // master score
+    masterScore: {
+        type: Boolean
+    },
+
     // timestamp - when scoreSheet was updated
     modified: {
         type: Date,
