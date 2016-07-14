@@ -11,7 +11,7 @@ exports.init = function(a, b) {
         return e.forEach(function(a) {
             a && a.id && (f[a.id] = a, f[a.id].count = 0);
         }), c.forEach(function(a, b) {
-            if (a && a.module) {
+            if (a && a.module && f[a.module]) {
                 if (a.link = "https://s3-us-west-2.amazonaws.com/pg-scoresheet/student-work/" + f[a.module].id + "/" + a.filename, 
                 "development" === process.env.NODE_ENV && f[a.module] && f[a.module].count >= 5) return;
                 f[a.module].count++, a.module = f[a.module]._id;
