@@ -43,6 +43,6 @@ client/lib
 
 # Compiled Folders
 client-compiled
-server-compiled
+#server-compiled
 
 
