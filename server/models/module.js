@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 //----------------------------------------------------------------------------------------------------------------------
 // Dependencies
@@ -60,7 +60,7 @@ var ModuleSchema = new Schema({
     // timestamp - when module was updated
     modified: {
         type: Date,
-        "default": Date.now
+        default: Date.now
     },
     
     // timestamp - when module was created

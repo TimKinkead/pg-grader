@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 //----------------------------------------------------------------------------------------------------------------------
 // Dependencies
@@ -45,11 +45,11 @@ var GroupSchema = new Schema({
     // timestamps
     modified: {
         type: Date,
-        "default": Date.now
+        default: Date.now
     },
     created: {
         type: Date,
-        "default": Date.now
+        default: Date.now
     }
 });
 
