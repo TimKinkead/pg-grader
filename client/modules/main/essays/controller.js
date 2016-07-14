@@ -291,17 +291,21 @@ angular.module('app').controller('EssaysController', [
 
         $scope.$watch('status.essayFilterBy', function(nV, oV) {
             if (nV !== oV) {
+                status.processingEssays = true;
                 essays.forEach(function(essay) {
                     essay.visible = showHideEssay(essay);
                 });
+                status.processingEssays = false;
             }
         });
 
         $scope.$watch('status.moduleFilterBy', function(nV, oV) {
             if (nV !== oV) {
+                status.processingEssays = true;
                 essays.forEach(function(essay) {
                     essay.visible = showHideEssay(essay);
                 });
+                status.processingEssays = false;
             }
         });
     }

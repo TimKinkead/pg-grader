@@ -404,6 +404,7 @@ angular.module('app').controller('GradeController', [
                     status.processingSave = false;
                     status.saved = true;
                     removeUnloadEvent();
+                    user.scoresheets++;
                     var modalInstance;
                     
                     // check master score modal
