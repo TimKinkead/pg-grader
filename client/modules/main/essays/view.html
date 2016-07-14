@@ -56,7 +56,7 @@
 </div>
 
 <!-- essay/module filters -->
-<div ng-if="essays.length"
+<div ng-if="user.admin || user.facilitator || user.scoresheets"
      class="container">
     <div class="form-inline well text-center">
 
@@ -75,7 +75,8 @@
         </div>
 
         <!-- module drop down -->
-        <div class="form-group">
+        <div ng-if="modules && modules.length > 1"
+             class="form-group">
             <label>&nbsp;for&nbsp;</label>
             <select ng-model="status.moduleFilterBy"
                     class="form-control"
@@ -99,12 +100,16 @@
 <div ng-if="user.admin"
      class="container text-center">
     <p>
-        Showing <strong>{{essays.length}}</strong> essays.
+        There are <strong>{{essays.length}}</strong> total essays.
     </p>
 </div>
 
+<div ng-if="status.processingEssays && user.scoresheets"
+     class="spinner">
+</div>
+
 <!-- table -->
-<div ng-if="essays.length"
+<div ng-if="!status.processingEssays && essays.length && (user.admin || user.facilitator || user.scoresheets)"
      class="container">
     <table class="table table-bordered table-hover">
         <thead>

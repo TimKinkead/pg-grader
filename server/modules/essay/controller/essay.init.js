@@ -53,7 +53,7 @@ exports.init = function(req, res) {
 			// upsert essays
 			essays.forEach(function(essay, index) {
 
-				if (essay && essay.module) {
+				if (essay && essay.module && modulesById[essay.module]) {
 					
 					// construct link
 					essay.link = 'https://s3-us-west-2.amazonaws.com/pg-scoresheet/student-work/'+modulesById[essay.module].id+'/'+essay.filename;
