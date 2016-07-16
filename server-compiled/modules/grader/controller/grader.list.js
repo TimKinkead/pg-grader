@@ -10,7 +10,7 @@ exports.list = function(a, b) {
             $in: a.user.group.modules
         }
     };
-    User.find(c).select("_id id name email scoresheets checkScores admin facilitator").exec(function(a, c) {
+    User.find(c).select("_id id name email admin facilitator group scoresheets checkScores").exec(function(a, c) {
         return a ? (error.log(new Error(a)), b.status(500).send({
             error: a
         })) : b.status(200).send(c || []);

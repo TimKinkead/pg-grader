@@ -48,8 +48,7 @@ var mongoose = require("mongoose"), Schema = mongoose.Schema, crypto = require("
         "default": !1
     },
     group: {
-        type: Object,
-        required: !0
+        type: Object
     },
     rubricSide: {
         type: String,
@@ -61,17 +60,20 @@ var mongoose = require("mongoose"), Schema = mongoose.Schema, crypto = require("
         "enum": [ "show all", "one at a time" ],
         "default": "show all"
     },
-    lastModule: {
-        type: Schema.ObjectId,
-        ref: "Module"
-    },
     currentEssay: {
         type: Schema.ObjectId,
         ref: "Essay"
     },
+    lastModule: {
+        type: Schema.ObjectId,
+        ref: "Module"
+    },
     scoresheets: {
         type: Number,
         "default": 0
+    },
+    scoresheetsByModule: {
+        type: Object
     },
     checkScores: {
         type: Number,

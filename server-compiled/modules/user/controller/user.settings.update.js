@@ -13,10 +13,11 @@ exports.updateSettings = function(a, b) {
     function d() {
         logger.dash("updating settings"), a.body.firstName && (a.user.firstName = a.body.firstName), 
         a.body.lastName && (a.user.lastName = a.body.lastName), a.body.email && (a.user.email = a.body.email), 
-        a.body.newPassword && (a.user.password = a.body.newPassword), a.body.rubricSide && (a.user.rubricSide = a.body.rubricSide), 
-        a.body.rubricElements && (a.user.rubricElements = a.body.rubricElements), a.body.lastModule && (a.user.lastModule = a.body.lastModule), 
-        a.body.lastRubric && (a.user.lastRubric = a.body.lastRubric), a.body.lastPrompt && (a.user.lastPrompt = a.body.lastPrompt), 
-        a.user.save(function(a) {
+        a.body.newPassword && (a.user.password = a.body.newPassword), a.body.group && (a.user.group = a.body.group), 
+        a.body.hasOwnProperty("facilitator") && (a.user.facilitator = a.body.facilitator), 
+        a.body.rubricSide && (a.user.rubricSide = a.body.rubricSide), a.body.rubricElements && (a.user.rubricElements = a.body.rubricElements), 
+        a.body.lastModule && (a.user.lastModule = a.body.lastModule), a.body.lastRubric && (a.user.lastRubric = a.body.lastRubric), 
+        a.body.lastPrompt && (a.user.lastPrompt = a.body.lastPrompt), a.user.save(function(a) {
             return a ? (a = new Error(a), error.log(a), void c(a)) : (logger.arrow("user settings updated"), 
             b.sendStatus(200));
         });

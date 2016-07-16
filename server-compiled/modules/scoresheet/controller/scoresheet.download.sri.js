@@ -57,21 +57,21 @@ function writeSpecs(a, b) {
     }), d.end();
 }
 
-var fs = require("fs"), fse = require("fs-extra"), archiver = require("archiver"), mongoose = require("mongoose"), ScoreSheet = mongoose.model("ScoreSheet"), Essay = mongoose.model("Essay"), Rubric = mongoose.model("Rubric"), error = require("../../error"), logger = require("../../logger");
+var fs = require("fs"), fse = require("fs-extra"), archiver = require("archiver"), mongoose = require("mongoose"), ScoreSheet = mongoose.model("ScoreSheet"), Essay = mongoose.model("Essay"), Module = mongoose.model("Module"), Rubric = mongoose.model("Rubric"), error = require("../../error"), logger = require("../../logger");
 
 exports.downloadSRI = function(a, b) {
     function c() {
         logger.dash("zipAndReturn"), b.setHeader("Content-disposition", 'attachment; filename="graded-work.zip"'), 
         b.contentType("application/zip");
         var a = archiver("zip");
-        a.pipe(b), j.forEach(function(b) {
+        a.pipe(b), l.forEach(function(b) {
             a.file("./temp/graded-work/" + b, {
                 name: b.toLowerCase()
             });
         }), a.finalize();
     }
     function d() {
-        h -= 1, 0 === h && c();
+        i -= 1, 0 === i && c();
     }
     function e() {
         logger.dash("writeFiles"), Essay.aggregate([ {
@@ -84,14 +84,17 @@ exports.downloadSRI = function(a, b) {
         } ], function(a, c) {
             return a ? (error.log(new Error(a)), b.status(500).send({
                 error: a
-            })) : c ? c.length ? (h = 3 * c.length, void c.forEach(function(a) {
-                a && a._id && a.essayIds && a.essayIds.length && (writeTexts(a._id, a.essayIds, function(a) {
-                    j.push(a), d();
-                }), writeScores(a._id, a.essayIds, i, function(a) {
-                    j.push(a), d();
-                }), writeSpecs(a._id, function(a) {
-                    j.push(a), d();
-                }));
+            })) : c ? c.length ? (i = 3 * c.length, void c.forEach(function(a, b) {
+                if (a && a._id && a.essayIds && a.essayIds.length) {
+                    var c = j[a._id] ? j[a._id].id : "unknown_module_" + b;
+                    c.toLowerCase(), writeTexts(c, a.essayIds, function(a) {
+                        l.push(a), d();
+                    }), writeScores(c, a.essayIds, k, function(a) {
+                        l.push(a), d();
+                    }), writeSpecs(c, function(a) {
+                        l.push(a), d();
+                    });
+                } else d(), d(), d();
             })) : (error.log(new Error("!results.length")), b.status(500).send({
                 error: "!results.length"
             })) : (error.log(new Error("!results")), b.status(500).send({
@@ -105,17 +108,26 @@ exports.downloadSRI = function(a, b) {
                 error: a
             })) : (c.forEach(function(a) {
                 a.fields.forEach(function(a) {
-                    a.name && i.indexOf(a.name) < 0 && i.push(a.name);
+                    a && a.name && k.indexOf(a.name) < 0 && k.push(a.name);
                 });
             }), void e());
         });
     }
     function g() {
+        logger.dash("constructModulesMap"), Module.find().exec(function(a, c) {
+            return a ? (error.log(new Error(a)), b.status(500).send({
+                error: a
+            })) : (c.forEach(function(a) {
+                a && a._id && (j[a._id] = a);
+            }), void f());
+        });
+    }
+    function h() {
         function a() {
             fs.mkdir("./temp/graded-work", function(a) {
                 return a ? (error.log(new Error(a)), b.status(500).send({
                     error: a
-                })) : void f();
+                })) : void g();
             });
         }
         logger.dash("checkDirectories"), fs.stat("./temp", function(c, d) {
@@ -133,6 +145,6 @@ exports.downloadSRI = function(a, b) {
         });
     }
     logger.filename(__filename);
-    var h, i = [], j = [];
-    g();
+    var i, j = {}, k = [], l = [];
+    h();
 };

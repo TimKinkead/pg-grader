@@ -4,7 +4,10 @@ var mongoose = require("mongoose"), Essay = mongoose.model("Essay"), User = mong
 
 exports.skip = function(a, b) {
     return logger.filename(__filename), a.user ? a.body.essay ? a.body.reason ? void Essay.update({
-        _id: a.body.essay
+        _id: a.body.essay,
+        "skip.user": {
+            $ne: a.user._id
+        }
     }, {
         $push: {
             skip: {

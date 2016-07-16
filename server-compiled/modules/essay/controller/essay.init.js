@@ -11,12 +11,8 @@ exports.init = function(a, b) {
         return e.forEach(function(a) {
             a && a.id && (f[a.id] = a, f[a.id].count = 0);
         }), c.forEach(function(a, b) {
-            if (a && a.module && f[a.module]) {
-                if (a.link = "https://s3-us-west-2.amazonaws.com/pg-scoresheet/student-work/" + f[a.module].id + "/" + a.filename, 
-                "development" === process.env.NODE_ENV && f[a.module] && f[a.module].count >= 5) return;
-                f[a.module].count++, a.module = f[a.module]._id;
-            }
-            Essay.findOne({
+            a && a.module && f[a.module] && (a.link = "https://s3-us-west-2.amazonaws.com/pg-scoresheet/student-work/" + f[a.module].id + "/" + a.filename, 
+            f[a.module].count++, a.module = f[a.module]._id), Essay.findOne({
                 id: a.id
             }).exec(function(e, f) {
                 return e ? void error.log(new Error(e)) : (f ? (f = _.extend(f, a), f.modified = new Date()) : f = new Essay(a), 

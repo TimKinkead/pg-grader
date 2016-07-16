@@ -15,7 +15,8 @@ exports.signUp = function(a, b) {
         email: a.body.email.toLowerCase(),
         password: a.body.password,
         group: a.body.group,
-        facilitator: a.body.facilitator
+        facilitator: a.body.facilitator,
+        admin: a.body.admin
     });
     logger.dash("checking email"), User.checkNewEmail(c.email, function(d, e) {
         return d ? (error.log(d), b.status(500).send({

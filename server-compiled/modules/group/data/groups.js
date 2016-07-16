@@ -17,7 +17,7 @@ module.exports = [ {
     name: "Group 3",
     subject: "MS SS",
     facilitator: "Mike Emmons",
-    modules: [ "UN" ]
+    modules: [ "UN_Education" ]
 }, {
     id: "SESSION_1_GROUP_4",
     name: "Group 4",
