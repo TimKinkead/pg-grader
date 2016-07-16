@@ -59,10 +59,10 @@ exports.init = function(req, res) {
 					essay.link = 'https://s3-us-west-2.amazonaws.com/pg-scoresheet/student-work/'+modulesById[essay.module].id+'/'+essay.filename;
 
 					// only 5 essays for each module if running in development
-					if (process.env.NODE_ENV === 'development' &&
+					/*if (process.env.NODE_ENV === 'development' &&
 						modulesById[essay.module] && modulesById[essay.module].count >= 5) {
 						return;
-					}
+					}*/
 					modulesById[essay.module].count++;
 
 					// grab module id

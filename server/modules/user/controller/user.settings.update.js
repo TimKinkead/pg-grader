@@ -47,6 +47,8 @@ exports.updateSettings = function(req, res) {
         if (req.body.newPassword) { 
             req.user.password = req.body.newPassword;
         }
+        if (req.body.group) { req.user.group = req.body.group; }
+        if (req.body.hasOwnProperty('facilitator')) { req.user.facilitator = req.body.facilitator; }
         if (req.body.rubricSide) { req.user.rubricSide = req.body.rubricSide; }
         if (req.body.rubricElements) { req.user.rubricElements = req.body.rubricElements; }
         if (req.body.lastModule) { req.user.lastModule = req.body.lastModule; }

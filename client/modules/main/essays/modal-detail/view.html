@@ -24,6 +24,12 @@
 
 <div class="modal-body">
 
+    <!-- warning -->
+    <div ng-if="status.noMasterScore"
+         class="alert alert-danger text-center">
+        This essay should have a master score, but it does not.
+    </div>
+
     <!-- in progress / skipped / graded -->
     <div style="margin: 10px 20px;">
         <div style="display: flex; flex-direction: row;">
@@ -46,7 +52,10 @@
                 </p>
                 <p ng-repeat="skip in essay.skip"
                    style="text-align: center; margin-bottom: 2px;">
-                    {{skip.user.name}}
+                    <span uib-tooltip="{{skip.reason}}"
+                          tooltip-placement="right">
+                        {{skip.user.name}}
+                    </span>
                 </p>
             </div>
 
@@ -59,6 +68,14 @@
                    style="text-align: center; margin-bottom: 2px;">
                     {{user.name}}
                 </p>
+                <div ng-if="user.admin"
+                     class="text-center">
+                    <button ng-click="adminAddGrade(essay)"
+                            class="btn btn-xs btn-default"
+                            uib-tooltip="submit grade for any grader">
+                        + add grade
+                    </button>
+                </div>
             </div>
 
         </div>
@@ -88,10 +105,12 @@
         </th>
         </thead>
         <tbody>
-        <tr ng-repeat="sheet in scoresheets | orderBy: 'masterScore'">
+        <tr ng-repeat="sheet in scoresheets | orderBy: 'masterScore'"
+            ng-style="{border: (sheet.masterScore) ? 'solid' : '', 'font-weight': (sheet.masterScore) ? 'bold' : ''}">
             <td ng-repeat="field in fields"
-                class="text-center">
-                <div ng-if="['grader', 'rubric'].indexOf(field) < 0">
+                class="text-center"
+                style="vertical-align: middle;">
+                <div ng-if="['grader', 'rubric', 'avg score'].indexOf(field) < 0">
                     {{sheet.score[field]}}
                 </div>
                 <div ng-if="field === 'grader'">
@@ -99,6 +118,9 @@
                 </div>
                 <div ng-if="field === 'rubric'">
                     {{sheet.rubric.name}}
+                </div>
+                <div ng-if="field === 'avg score'">
+                    <strong>{{sheet.score|averageScore}}</strong>
                 </div>
             </td>
         </tr>

@@ -33,20 +33,27 @@ exports.save = function(req, res) {
     var newScoreSheet,
         checkScore,
         consensusScore,
-        masterScore = (req.user.admin) ? req.body.masterScore : null,
+        masterScore = (req.user.admin || req.user.facilitator) ? req.body.masterScore : null,
+        adminScore = (req.user.admin),
         params = {
-            user: req.user._id,
+            user: (req.user.admin && req.body.user) ? req.body.user : req.user._id,
             essay: req.body.essay,
             rubric: req.body.rubric,
             score: req.body.score,
             masterScore: masterScore
+        },
+        query = (masterScore) ? 
+        {
+            masterScore: true,
+            essay: params.essay
+        } : 
+        {
+            user: params.user,
+            essay: params.essay
         };
-
+    
     // look for existing score sheet
-    ScoreSheet.findOne({
-        user: params.user,
-        essay: params.essay
-    })
+    ScoreSheet.findOne(query)
         .exec(function(err, scoresheetDoc) {
             if (err) {
                 error.log(new Error(err));
@@ -60,6 +67,12 @@ exports.save = function(req, res) {
             } else {
                 scoresheetDoc.rubric = params.rubric;
                 scoresheetDoc.score = params.score;
+                if (masterScore) {
+                    scoresheetDoc.masterScore = params.masterScore;
+                    if (scoresheetDoc.user.toString() !== params.user.toString()) {
+                        scoresheetDoc.user = params.user;
+                    }
+                }
             }
 
             // save score sheet
@@ -81,7 +94,7 @@ exports.save = function(req, res) {
                         scoresheets: scoresheetDoc._id
                     },
                     $pull: {
-                        graders: req.user._id
+                        graders: params.user
                     }
                 } :
                 {
@@ -90,11 +103,11 @@ exports.save = function(req, res) {
                     },
                     $addToSet: {
                         scoresheets: scoresheetDoc._id,
-                        gradedBy: req.user._id
+                        gradedBy: params.user
                     },
                     $pull: {
-                        skip: {user: req.user._id},
-                        graders: req.user._id
+                        skip: {user: params.user},
+                        graders: params.user
                     }
                 };
                 Essay.findOneAndUpdate(
@@ -128,11 +141,9 @@ exports.save = function(req, res) {
 
                         // build user update
                         var update = {$unset: {currentEssay: true}};
-                        if (req.user.lastRubric && req.user.lastRubric.toString() !== params.rubric.toString()) {
-                            update.$set = {lastRubric: params.rubric};
-                        }
                         if (newScoreSheet) {
                             update.$inc = {scoresheets: 1};
+                            update.$inc['scoresheetsByModule.'+essayDoc.module] = 1;
                         }
                         if (checkScore) {
                             if (!update.$inc) { update.$inc = {}; }
@@ -145,7 +156,7 @@ exports.save = function(req, res) {
 
                         // update user
                         User.update(
-                            {_id: req.user._id},
+                            {_id: params.user},
                             update,
                             function(err) {
                                 if (err) { error.log(new Error(err)); }

@@ -6,7 +6,7 @@
      style="height: 65px; padding: 15px; border-top: thin solid; border-bottom: thin solid; background-color: lightblue;">
 
     <!-- back to essays -->
-    <button ui-sref="essays"
+    <button ui-sref="essays({essayFilterBy: (params.masterScore) ? 'master scores' : ''})"
             class="btn btn-default pull-left">
         <i class="glyphicon glyphicon-arrow-left"></i>
         &nbsp;back to essays
@@ -25,13 +25,13 @@
     </button>
 
     <!-- next essay -->
-    <button ng-if="params.scoresheet && status.saved"
+    <!--<button ng-if="params.scoresheet && status.saved && !params.masterScore"
             ng-click="nextEssay()"
             class="btn btn-default pull-right"
             style="margin-left: 5px;">
         next essay&nbsp;
         <i class="glyphicon glyphicon-arrow-right"></i>
-    </button>
+    </button>-->
 
     <!-- save -->
     <button ng-click="clickSave() && save()"
@@ -49,8 +49,65 @@
 
 </div>
 
+<!-- master score warning -->
+<div ng-if="params.masterScore"
+     class="text-center"
+     style="height: 55px; position: fixed; top: 65px; left: 0; right: 0; bottom: 120px; padding: 15px; border-bottom: thin solid; background-color: yellow;">
+    <div ng-if="!params.scoresheet">
+        <p style="font-weight: bold; font-size: 115%;">
+            You are adding a master score.
+        </p>
+    </div>
+    <div ng-if="params.scoresheet">
+        <p ng-if="docs.scoresheet.user._id.toString() === user._id.toString()"
+           style="font-weight: bold; font-size: 115%;">
+            You are editing a master score.
+        </p>
+        <p ng-if="docs.scoresheet.user._id.toString() !== user._id.toString()"
+           style="font-weight: bold; font-size: 115%;">
+            Warning! You are editing a master score that was added by
+            <span style="text-decoration: underline;">{{docs.scoresheet.user.name}}</span>.
+        </p>
+    </div>
+</div>
+
+<!-- admin select user drop down -->
+<div ng-if="!params.masterScore && user.admin"
+     class="text-center"
+     style="height: 55px; position: fixed; top: 65px; left: 0; right: 0; bottom: 120px; padding: 10px; border-bottom: thin solid; background-color: yellow;">
+    <div ng-if="!params.scoresheet">
+        <div class="form-inline">
+            <div class="form-group">
+                <label>
+                    Grade this essay for&nbsp;
+                </label>
+                <select ng-model="params.user"
+                        class="form-control">
+                    <option ng-repeat="grader in docs.graders"
+                            value="{{grader._id}}"
+                            class="form-control">
+                        {{grader.name}}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div ng-if="params.scoresheet">
+        <p ng-if="docs.scoresheet.user._id.toString() === user._id.toString()"
+           style="font-weight: bold; font-size: 115%;">
+            You are editing a master score.
+        </p>
+        <p ng-if="docs.scoresheet.user._id.toString() !== user._id.toString()"
+           style="font-weight: bold; font-size: 115%;">
+            Warning! You are editing a master score that was added by
+            <span style="text-decoration: underline;">{{docs.scoresheet.user.name}}</span>.
+        </p>
+    </div>
+</div>
+
 <!-- resizable divs -->
-<div style="display: flex; position: fixed; top: 65px; left: 0; right: 0; bottom: 0;">
+<div style="display: flex; position: fixed; left: 0; right: 0; bottom: 0;"
+     ng-style="{top: (params.masterScore || user.admin) ? '120px' : '65px'}">
 
     <!-- left side -->
     <div resizable r-directions="['right']"

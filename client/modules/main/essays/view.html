@@ -5,7 +5,7 @@
      style="background: #677F71; padding-top: 12px; padding-bottom: 18px;">
     <h2 class="text-center"
         style="color: whitesmoke;">
-        {{(!user.admin) ? user.group.name : ''}} Essays
+        Essays{{(!user.admin) ? ' ('+user.group.name+')' : ''}}
     </h2>
 </div>
 
@@ -15,7 +15,7 @@
      style="margin-bottom: 20px;">
     <button ui-sref="grade"
             class="btn btn-lg btn-success">
-        {{user.scoresheets > 0 ? 'Grade Next Essay' : 'Start Grading'}}
+        {{!user.scoresheets ? 'Start Grading' : (status.resumeGrading ? 'Resume Grading' : 'Grade Next Essay')}}
     </button>
 </div>
 
@@ -56,7 +56,7 @@
 </div>
 
 <!-- essay/module filters -->
-<div ng-if="user.admin || user.facilitator || user.scoresheets"
+<div ng-if="user.admin || user.facilitator"
      class="container">
     <div class="form-inline well text-center">
 
@@ -104,7 +104,8 @@
     </p>
 </div>
 
-<div ng-if="status.processingEssays && user.scoresheets"
+<!-- spinner -->
+<div ng-if="status.processingEssays && (user.admin || user.facilitator || user.scoresheets)"
      class="spinner">
 </div>
 
@@ -120,13 +121,9 @@
         </thead>
         <tbody>
             <tr ng-repeat="essay in essays | filter : {visible: true} | orderBy : 'id'"
-                ng-init="essayIndex = $index+1"
-                uib-tooltip="{{user.admin || user.facilitator ? 'click to view' : ''}}"
-                tooltip-placement="right">
+                ng-init="essayIndex = $index+1">
                 <td ng-repeat="field in fields"
-                    ng-click="(user.admin || user.facilitator) && ['id', 'master score', 'grade'].indexOf(field)<0 && viewDetails(essay._id)"
-                    style="text-align: center; vertical-align: middle;"
-                    ng-style="{cursor: (user.admin || user.facilitator && ['id', 'master score', 'grade'].indexOf(field)<0) ? 'pointer' : ''}">
+                    style="text-align: center; vertical-align: middle;">
 
                     <!-- grader/facilitator/admin fields -->
                     <div ng-if="field === 'no'">
@@ -135,69 +132,127 @@
                     <div ng-if="field === 'id'">
                         <a href="https://docs.google.com/viewerng/viewer?url={{essay.link}}"
                            target="_blank">
-                            {{essay.id}}
+                            {{essay.id}}</a>
+                        &nbsp;
+                        <a href="{{essay.link}}"
+                           target="_blank">
+                            <i class="glyphicon glyphicon-download"></i>
                         </a>
                     </div>
                     <div ng-if="field === 'module'">
                         {{essay.module.name}}
                     </div>
-                    <div ng-if="field === 'master score'">
-                        <div ng-if="essay.masterScoreSheet && (essay.wasGradedByYou || user.facilitator || user.admin)">
-                            {{essay.masterScoreSheet.score|averageScore}}
-                            &nbsp;
-                            <button ng-click="checkMasterScore(essay._id)"
-                                    class="btn btn-xs btn-info">
-                                {{user.admin || user.facilitator ? 'review' : 'compare'}}
-                            </button>
-                        </div>
-                    </div>
+
 
                     <!-- grader fields -->
-                    <div ng-if="field === 'grading in progress'">
-                        <i ng-if="(!essay.gradeAll && essay.beingGradedBy) || essay.beingGradedByYou"
-                           class="glyphicon glyphicon-ok">
+                    <div ng-if="field === 'in progress'">
+                        <i ng-if="essay.beingGradedByYou"
+                           class="glyphicon glyphicon-ok"
+                           uib-tooltip="in progress">
                         </i>
                     </div>
-                    <div ng-if="field === 'skipped by you'">
+                    <div ng-if="field === 'skipped'">
                         <i ng-if="essay.skippedByYou"
-                           class="glyphicon glyphicon-ok">
-                        </i>
-                    </div>
-                    <div ng-if="field === 'graded by you'">
-                        <i ng-if="essay.wasGradedByYou"
-                           class="glyphicon glyphicon-ok">
+                           class="glyphicon glyphicon-ok"
+                           uib-tooltip="skipped">
                         </i>
                     </div>
                     <div ng-if="field === 'graded'">
-                        <i ng-if="(!essay.gradeAll && essay.wasGradedBy) || essay.wasGradedByYou"
-                           class="glyphicon glyphicon-ok">
+                        <i ng-if="essay.wasGradedByYou"
+                           class="glyphicon glyphicon-ok"
+                           uib-tooltip="graded">
                         </i>
                     </div>
 
                     <!-- facilitator/admin fields -->
                     <div ng-if="field === 'being graded by'">
-                        {{essay.beingGradedBy ? essay.beingGradedBy : ''}}
+                        <span uib-tooltip="being graded by {{essay.beingGradedBy}}">
+                            {{essay.beingGradedBy ? essay.beingGradedBy : ''}}
+                        </span>
                     </div>
                     <div ng-if="field === 'skipped by'">
-                        {{essay.skippedBy ? essay.skippedBy : ''}}
+                        <span uib-tooltip="skipped by {{essay.skippedBy}}">
+                            {{essay.skippedBy ? essay.skippedBy : ''}}
+                        </span>
                     </div>
                     <div ng-if="field === 'graded by'">
-                        {{essay.wasGradedBy ? essay.wasGradedBy : ''}}
+                        <span uib-tooltip="graded by {{essay.wasGradedBy}}">
+                            {{essay.wasGradedBy ? essay.wasGradedBy : ''}}
+                        </span>
                     </div>
-                    <div ng-if="field === 'grade quota'">
-                        {{essay.gradeAll ? 'all' : essay.gradeQuota}}
+                    <div ng-if="field === 'everyone'">
+                        <i ng-if="essay.gradeAll"
+                           class="glyphicon glyphicon-ok"
+                           uib-tooltip="everyone should grade this essay">
+                        </i>
+                    </div>
+
+                    <!-- master score -->
+                    <div ng-if="field === 'master score'">
+                        <div ng-if="user.admin || user.facilitator">
+                            <div ng-if="essay.masterScore && !essay.masterScoreSheet">
+                                <button ui-sref="grade({essay: essay._id, masterScore: true})"
+                                        class="btn btn-xs btn-danger"
+                                        uib-tooltip="please add a master score for this check essay">
+                                    <i class="glyphicon glyphicon-warning-sign"></i>
+                                    &nbsp;add master score
+                                </button>
+                            </div>
+                            <div ng-if="essay.masterScoreSheet">
+                                {{essay.masterScoreSheet.score|averageScore}}
+                                <button ui-sref="grade({scoresheet: essay.masterScoreSheet._id, masterScore: true})"
+                                        class="btn btn-xs btn-info">
+                                    edit master score
+                                </button>
+                            </div>
+                            <div ng-if="user.admin && !essay.masterScore">
+                                <span ui-sref="grade({essay: essay._id, masterScore: true})"
+                                      uib-tooltip="add master score"
+                                      style="cursor: pointer; color: lightgray;">
+                                    +
+                                </span>
+                            </div>
+                        </div>
+                        <div ng-if="!user.admin && !user.facilitator">
+                            <div ng-if="essay.masterScore && essay.wasGradedByYou">
+                                <span ng-if="essay.masterScoreSheet">
+                                    {{essay.masterScoreSheet.score|averageScore}}
+                                    &nbsp;
+                                </span>
+                                <span ng-if="!essay.masterScoreSheet">
+                                    <i class="glyphicon glyphicon-warning-sign"
+                                       uib-tooltip="This essay should have a master score, but it does not.">
+                                    </i>
+                                    &nbsp;
+                                </span>
+                                <button ng-click="checkMasterScore(essay._id)"
+                                        class="btn btn-xs btn-info">
+                                    compare
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- grade field -->
                     <div ng-if="field === 'grade'">
-                        <span ng-if="essay.yourScoreSheet">
-                            {{essay.yourScoreSheet.score|averageScore}}
-                        </span>
-                        &nbsp;
-                        <button ui-sref="grade({essay: essay._id, scoresheet: essay.yourScoreSheet._id})"
-                                class="btn btn-sm btn-default"
-                                ng-class="gradeButtonNgClass(essay)">
-                            {{gradeButtonText(essay)}}
+                        <div ng-if="(!user.admin && !user.facilitator) || (user.facilitator && !essay.masterScore)">
+                            <span ng-if="essay.yourScoreSheet">
+                                {{essay.yourScoreSheet.score|averageScore}}
+                                &nbsp;
+                            </span>
+                            <button ui-sref="grade({essay: essay._id, scoresheet: essay.yourScoreSheet._id})"
+                                    class="btn btn-sm btn-default"
+                                    ng-class="gradeButtonNgClass(essay)">
+                                {{gradeButtonText(essay)}}
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- view details (admin/facilitator) -->
+                    <div ng-if="field === 'details'">
+                        <button ng-click="viewDetails(essay._id)"
+                                class="btn btn-sm btn-default">
+                            view details
                         </button>
                     </div>
 
@@ -207,6 +262,22 @@
     </table>
 </div>
 
+<div ng-if="!user.admin && !user.facilitator && !status.processingEssays && essays.length && user.scoresheets"
+     class="text-center"
+     style="margin-bottom: 20px;">
+    <button ng-if="status.essayFilterBy !== 'all essays'"
+            ng-click="status.essayFilterBy = 'all essays'"
+            class="btn btn-sm btn-default">
+        Show All Essays
+    </button>
+    <button ng-if="status.essayFilterBy === 'all essays'"
+            ng-click="status.essayFilterBy = 'my essays'"
+            class="btn btn-sm btn-default">
+        Hide Ungraded Essays
+    </button>
+</div>
+
+<!--
 <div ng-if="skippedEssays.$resolved && skippedEssays.length"
      class="container text-center">
     <hr>
@@ -232,3 +303,4 @@
         </tbody>
     </table>
 </div>
+-->

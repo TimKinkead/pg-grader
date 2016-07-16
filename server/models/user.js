@@ -72,8 +72,8 @@ var UserSchema = new Schema({
     
     // group info
     group: {
-        type: Object,
-        required: true
+        type: Object
+        //required: true // not required for admin
     },
     
     // settings
@@ -87,6 +87,12 @@ var UserSchema = new Schema({
         enum: ['show all', 'one at a time'],
         default: 'show all'
     },
+
+    // essay/module tracking
+    currentEssay: {
+        type: Schema.ObjectId,
+        ref: 'Essay'
+    },
     lastModule: {
         type: Schema.ObjectId,
         ref: 'Module'
@@ -98,15 +104,14 @@ var UserSchema = new Schema({
     lastPrompt: {
         type: String
     },*/
-    currentEssay: {
-        type: Schema.ObjectId,
-        ref: 'Essay'
-    },
 
     // counters
     scoresheets: {
         type: Number,
         default: 0
+    },
+    scoresheetsByModule: {
+        type: Object // {moduleId1: 5, moduleId2: 1}
     },
     checkScores: {
         type: Number,

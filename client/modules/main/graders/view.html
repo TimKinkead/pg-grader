@@ -60,19 +60,30 @@
 <div class="container">
     <table class="table table-bordered">
         <thead>
-            <th ng-repeat="field in fields">
+            <th ng-repeat="field in fields"
+                class="text-center"
+                style="vertical-align: middle;">
                 {{field|capitalize}}
             </th>
         </thead>
         <tbody>
             <tr ng-repeat="grader in graders | orderBy:'-created'"
                 ng-init="graderIndex = $index+1">
-                <td ng-repeat="field in fields">
-                    <div ng-if="['no', 'graded essays', 'check scores', 'facilitator', 'admin'].indexOf(field) < 0">
+                <td ng-repeat="field in fields"
+                    class="text-center"
+                    style="vertical-align: middle;">
+                    <div ng-if="['no', 'group', 'graded essays', 'check scores', 'facilitator', 'admin'].indexOf(field) < 0">
                         {{grader[field]}}
                     </div>
                     <div ng-if="field === 'no'">
                         {{graderIndex}}
+                    </div>
+                    <div ng-if="field === 'group'">
+                        <span ng-if="grader.group"
+                              uib-tooltip-html="getGroupTooltip(grader.group)"
+                              tooltip-placement="right">
+                            {{grader.group.name}}
+                        </span>
                     </div>
                     <div ng-if="field === 'graded essays'">
                         {{grader.scoresheets}}

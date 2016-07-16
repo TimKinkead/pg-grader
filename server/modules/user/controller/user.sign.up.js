@@ -49,7 +49,8 @@ exports.signUp = function(req, res) {
         email: req.body.email.toLowerCase(),
         password: req.body.password,
         group: req.body.group,
-        facilitator: req.body.facilitator
+        facilitator: req.body.facilitator,
+        admin: req.body.admin
     });
 
     // check existing users

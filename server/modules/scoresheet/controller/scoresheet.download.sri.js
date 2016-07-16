@@ -13,6 +13,7 @@ var fs = require('fs'),
 var mongoose = require('mongoose'),
 	ScoreSheet = mongoose.model('ScoreSheet'),
 	Essay = mongoose.model('Essay'),
+	Module = mongoose.model('Module'),
 	Rubric = mongoose.model('Rubric');
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -131,6 +132,7 @@ exports.downloadSRI = function(req, res) {
 	
 	// variables
 	var cnt,
+		modulesMap = {},
 		scoreFields = [],
 		files = [];
 
@@ -182,26 +184,35 @@ exports.downloadSRI = function(req, res) {
 
 				// create 3 files for each module
 				cnt = results.length * 3;
-				results.forEach(function(result) {
+				results.forEach(function(result, index) {
 					if (result && result._id && result.essayIds && result.essayIds.length) {
 
+						// get module name
+						var moduleName = (modulesMap[result._id]) ? modulesMap[result._id].id : 'unknown_module_'+index;
+						moduleName.toLowerCase();
+
 						// create <module>.texts.tsv
-						writeTexts(result._id, result.essayIds, function(filename) {
+						writeTexts(moduleName, result.essayIds, function(filename) {
 							files.push(filename);
 							checkDone();
 						});
 
 						// create <module>.scores.tsv
-						writeScores(result._id, result.essayIds, scoreFields, function(filename) {
+						writeScores(moduleName, result.essayIds, scoreFields, function(filename) {
 							files.push(filename);
 							checkDone();
 						});
 
 						// create <module>.scores.specs.tsv
-						writeSpecs(result._id, function(filename) {
+						writeSpecs(moduleName, function(filename) {
 							files.push(filename);
 							checkDone();
 						});
+
+					} else {
+						checkDone();
+						checkDone();
+						checkDone();
 					}
 				});
 			}
@@ -222,7 +233,7 @@ exports.downloadSRI = function(req, res) {
 				// grab score fields
 				rubricDocs.forEach(function (rubric) {
 					rubric.fields.forEach(function (field) {
-						if (field.name && scoreFields.indexOf(field.name) < 0) {
+						if (field && field.name && scoreFields.indexOf(field.name) < 0) {
 							scoreFields.push(field.name);
 						}
 					});
@@ -231,6 +242,28 @@ exports.downloadSRI = function(req, res) {
 				writeFiles();
 			});
 	}
+
+	function constructModulesMap() {
+		logger.dash('constructModulesMap');
+
+		Module.find()
+			.exec(function(err, moduleDocs) {
+				if (err) {
+					error.log(new Error(err));
+					return res.status(500).send({error: err});
+				}
+
+				// construct modules map
+				moduleDocs.forEach(function(module) {
+					if (module && module._id) {
+						modulesMap[module._id] = module;
+					}
+				});
+
+				getScoreFields();
+			});
+	}
+
 
 	function checkDirectories() {
 		logger.dash('checkDirectories');
@@ -241,7 +274,7 @@ exports.downloadSRI = function(req, res) {
 					error.log(new Error(err));
 					return res.status(500).send({error: err});
 				}
-				getScoreFields();
+				constructModulesMap();
 			});
 		}
 

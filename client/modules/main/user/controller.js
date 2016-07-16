@@ -6,10 +6,14 @@ angular.module('app').controller('UserController', [
     '$resource',
     '$state',
     '$location',
+    '$window',
     'CurrentUser',
-    function($scope, $http, $resource, $state, $location, CurrentUser) {
+    function($scope, $http, $resource, $state, $location, $window, CurrentUser) {
         
         var user = $scope.user = {},
+            
+            window = $scope.window = $window,
+            
             status = $scope.status = {},
             params = $scope.params = {},
             
@@ -100,15 +104,15 @@ angular.module('app').controller('UserController', [
         // select group
         $scope.selectGroup = function(group) {
             user.group = group;
+            var moduleIds = [];
             if (group.modules) {
-                var moduleIds = [];
                 group.modules.forEach(function(module) {
                     if (module._id) {
                         moduleIds.push(module._id);
                     }
                 });
-                user.group.modules = moduleIds;
             }
+            user.group.modules = moduleIds;
             status.showGroups = false;
         };
         
@@ -119,15 +123,15 @@ angular.module('app').controller('UserController', [
         };
         
         // sign up a new user
-        $scope.signUp = function() {
+        $scope.signUp = function(admin) {
+            if (admin) { user.admin = true; }
             status.errorMessage = null;
             status.processing = true;
-            console.log(user);
             $http.post('/data/user/sign-up', user)
                 .success(function(newUserData) {
                     status.processing = false;
                     CurrentUser.data = angular.extend(CurrentUser.data, newUserData);
-                    $state.go('welcome');
+                    $state.go((user.admin) ? 'essays' : 'welcome');
                 })
                 .error(function(err) {
                     status.processing = false;
@@ -152,7 +156,7 @@ angular.module('app').controller('UserController', [
                 .success(function(userData) {
                     status.processing = false;
                     CurrentUser.data = angular.extend(CurrentUser.data, userData);
-                    $state.go('welcome');
+                    $state.go((userData.admin) ? 'essays' : 'welcome');
                 })
                 .error(function(err) {
                     status.processing = false;
@@ -178,7 +182,6 @@ angular.module('app').controller('UserController', [
                 .success(function() {
                     status.processing = false;
                     status.successMessage = 'Reset link sent. Check your email.';
-                    console.log(status);
                 })
                 .error(function(err) {
                     status.processing = false;
@@ -227,10 +230,23 @@ angular.module('app').controller('UserController', [
                 function(err) {
                     status.processing = false;
                     status.errorMessage = 'We had trouble retrieving your settings information. Please try again.';
-                    console.log(err);
                 }
             );
         }
+        
+        $scope.selectNewGroup = function(group) {
+            fullUser.group = group;
+            var moduleIds = [];
+            if (group.modules) {
+                group.modules.forEach(function(module) {
+                    if (module._id) {
+                        moduleIds.push(module._id);
+                    }
+                });
+            }
+            fullUser.group.modules = moduleIds;
+            status.editGroup = false;
+        };
 
         // update settings
         $scope.updateSettings = function() {
@@ -255,6 +271,12 @@ angular.module('app').controller('UserController', [
                 params.newPassword = fullUser.newPassword;
                 params.password = fullUser.password;
             }
+            if (fullUser.group && (!user.group || fullUser.group._id !== user.group._id)) {
+                params.group = fullUser.group;
+            }
+            if (fullUser.facilitator !== user.facilitator) {
+                params.facilitator = fullUser.facilitator;
+            }
 
             // update settings
             status.processing = true;
@@ -265,6 +287,9 @@ angular.module('app').controller('UserController', [
                     status.successMessage = 'Settings Updated';
                     fullUser.newPassword = null;
                     fullUser.password = null;
+                    ['editFirstName', 'editLastName', 'editEmail', 'editPassword', 'editGroup', 'editRole'].forEach(function(item) {
+                        status[item] = false;
+                    });
                 })
                 .error(function(err) {
                     status.processing = false;

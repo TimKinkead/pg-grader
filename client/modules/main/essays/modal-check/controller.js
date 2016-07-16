@@ -23,7 +23,6 @@ angular.module('app').controller('MasterScoreModalController', [
             $modalInstance.dismiss();
         };
         
-        
         // get essay
         essay = $scope.essay = $resource('data/essay').get(
             {essay: essayId, full: true},
@@ -38,10 +37,12 @@ angular.module('app').controller('MasterScoreModalController', [
                 });
                 
                 // grab score sheets
+                var masterScore = false;
                 essay.scoresheets.forEach(function(scoresheet) {
                     if (user.admin || user.facilitator || scoresheet.masterScore || scoresheet.user.toString() === user._id.toString()) {
                         scoresheet.user = userMap[scoresheet.user];
                         scoresheets.push(scoresheet);
+                        if (scoresheet.masterScore) { masterScore = true; }
                         
                         // grab fields
                         for (var key in scoresheet.score) {
@@ -53,6 +54,10 @@ angular.module('app').controller('MasterScoreModalController', [
                         }
                     }
                 });
+                if (!masterScore) { status.noMasterScore = true; }
+
+                // add average score field
+                fields.push('avg score');
                 
             },
             function(err) {

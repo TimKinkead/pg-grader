@@ -34,7 +34,7 @@ angular.module('app').config([
             templateUrl: 'modules/main/user/views/sign-up.html',
             data: {guestOnly: true}
         });
-
+        
         $stateProvider.state('user.login', {
             url: '/login',
             templateUrl: 'modules/main/user/views/login.html',
@@ -58,11 +58,17 @@ angular.module('app').config([
             templateUrl: 'modules/main/user/views/reset-password.html',
             data: {guestOnly: true}
         });
+        
+        $stateProvider.state('user.adminsignup', {
+            url: '/sign-up/admin',
+            templateUrl: 'modules/main/user/views/admin-sign-up.html',
+            data: {guestOnly: true}
+        });
 
         // -- Essays --
 
         $stateProvider.state('essays', {
-            url: '/essays?all-essays-graded&modal-check&essay',
+            url: '/essays?all-essays-graded&modal-check&viewDetails&essay&essayFilterBy&moduleFilterBy',
             templateUrl: 'modules/main/essays/view.html',
             controller: 'EssaysController',
             data: {memberOnly: true}
@@ -71,7 +77,7 @@ angular.module('app').config([
         // -- Grade --
 
         $stateProvider.state('grade', {
-            url: '/grade?scoresheet&essay',
+            url: '/grade?scoresheet&essay&masterScore',
             templateUrl: 'modules/main/grade/view.html',
             controller: 'GradeController',
             data: {memberOnly: true}
@@ -88,21 +94,21 @@ angular.module('app').config([
         
         // -- Graded Work --
 
-        $stateProvider.state('graded-work', {
+        /*$stateProvider.state('graded-work', {
             url: '/graded-work',
             templateUrl: 'modules/main/graded-work/view.html',
             controller: 'GradedWorkController',
             data: {memberOnly: true}
-        });
+        });*/
 
         // -- Consensus Scores --
 
-        $stateProvider.state('consensus-scores', {
+        /*$stateProvider.state('consensus-scores', {
             url: '/consensus-scores',
             templateUrl: 'modules/main/consensus-scores/view.html',
             controller: 'ConsensusScoresController',
             data: {memberOnly: true}
-        });
+        });*/
 
         // -- Download --
 
@@ -118,7 +124,8 @@ angular.module('app').config([
         $stateProvider.state('admin', {
             url: '/admin',
             templateUrl: 'modules/main/admin/view.html',
-            controller: 'AdminController'
+            controller: 'AdminController',
+            data: {adminOnly: true}
         });
         
     }

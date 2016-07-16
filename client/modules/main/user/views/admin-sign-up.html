@@ -1,22 +1,12 @@
-<!-- SIGN UP -->
+<!-- ADMIN SIGN UP -->
 
 <!-- title -->
 <div class="jumbotron"
      style="background: #677F71; padding-top: 12px; padding-bottom: 18px; margin-bottom: 20px;">
     <h2 class="text-center"
         style="color: whitesmoke;">
-        Sign Up
-    </h2>
-</div>
-
-<!-- admin sign up -->
-<div ng-if="window.location.host.indexOf('localhost') > -1"
-     class="text-center"
-     style="margin-bottom: 20px;">
-    <button ui-sref="user.adminsignup"
-            class="btn btn-info">
         Admin Sign Up
-    </button>
+    </h2>
 </div>
 
 <!-- error message -->
@@ -45,7 +35,7 @@
     <div style="max-width: 500px; margin: auto; padding: 15px; border: 1px solid; border-radius: 5px; background-color: lightblue;">
 
         <!-- sign up form -->
-        <form ng-submit="click() && form.$valid && signUp()"
+        <form ng-submit="click() && form.$valid && signUp('admin')"
               ng-if="!status.processing"
               name="form"
               novalidate>
@@ -121,68 +111,9 @@
                 </span>
             </div>
 
-            <!-- group drop down -->
-            <div class="form-group"
-                 style="margin-bottom: 0;">
-                <label>group</label>
-                <select ng-if="!status.showGroups && groups && groups.$resolved"
-                        ng-click="status.showGroups = true"
-                        ng-model="user.group._id"
-                        class="form-control"
-                        name="group"
-                        required>
-                    <option ng-repeat="group in groups | orderBy:name"
-                            value="{{group._id}}">
-                        {{group.name}}
-                    </option>
-                </select>
-            </div>
-
-            <!-- group buttons -->
-            <div ng-if="status.showGroups && groups && groups.$resolved"
-                 style="display: flex; flex-direction: column;">
-                <div ng-repeat="group in groups | orderBy: 'name'"
-                     ng-click="selectGroup(group)"
-                     class="btn btn-default"
-                     style="flex: 1">
-                    <div style="display: flex; flex-direction: row; align-items: center;">
-                        <div style="flex: 1; font-weight: bold;">
-                            {{group.name}}
-                        </div>
-                        <div style="flex: 3; text-align: left; font-size: 90%; white-space: normal;">
-                            <ul style="margin: 10px 0;">
-                                <li>
-                                    <strong>Subject:</strong>
-                                    {{group.subject}}
-                                </li>
-                                <li>
-                                    <strong>Facilitator:</strong>
-                                    {{group.facilitator}}
-                                </li>
-                                <li>
-                                    <strong>Modules:</strong>
-                                    <span ng-repeat="module in group.modules">
-                                        {{module.name}}{{(group.modules[$index+1]) ? ', ' : ''}}
-                                    </span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- role -->
-            <div class="form-group"
-                 style="margin-top: 15px;">
-                <label>role</label>
-                <select ng-model="user.facilitator"
-                        class="form-control"
-                        name="role"
-                        required>
-                    <option value="false">grader</option>
-                    <option value="true">facilitator</option>
-                </select>
-            </div>
+            <p style="margin: 30px 0 0 0; text-align: center; font-weight: bold;">
+                You are signing up as an administrator.
+            </p>
 
             <!-- sign up button -->
             <button type="submit"
@@ -200,8 +131,6 @@
                 <p ng-if="!form.lastName.$valid">* last name is required *</p>
                 <p ng-if="!form.email.$valid">* please provide a valid email address *</p>
                 <p ng-if="!form.password.$valid">* your password must be at least 6 characters *</p>
-                <p ng-if="!form.group.$valid">* please select a group *</p>
-                <p ng-if="!form.role.$valid">* please select a role *</p>
             </div>
 
         </form>
