@@ -30,7 +30,7 @@ module.exports = [
 		subject: 'MS SS',
 		facilitator: 'Mike Emmons',
 		modules: [
-			'UN'
+			'UN_Education'
 		]
 	},
 	{
@@ -48,7 +48,8 @@ module.exports = [
 		subject: 'HS Science',
 		facilitator: 'Susan Schultz',
 		modules: [
-			'NUCLEAR_POWER', 'BPA'
+			'NUCLEAR_POWER',
+			'BPA'
 		]
 	},
 	{

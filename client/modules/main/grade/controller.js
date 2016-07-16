@@ -28,17 +28,21 @@ angular.module('app').controller('GradeController', [
                 user: user._id,
                 essay: null,
                 rubric: null,
-                score: {}
+                score: {},
+                masterScore: null
             },
             docs = $scope.docs = {
                 scoresheet: null,
                 essay: null,
                 rubric: null,
-                rubrics: null
+                rubrics: null,
+                graders: null
             };
 
         // -------------------------------------------------------------------------------------------------------------
         // Check Url Query Params & Initialize Page
+
+        //console.log($stateParams);
 
         if ($stateParams.scoresheet) {
             params.scoresheet = $stateParams.scoresheet;
@@ -47,11 +51,14 @@ angular.module('app').controller('GradeController', [
         } else {
             status.nextEssay = true;
         }
+        if ($stateParams.masterScore && (params.scoresheet || params.essay)) {
+            params.masterScore = true;
+        }
 
         // -------------------------------------------------------------------------------------------------------------
         // Success/Error Messages
 
-        $scope.errorModal = function errorModal(header, message) {
+        var errorModal = $scope.errorModal = function (header, message) {
             if (header && !message) { message = header; header = null; }
             if (!header) { header = 'Error!'; }
             if (!message) { message = 'Something went wrong. Please try again.'; }
@@ -75,11 +82,11 @@ angular.module('app').controller('GradeController', [
 
         var navigateAwayMessage = 'Warning!\n\nYour work has not been saved.\nAre you sure you want to leave this page?\n';
 
-        // prevent `back to graded work` state change
+        // prevent `back to essays` state change
         $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
             //console.log('toState', toState, 'fromState', fromState);
             //console.log('toParams', toParams, 'fromParams', fromParams);
-            if (status.saved === false) {
+            if (status.saved === false && !status.skip) {
                 if(!confirm(navigateAwayMessage)) {
                     event.preventDefault();
                 }
@@ -281,9 +288,11 @@ angular.module('app').controller('GradeController', [
             modalInstance.result.then(
                 function(reason) { // close
                     status.processingSkip = true;
+                    removeUnloadEvent();
                     $http.put('/data/essay/skip', {essay: params.essay, reason: reason})
                         .success(function() {
                             status.processingSkip = false;
+                            status.skip = true;
                             $state.go('essays');
                         })
                         .error(function(err) {
@@ -333,6 +342,7 @@ angular.module('app').controller('GradeController', [
                 }
             );
         }
+        getRubrics();
 
         // score a field
         $scope.scoreField = function(fieldIndex, fieldName, score) {
@@ -369,7 +379,7 @@ angular.module('app').controller('GradeController', [
                     status.processingScoreSheet = false;
                     status.saved = true;
                     status.formValid = true;
-                    docs.scoresheet = true;
+                    docs.scoresheet = scoresheet;
                     params.essay = scoresheet.essay._id;
                     params.rubric = scoresheet.rubric._id;
                     params.score = scoresheet.score;
@@ -404,6 +414,17 @@ angular.module('app').controller('GradeController', [
                     status.processingSave = false;
                     status.saved = true;
                     removeUnloadEvent();
+
+                    if (params.masterScore) {
+                        $state.go('essays', {essayFilterBy: 'master scores'});
+                        return;
+                    }
+
+                    if (user.admin) {
+                        $state.go('essays', {essayFilterBy: 'graded essays', essay: params.essay, viewDetails: true});
+                        return;
+                    }
+
                     user.scoresheets++;
                     var modalInstance;
                     
@@ -457,6 +478,24 @@ angular.module('app').controller('GradeController', [
                     errorModal('We had trouble saving your score sheet. Please try again.');
                 });
         };
+
+        // -------------------------------------------------------------------------------------------------------------
+        // Graders
+        
+        // get graders
+        if (user.admin) {
+            status.processingGraders = true;
+            docs.graders = $resource('data/grader/list').query(
+                {},
+                function() {
+                    status.processingGraders = false;
+                },
+                function(err) {
+                    status.processingGraders = false;
+                    errorModal('We had trouble listing the graders.');
+                }
+            );
+        }
         
         // -------------------------------------------------------------------------------------------------------------
         // Watch Parameter Changes
@@ -464,7 +503,7 @@ angular.module('app').controller('GradeController', [
         function updateQueryParams() {
             //console.log('updateQueryParams');
             var changed = false;
-            ['scoresheet', 'essay'].forEach(function(param) {
+            ['scoresheet', 'essay', 'masterScore'].forEach(function(param) {
                 if (params[param] !== $stateParams[param]) {
                     $stateParams[param] = params[param];
                     changed = true;

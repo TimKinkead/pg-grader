@@ -32,7 +32,7 @@ exports.list = function(req, res) {
     
     // get graders
     User.find(query)
-        .select('_id id name email scoresheets checkScores admin facilitator')
+        .select('_id id name email admin facilitator group scoresheets checkScores')
         .exec(function(err, userDocs) {
             if (err) {
                 error.log(new Error(err));

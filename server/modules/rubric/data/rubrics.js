@@ -8,9 +8,9 @@ module.exports = [
 	// -----------------------------------------------------------------------------------------------------------------
 	// BPA
 	{
-		id: 'LDC_Arg_9-12_BPA',
-		name: 'Argumentation, Grades 9-12 (BPA)',
-		link: 'https://s3-us-west-2.amazonaws.com/pg-scoresheet/rubrics/LDC_Arg_9-12_BPA.docx',
+		id: 'LDC_Arg_9-12_BPA-Plastic',
+		name: 'Argumentation, Grades 9-12 (BPA Plastic)',
+		link: 'https://s3-us-west-2.amazonaws.com/pg-scoresheet/rubrics/LDC_Arg_9-12_BPA-Plastic.docx',
 		headers: ['emerging', 'approaches expectations', 'meets expectations', 'advanced'],
 		fields: [
 			{
@@ -105,9 +105,9 @@ module.exports = [
 	// -----------------------------------------------------------------------------------------------------------------
 	// Cold War (Red Scare)
 	{
-		id: 'LDC_Arg_9-12_Red-Scare',
-		name: 'Argumentation, Grades 9-12 (Red Scare)',
-		link: 'https://s3-us-west-2.amazonaws.com/pg-scoresheet/rubrics/LDC_Arg_9-12_Red-Scare.docx',
+		id: 'LDC_Arg_9-12_Cold-War-Red-Scare',
+		name: 'Argumentation, Grades 9-12 (Cold War Red Scare)',
+		link: 'https://s3-us-west-2.amazonaws.com/pg-scoresheet/rubrics/LDC_Arg_9-12_Cold-War-Red-Scare.docx',
 		headers: ['emerging', 'approaches expectations', 'meets expectations', 'advanced'],
 		fields: [
 			{
@@ -382,9 +382,9 @@ module.exports = [
 	// -----------------------------------------------------------------------------------------------------------------
 	// No Guitar Blues (Growing Up is Hard to Do)
 	{
-		id: 'LDC_Inf_6-8_Growing-Up-is-Hard',
-		name: 'Informational/Explanatory, Grades 6-8 (Growing Up is Hard to Do)',
-		link: 'https://s3-us-west-2.amazonaws.com/pg-scoresheet/rubrics/LDC_Inf_6-8_Growing-Up-is-Hard.docx',
+		id: 'LDC_Inf_6-8_No-Guitar-Blues',
+		name: 'Informational/Explanatory, Grades 6-8 (No Guitar Blues)',
+		link: 'https://s3-us-west-2.amazonaws.com/pg-scoresheet/rubrics/LDC_Inf_6-8_No-Guitar-Blues.docx',
 		headers: ['emerging', 'approaches expectations', 'meets expectations', 'advanced'],
 		fields: [
 			{
@@ -634,9 +634,9 @@ module.exports = [
 	// -----------------------------------------------------------------------------------------------------------------
 	// UN (Children's Rights)
 	{
-		id: 'LDC_Arg_6-8_UN-Childrens-Rights',
-		name: 'Argumentation, Grades 6-8 (UN Children\'s Rights)',
-		link: 'https://s3-us-west-2.amazonaws.com/pg-scoresheet/rubrics/LDC_Arg_6-8_UN-Childrens-Rights.docx',
+		id: 'LDC_Arg_6-8_UN-Education',
+		name: 'Argumentation, Grades 6-8 (UN Education)',
+		link: 'https://s3-us-west-2.amazonaws.com/pg-scoresheet/rubrics/LDC_Arg_6-8_UN-Education.docx',
 		headers: ['emerging', 'approaches expectations', 'meets expectations', 'advanced'],
 		fields: [
 			{

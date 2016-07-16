@@ -20,7 +20,7 @@ angular.module('app').controller('EssaysController', [
         var user = $scope.user = CurrentUser.data,
             
             status = $scope.status = {
-                essayFilterBy: (user.admin || user.facilitator) ? 'all essays' : 'my essays',
+                essayFilterBy: (user.admin) ? 'master scores' : 'my essays',
                 moduleFilterBy: null
             },
             params = $scope.params = {},
@@ -28,18 +28,28 @@ angular.module('app').controller('EssaysController', [
             errorMessages = $scope.errorMessages = [],
             successMessages = $scope.successMessages = [],
             
-            essayFilterOptions = $scope.essayFilterOptions = (user.admin || user.facilitator) ?
-                ['all essays', 'master scores', 'graded essays', 'ungraded essays', 'my essays'] :
-                ['my essays', 'all essays'],
+            essayFilterOptions = $scope.essayFilterOptions = (user.admin) ?
+                ['master scores', 'graded essays', 'ungraded essays', 'all essays'] :
+                (
+                    user.facilitator ?
+                    ['my essays', 'master scores', 'graded essays', 'ungraded essays', 'all essays'] :
+                    ['my essays', 'all essays']
+                ),
+
+            essayStats = $scope.essayStats = {},
             
             essayRefreshTime = ($window.location.host.indexOf('localhost') > -1) ? 10000 : 30000,
 
             essays = $scope.essays = [],
             modules = $scope.modules = [],
             
-            fields = $scope.fields = (user.admin || user.facilitator) ?
-                ['no', 'id', 'module', 'master score', 'being graded by', 'skipped by', 'graded by', 'grade quota', 'grade'] :
-                ['no', 'id', 'module', 'master score', 'grading in progress', 'skipped by you', 'graded by you', 'graded', 'grade'];
+            fields = $scope.fields = (user.admin) ?
+                ['no', 'id', 'module', 'being graded by', 'skipped by', 'graded by', 'everyone', 'master score', 'details'] :
+                (
+                    user.facilitator ?
+                        ['no', 'id', 'module', 'being graded by', 'skipped by', 'graded by', 'everyone', 'master score', 'grade', 'details'] :
+                        ['no', 'id', 'module', 'in progress', 'skipped', 'graded', 'master score', 'grade']
+                );
         
         // -------------------------------------------------------------------------------------------------------------
         // Success/Error Messages
@@ -69,12 +79,15 @@ angular.module('app').controller('EssaysController', [
                 masterScoreSheet: null
             };
             if (essay.graders && essay.graders.length) {
+                var resumeGrading = false;
                 essay.graders.forEach(function(grader) {
                     flags.beingGradedBy++;
                     if (grader.toString() === user._id.toString()) {
                         flags.beingGradedByYou = true;
+                        resumeGrading = true;
                     }
                 });
+                status.resumeGrading = resumeGrading;
             }
             if (essay.skip && essay.skip.length) {
                 essay.skip.forEach(function(skipObj) {
@@ -107,7 +120,7 @@ angular.module('app').controller('EssaysController', [
                     visible = true;
                     break;
                 case 'master scores':
-                    visible = Boolean(essay.masterScoreSheet);
+                    visible = Boolean(essay.masterScore);
                     break;
                 case 'graded essays':
                     visible = Boolean(essay.wasGradedBy);
@@ -116,7 +129,7 @@ angular.module('app').controller('EssaysController', [
                     visible = Boolean(!essay.wasGradedBy);
                     break;
                 case 'my essays':
-                    visible = Boolean(essay.wasGradedByYou || essay.beingGradedByYou);
+                    visible = Boolean(essay.beingGradedByYou || essay.skippedByYou || essay.wasGradedByYou);
                     break;
                 default:
                     visible = true;
@@ -127,6 +140,14 @@ angular.module('app').controller('EssaysController', [
                 }
             }
             return visible;
+        }
+
+        function filterEssays() {
+            status.processingEssays = true;
+            essays.forEach(function(essay) {
+                essay.visible = showHideEssay(essay);
+            });
+            setTimeout(function() { status.processingEssays = false; }, 1);
         }
 
         // refresh essay info
@@ -162,7 +183,9 @@ angular.module('app').controller('EssaysController', [
                     essay = angular.extend(essay, getEssayFlags(essay));
                     essay.visible = showHideEssay(essay);
                 });
-                setTimeout(refreshEssays, essayRefreshTime);
+                if (user.admin || user.facilitator) {
+                    setTimeout(refreshEssays, essayRefreshTime);
+                }
             },
             function(err) {
                 status.processingEssays = false;
@@ -189,7 +212,7 @@ angular.module('app').controller('EssaysController', [
         // -------------------------------------------------------------------------------------------------------------
         // View Details Modal
 
-        $scope.viewDetails = function(essayId) {
+        var viewDetails = $scope.viewDetails = function(essayId) {
             var modalInstance = $modal.open({
                 templateUrl: 'modules/main/essays/modal-detail/view.html',
                 controller: 'EssayDetailModalController',
@@ -235,10 +258,9 @@ angular.module('app').controller('EssaysController', [
                 ngClassObj['btn-danger'] = true;
             } else if (essay.wasGradedByYou) {
                 ngClassObj['btn-info'] = true;
-            } else if (
-                (!essay.gradeAll && !essay.beingGradedBy && !essay.wasGradedBy && !essay.skippedByYou) ||
-                (essay.gradeAll && !essay.wasGradedByYou && !essay.skippedByYou)
-            ) {
+            } else if (essay.skippedByYou) {
+                ngClassObj['btn-default'] = true;
+            } else {
                 ngClassObj['btn-success'] = true;
             }
             return ngClassObj;
@@ -259,6 +281,23 @@ angular.module('app').controller('EssaysController', [
         // -------------------------------------------------------------------------------------------------------------
         // Url Query Params
 
+        function updateQueryParams() {
+            var changed = false;
+            ['essayFilterBy', 'moduleFilterBy'].forEach(function(param) {
+                if (status[param] !== $stateParams[param]) {
+                    $stateParams[param] = status[param];
+                    changed = true;
+                }
+            });
+            if ((user.admin || user.facilitator) && changed) {
+                $state.go($state.$current, $stateParams, {notify: false, reload: false});
+            }
+        }
+
+        if ($stateParams.essayFilterBy) {
+            status.essayFilterBy = $stateParams.essayFilterBy;
+        }
+
         if ($stateParams['all-essays-graded']) {
             status.allEssaysGraded = true;
             $stateParams['all-essays-graded'] = null;
@@ -270,6 +309,15 @@ angular.module('app').controller('EssaysController', [
                 checkMasterScore($stateParams.essay);
             }
             $stateParams['modal-check'] = null;
+            $stateParams.essay = null;
+            $state.go($state.$current, $stateParams, {notify: false, reload: false});
+        }
+
+        if ($stateParams.viewDetails) {
+            if ($stateParams.essay) {
+                viewDetails($stateParams.essay);
+            }
+            $stateParams.viewDetails = null;
             $stateParams.essay = null;
             $state.go($state.$current, $stateParams, {notify: false, reload: false});
         }
@@ -291,21 +339,15 @@ angular.module('app').controller('EssaysController', [
 
         $scope.$watch('status.essayFilterBy', function(nV, oV) {
             if (nV !== oV) {
-                status.processingEssays = true;
-                essays.forEach(function(essay) {
-                    essay.visible = showHideEssay(essay);
-                });
-                status.processingEssays = false;
+                filterEssays();
+                updateQueryParams();
             }
         });
 
         $scope.$watch('status.moduleFilterBy', function(nV, oV) {
             if (nV !== oV) {
-                status.processingEssays = true;
-                essays.forEach(function(essay) {
-                    essay.visible = showHideEssay(essay);
-                });
-                status.processingEssays = false;
+                filterEssays();
+                updateQueryParams();
             }
         });
     }

@@ -70,9 +70,24 @@ exports.read = function(req, res) {
 					error.log(err);
 					return res.status(500).send(err);
 				}
-				
-				updateUser(req.user._id, essayDoc);
-				updateEssay(essayDoc._id, req.user._id);
+
+				// update user and essay
+				var updateUserAndEssay = true;
+				if (req.user.admin) {
+					updateUserAndEssay = false;
+				} else if (req.user.facilitator && essayDoc.masterScore) {
+					updateUserAndEssay = false;
+				} else {
+					essayDoc.scoresheets.forEach(function(scoresheet) {
+						if (scoresheet.user && scoresheet.user.toString() === req.user._id.toString()) {
+							updateUserAndEssay = false;
+						}
+					});
+				}
+				if (updateUserAndEssay) {
+					updateUser(req.user._id, essayDoc);
+					updateEssay(essayDoc._id, req.user._id);
+				}
 				
 				return res.status(200).send(essayDoc);
 			});

@@ -37,22 +37,6 @@
     </span>
     -->
 
-    <div ng-if="user.admin"
-         class="text-center">
-        <button ng-click="params.masterScore = !params.masterScore"
-                class="btn btn-default"
-                ng-class="{'btn-success': (params.masterScore), 'btn-info': (!params.masterScore)}">
-            <i ng-if="!params.masterScore"
-               class="glyphicon glyphicon-unchecked">
-            </i>
-            <i ng-if="params.masterScore"
-               class="glyphicon glyphicon-ok">
-            </i>
-            &nbsp;
-            Save as Master Score
-        </button>
-    </div>
-
     <!-- rubric well -->
     <h3 style="text-align: center; margin-top: 10px;">
         Rubric
@@ -60,7 +44,10 @@
     <div ng-if="!status.processingRubrics && docs.rubrics.$resolved"
          class="form-group">
         <div class="well">
-            <p style="margin: 0; text-align: center; font-size: 110%;">
+
+            <!-- rubric name -->
+            <p ng-if="docs.rubric"
+               style="margin: 0; text-align: center; font-size: 110%;">
                 {{docs.rubric.name}}
                 <a href="{{'https://docs.google.com/viewerng/viewer?url='+docs.rubric.link}}"
                    target="_blank">
@@ -69,6 +56,24 @@
                     </i>
                 </a>
             </p>
+
+            <!-- rubric drop down -->
+            <div ng-if="!docs.rubric">
+                <select ng-model="params.rubric"
+                        class="form-control"
+                        style="margin: auto;"
+                        name="rubric"
+                        required>
+                    <option value="" selected hidden disabled>
+                        please select a rubric
+                    </option>
+                    <option ng-repeat="rubric in docs.rubrics | orderBy:name"
+                            value="{{rubric._id}}">
+                        {{rubric.name}}
+                    </option>
+                </select>
+            </div>
+
         </div>
     </div>
     <span ng-if="status.processingRubrics"
@@ -77,7 +82,8 @@
     </span>
 
     <!-- rubric table title -->
-    <h3 style="text-align: center; margin-top: 10px;">
+    <h3 ng-if="params.rubric"
+        style="text-align: center; margin-top: 10px;">
         Scoring Elements
     </h3>
     <span ng-if="status.processingRubric"
@@ -183,7 +189,7 @@
                      class="btn-group-custom"
                      style="display: flex;"
                      ng-style="{'flex-direction': (status.rubricTableWidth > 700) ? 'row' : 'column'}">
-                    <button ng-repeat="detail in field.details | orderBy: '-score'"
+                    <button ng-repeat="detail in field.details | orderBy: 'score'"
                             ng-click="scoreField(fieldIndex, field.name, detail.score)"
                             class="btn"
                             ng-class="{active: params.score[field.name] === detail.score}"

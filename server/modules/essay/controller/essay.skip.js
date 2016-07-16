@@ -33,7 +33,10 @@ exports.skip = function(req, res) {
 	
 	// update essay
 	Essay.update(
-		{_id: req.body.essay},
+		{
+			_id: req.body.essay,
+			'skip.user': {$ne: req.user._id}
+		},
 		{
 			$push: {skip: {user: req.user._id, reason: req.body.reason}},
 			$pull: {graders: req.user._id}

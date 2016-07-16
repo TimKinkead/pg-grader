@@ -5,12 +5,12 @@
  */
 module.exports = [
 	{
-		id: 'BPA',
-		name: 'Plastics and You (BPA)',
+		id: 'BPA_PLASTIC',
+		name: 'BPA Plastic',
 		abbv: 'BPA',
 		grade: '9-12',
 		subject: 'HS Science',
-		rubric: 'Argumentation, Grades 9-12 (BPA)',
+		rubric: 'Argumentation, Grades 9-12 (BPA Plastic)',
 		prompt: 'After reading informational texts and scientific research on the breakdown of chemical bonds and the use of BPAs in food and drink containers, ' +
 			'write a scientific article for a health magazine in which you discuss the chemical composition, bonding, and breakdown of polycarbonate plastics ' +
 			'and evaluate the extent to which the US should regulate the use of BPA in plastics, based on available research. ' +
@@ -21,11 +21,11 @@ module.exports = [
 	},
 	{
 		id: 'COLD_WAR_RED_SCARE',
-		name: 'Cold War (Red Scare)',
+		name: 'Cold War Red Scare',
 		abbv: 'CW',
 		grade: '9-12',
 		subject: 'HS SS',
-		rubric: 'Argumentation, Grades 9-12 (Red Scare)',
+		rubric: 'Argumentation, Grades 9-12 (Cold War Red Scare)',
 		prompt: 'What were the most important causes of the Red Scare after WWII? ' +
 			'After reading the primary sources write an essay in which you address the question and argue the role of Senator Joseph McCarthy in this event. ' +
 			'Support your discussion with evidence from the text(s).',
@@ -60,11 +60,11 @@ module.exports = [
 	},
 	{
 		id: 'NO_GUITAR_BLUES',
-		name: 'Growing Up is Hard to Do',
+		name: 'No Guitar Blues',
 		abbv: 'NGB',
 		grade: '6-8',
 		subject: 'MS ELA',
-		rubric: 'Informational/Explanatory, Grades 6-8 (Growing Up is Hard to Do)',
+		rubric: 'Informational/Explanatory, Grades 6-8 (No Guitar Blues)',
 		prompt: 'How does author Gary Soto\'s work develop the theme of growing up? After reading a selected short story by Gary Soto, ' +
 			'write an essay that addresses the question and analyzes how the author uses story elements to reveal the theme, ' +
 			'providing examples to clarify your analysis.'
@@ -100,12 +100,12 @@ module.exports = [
 		]
 	},
 	{
-		id: 'UN',
-		name: 'UN Children\'s Rights',
+		id: 'UN_EDUCATION',
+		name: 'UN Education',
 		abbv: 'UN',
 		grade: '6-8',
 		subject: 'MS SS',
-		rubric: 'Argumentation, Grades 6-8 (UN Children\'s Rights)',
+		rubric: 'Argumentation, Grades 6-8 (UN Education)',
 		prompt: 'After reading excerpts from the United Nations’ Education-for-All goals and examining the global community’s progress ' +
 			'with the United Nations education initiatives, write a report to the UN General Assembly in which you argue how successful or unsuccessful ' +
 			'the international community has been at advancing the educational rights of children. ' +

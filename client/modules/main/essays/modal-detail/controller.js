@@ -7,9 +7,10 @@ angular.module('app').controller('EssayDetailModalController', [
     '$scope',
     '$uibModalInstance',
     '$resource',
+    '$state',
     'CurrentUser',
     'essayId',
-    function ($scope, $modalInstance, $resource, CurrentUser, essayId) {
+    function ($scope, $modalInstance, $resource, $state, CurrentUser, essayId) {
 
         // variables
         var user = $scope.user = CurrentUser.data,
@@ -37,11 +38,13 @@ angular.module('app').controller('EssayDetailModalController', [
                 });
 
                 // grab score sheets
+                var masterScore = false;
                 essay.scoresheets.forEach(function(scoresheet) {
                     if (user.admin || user.facilitator || scoresheet.masterScore || scoresheet.user.toString() === user._id.toString()) {
                         scoresheet.user = userMap[scoresheet.user];
                         scoresheets.push(scoresheet);
-
+                        if (scoresheet.masterScore) { masterScore = true; }
+                        
                         // grab fields
                         for (var key in scoresheet.score) {
                             if (scoresheet.score.hasOwnProperty(key)) {
@@ -52,12 +55,26 @@ angular.module('app').controller('EssayDetailModalController', [
                         }
                     }
                 });
+                if (essay.masterScore && !masterScore) { status.noMasterScore = true; }
+
+                // add average score field
+                fields.push('avg score');
 
             },
             function(err) {
                 status.errorMessage = 'We had trouble loading the scores. Please try again.';
             }
         );
+        
+        $scope.adminAddGrade = function(essay) {
+            $modalInstance.dismiss();
+            $state.go('grade', {essay: essay._id});
+        };
+
+        $scope.adminEditGrade = function(scoresheet) {
+            $modalInstance.dismiss();
+            $state.go('grade', {scoresheet: scoresheet._id});
+        };
 
     }
 ]);

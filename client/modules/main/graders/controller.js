@@ -20,10 +20,14 @@ angular.module('app').controller('GradersController', [
             
             errorMessages = $scope.errorMessages = [],
             successMessages = $scope.successMessages = [],
+
+            graders = $scope.graders = [],
+            modules = $scope.modules = [],
+            modulesMap = $scope.modulesMap = {},
             
             fields = $scope.fields = (user.admin) ? 
-                ['no', 'id', 'name', 'email', 'graded essays', 'check scores', 'facilitator', 'admin'] :
-                ['no', 'id', 'name', 'email', 'graded essays', 'check scores'];
+                ['no', 'id', 'name', 'email', 'group', 'graded essays', 'check scores', 'facilitator', 'admin'] :
+                ['no', 'id', 'name', 'email', 'graded essays', 'check scores', 'facilitator'];
         
         // -------------------------------------------------------------------------------------------------------------
         // Success/Error Messages
@@ -39,11 +43,51 @@ angular.module('app').controller('GradersController', [
         };
 
         // -------------------------------------------------------------------------------------------------------------
+        // Modules
+
+        // get modules
+        status.processingModules = true;
+        modules = $scope.graders = $resource('data/module/list').query(
+            {},
+            function() {
+                status.processingModules = false;
+                modules.forEach(function(module) {
+                    if (module && module._id) {
+                        modulesMap[module._id] = module;
+                    } 
+                });
+            },
+            function(err) {
+                status.processingModules = false;
+            }
+        );
+
+        // get group tooltip
+        $scope.getGroupTooltip = function(group) {
+            var tooltip = '';
+            if (group) {
+                if (group.subject) { tooltip += group.subject; }
+                if (group.modules && group.modules.length) {
+                    var moduleNames = [];
+                    group.modules.forEach(function(moduleId) {
+                        if (modulesMap[moduleId] && modulesMap[moduleId].name) {
+                            moduleNames.push(modulesMap[moduleId].name);
+                        }
+                    });
+                    if (moduleNames.length) {
+                        tooltip += '<br>('+moduleNames.join(', ')+')';
+                    }
+                }
+            }
+            return tooltip;
+        };
+
+        // -------------------------------------------------------------------------------------------------------------
         // Graders
         
         // get graders
         status.processing = true;
-        var graders = $scope.graders = $resource('data/grader/list').query(
+        graders = $scope.graders = $resource('data/grader/list').query(
             {},
             function() {
                 status.processing = false;
