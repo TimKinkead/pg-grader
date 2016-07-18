@@ -6,6 +6,7 @@ angular.module('app').directive('fixedSizeFullHeight', ['$window', function($win
 		restrict: 'C',
 		link: function($scope, $element, $attrs) {
 			function setFullHeight() {
+
 				var element = $element[0] ? $element[0] : $element,
 					siblings = element.parentNode.children,
 					siblingIndex = Array.prototype.indexOf.call(element.parentNode.children, element),

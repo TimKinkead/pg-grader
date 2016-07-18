@@ -125,6 +125,34 @@
             <div class="form-group"
                  style="margin-bottom: 0;">
                 <label>group</label>
+
+                <button ng-if="!status.showGroups"
+                        ng-click="status.showGroups = true"
+                        class="btn btn-block btn-default">
+                    <div class="text-left"
+                         style="width: 100%">
+                        <span ng-style="{color: user.group ? '' : '#999'}">
+                            {{user.group.name ? user.group.name : 'select a group'}}
+                        </span>
+                    </div>
+                </button>
+
+                <!-- group selected & edit button -->
+                <!--
+                <div ng-if="!status.showGroups"
+                     style="padding: 1px;">
+                    <input ng-click="status.showGroups = true"
+                           style="cursor: pointer"
+                           type="text"
+                           name="group"
+                           ng-model="user.group.name"
+                           class="form-control"
+                           placeholder="select a group"
+                           required>
+                </div>
+                -->
+
+                <!--
                 <select ng-if="!status.showGroups && groups && groups.$resolved"
                         ng-click="status.showGroups = true"
                         ng-model="user.group._id"
@@ -136,6 +164,8 @@
                         {{group.name}}
                     </option>
                 </select>
+                -->
+
             </div>
 
             <!-- group buttons -->
