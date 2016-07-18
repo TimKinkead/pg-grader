@@ -106,7 +106,8 @@
 </div>
 
 <!-- resizable divs -->
-<div style="display: flex; position: fixed; left: 0; right: 0; bottom: 0;"
+<div id="grade-dashboard"
+     style="display: flex; position: fixed; left: 0; right: 0; bottom: 0;"
      ng-style="{top: (params.masterScore || user.admin) ? '120px' : '65px'}">
 
     <!-- left side -->
@@ -114,7 +115,7 @@
          r-flex="true"
          class="resizable"
          r-grabber="<div style='height: 100%; width: 100%; border-left: thin solid; border-right: thin solid; background-color: lightblue;'></div>"
-         style="width: 50%; max-width: 80%; min-width: 200px;">
+         style="width: 50%; max-width: 80%; min-width: 200px; background-color: lightgray;">
 
         <!-- left side content -->
         <ng-include src="user.rubricSide === 'right' ? 'modules/main/grade/views/text.html' : 'modules/main/grade/views/rubric.html'">
@@ -123,7 +124,7 @@
     </div>
 
     <!-- right side -->
-    <div style="flex: 1; margin-left: 14px;">
+    <div style="flex: 1; margin-left: 14px; overflow-y: scroll;">
 
         <!-- right side content -->
         <ng-include src="user.rubricSide === 'right' ? 'modules/main/grade/views/rubric.html' : 'modules/main/grade/views/text.html'">
