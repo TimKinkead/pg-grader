@@ -30,7 +30,7 @@ module.exports = [
 		subject: 'MS SS',
 		facilitator: 'Mike Emmons',
 		modules: [
-			'UN_Education'
+			'UN_EDUCATION'
 		]
 	},
 	{

@@ -110,7 +110,7 @@
 </div>
 
 <!-- table -->
-<div ng-if="!status.processingEssays && essays.length && (user.admin || user.facilitator || user.scoresheets)"
+<div ng-if="!status.processingEssays && essays.length && (user.admin || user.facilitator || (user.scoresheets || status.essayFilterBy === 'all essays'))"
      class="container">
     <table class="table table-bordered table-hover">
         <thead>
@@ -262,7 +262,7 @@
     </table>
 </div>
 
-<div ng-if="!user.admin && !user.facilitator && !status.processingEssays && essays.length && user.scoresheets"
+<div ng-if="!user.admin && !user.facilitator && !status.processingEssays && essays.length"
      class="text-center"
      style="margin-bottom: 20px;">
     <button ng-if="status.essayFilterBy !== 'all essays'"
