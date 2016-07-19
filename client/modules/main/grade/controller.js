@@ -177,14 +177,27 @@ angular.module('app').controller('GradeController', [
             status.rubricTableWidth = document.getElementById('rubric-table').clientWidth;
         };
 
+        var updateIframeHeight = $scope.updateIframeHeight = function() {
+            var gradeDash = document.getElementById('grade-dashboard'),
+                iframe = document.getElementById('iframe-text'),
+                newHeight = gradeDash.getBoundingClientRect().bottom - iframe.getBoundingClientRect().top;
+            iframe.style.minHeight = newHeight+'px';
+        };
+
+        $scope.updateIframeHeightDelay = function(delay) {
+            setTimeout(updateIframeHeight, delay);
+        };
+
         // watch div resize
         $scope.$on('angular-resizable.resizeEnd', function(event, args) {
             updateRubricTableWidth();
+            updateIframeHeight();
         });
 
         // watch window resize
         angular.element($window).bind('resize', function() {
             updateRubricTableWidth();
+            updateIframeHeight();
         });
 
         // -------------------------------------------------------------------------------------------------------------
