@@ -110,7 +110,7 @@
 </div>
 
 <!-- table -->
-<div ng-if="!status.processingEssays"
+<div ng-if="!status.processingEssays && essays.length && (user.admin || user.facilitator || (user.scoresheets || status.essayFilterBy === 'all essays'))"
      class="container">
     <table class="table table-bordered table-hover">
         <thead>
