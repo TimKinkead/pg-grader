@@ -64,7 +64,7 @@ function writeTexts(module, essayIds, clbk) {
 
 function writeScores(module, essayIds, scoreFields, clbk) {
 	var filename = module+'.scores.tsv',
-		headers = ['DocId'].concat(scoreFields),
+		headers = ['DocId', 'Grader'].concat(scoreFields),
 		streamStarted = false,
 		writeStream = fs.createWriteStream('temp/graded-work/'+filename);
 
@@ -74,7 +74,8 @@ function writeScores(module, essayIds, scoreFields, clbk) {
 
 	// stream score sheets
 	ScoreSheet.find({essay: {$in: essayIds}})
-		.select('_id essay score')
+		.select('_id user essay score')
+		.populate('user', '_id name')
 		.populate('essay', '_id id link')
 		.sort({'essay.id': 1})
 		.stream()
@@ -83,9 +84,10 @@ function writeScores(module, essayIds, scoreFields, clbk) {
 				writeStream.write(headers.map(csvEscape).join('\t')+'\n');
 				streamStarted = true;
 			}
-			var essay = scoresheetDoc.essay || {},
+			var user = scoresheetDoc.user || {},
+				essay = scoresheetDoc.essay || {},
 				score = scoresheetDoc.score || {},
-				data = [essay.id];
+				data = [essay.id, user.name];
 			scoreFields.forEach(function(field) {
 				data.push(score[field] || '');
 			});
