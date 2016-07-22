@@ -71,7 +71,7 @@
     </div>
 </div>
 
-<!-- admin select user drop down -->
+<!-- admin add/edit grade -->
 <div ng-if="!params.masterScore && user.admin"
      class="text-center"
      style="height: 55px; position: fixed; top: 65px; left: 0; right: 0; bottom: 120px; padding: 10px; border-bottom: thin solid; background-color: yellow;">
@@ -94,12 +94,12 @@
     </div>
     <div ng-if="params.scoresheet">
         <p ng-if="docs.scoresheet.user._id.toString() === user._id.toString()"
-           style="font-weight: bold; font-size: 115%;">
-            You are editing a master score.
+           style="font-weight: bold; font-size: 115%; margin: 5px 0 10px 0;">
+            You are editing your own score as an admin.
         </p>
         <p ng-if="docs.scoresheet.user._id.toString() !== user._id.toString()"
-           style="font-weight: bold; font-size: 115%;">
-            Warning! You are editing a master score that was added by
+           style="font-weight: bold; font-size: 115%; margin: 5px 0 10px 0;">
+            Warning! You are editing a score that was added by
             <span style="text-decoration: underline;">{{docs.scoresheet.user.name}}</span>.
         </p>
     </div>

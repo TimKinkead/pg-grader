@@ -53,7 +53,7 @@ module.exports = (function() {
 		},
 		{
 			module: 'NO_GUITAR_BLUES',
-			count: 57,
+			count: 108,
 			prefix: 'NGB',
 			fileType: 'docx',
 			masterScores: [12, 57, 19],
