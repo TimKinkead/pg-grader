@@ -707,6 +707,27 @@ module.exports = [ {
             score: 4,
             text: "Consistently applies standard English conventions, with few errors. Demonstrates varied syntax and precise word choice.\nConsistently uses language and tone appropriate to the audience and purpose."
         } ]
+    }, {
+        name: "Disciplinary Content Understanding",
+        details: [ {
+            score: 1,
+            text: "Includes disciplinary content in explanations, but understanding of content is weak; content is irrelevant, inappropriate, or inaccurate."
+        }, {
+            score: 1.5
+        }, {
+            score: 2,
+            text: "Briefly notes disciplinary content relevant to the prompt; shows basic or uneven understanding of content with minor errors in explanation."
+        }, {
+            score: 2.5
+        }, {
+            score: 3,
+            text: "Accurately presents disciplinary content relevant to the prompt with sufficient explanations that demonstrate understanding."
+        }, {
+            score: 3.5
+        }, {
+            score: 4,
+            text: "Integrates relevant and accurate disciplinary content with thorough explanations that demonstrate in-depth understanding."
+        } ]
     } ]
 }, {
     id: "LDC_Arg_9-12_Nuclear-Power",

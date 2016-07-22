@@ -49,7 +49,7 @@ module.exports = [
 		facilitator: 'Susan Schultz',
 		modules: [
 			'NUCLEAR_POWER',
-			'BPA'
+			'BPA_PLASTIC'
 		]
 	},
 	{

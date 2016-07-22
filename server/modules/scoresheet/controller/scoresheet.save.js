@@ -51,6 +51,11 @@ exports.save = function(req, res) {
             user: params.user,
             essay: params.essay
         };
+
+    //console.log('req.user._id', req.user._id);
+    //console.log('req.user.admin', 'req.user.admin');
+    //console.log('req.body.user', req.body.user);
+    //console.log(JSON.stringify(params));
     
     // look for existing score sheet
     ScoreSheet.findOne(query)

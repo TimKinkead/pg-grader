@@ -38,7 +38,7 @@ module.exports = function() {
         gradeAll: [ 21, 29, 37, 45, 53, 61, 69, 77, 85, 93, 101, 109, 117, 125, 133, 141, 149, 157, 165, 173, 181, 189, 197, 205 ]
     }, {
         module: "NO_GUITAR_BLUES",
-        count: 57,
+        count: 108,
         prefix: "NGB",
         fileType: "docx",
         masterScores: [ 12, 57, 19 ],

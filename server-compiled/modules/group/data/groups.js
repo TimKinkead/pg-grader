@@ -29,7 +29,7 @@ module.exports = [ {
     name: "Group 5",
     subject: "HS Science",
     facilitator: "Susan Schultz",
-    modules: [ "NUCLEAR_POWER", "BPA" ]
+    modules: [ "NUCLEAR_POWER", "BPA_PLASTIC" ]
 }, {
     id: "SESSION_1_GROUP_6",
     name: "Group 6",

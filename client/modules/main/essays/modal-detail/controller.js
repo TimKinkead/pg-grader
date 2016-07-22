@@ -59,6 +59,9 @@ angular.module('app').controller('EssayDetailModalController', [
 
                 // add average score field
                 fields.push('avg score');
+                
+                // add edit field if admin
+                if (user.admin) { fields.push('edit'); }
 
             },
             function(err) {

@@ -239,7 +239,7 @@ angular.module('app').controller('GradeController', [
                         'https://docs.google.com/gview?url='+essay.link+'&embedded=true'
                     );
                     if (!params.rubric) { params.rubric = essay.module.rubric; }
-                    if (!params.scoresheet && essay.scoresheets) {
+                    if (!params.scoresheet && essay.scoresheets && !user.admin) {
                         essay.scoresheets.forEach(function(scoresheet) {
                             if (scoresheet.user && scoresheet.user.toString() === user._id.toString() && !scoresheet.masterScore) {
                                 params.scoresheet = scoresheet._id;
@@ -393,6 +393,7 @@ angular.module('app').controller('GradeController', [
                     status.saved = true;
                     status.formValid = true;
                     docs.scoresheet = scoresheet;
+                    params.user = (user.admin && scoresheet.user._id) ? scoresheet.user._id : params.user;
                     params.essay = scoresheet.essay._id;
                     params.rubric = scoresheet.rubric._id;
                     params.score = scoresheet.score;
