@@ -26,21 +26,21 @@ function writeTexts(a, b, c) {
 }
 
 function writeScores(a, b, c, d) {
-    var e = a + ".scores.tsv", f = [ "DocId" ].concat(c), g = !1, h = fs.createWriteStream("temp/graded-work/" + e);
+    var e = a + ".scores.tsv", f = [ "DocId", "Grader" ].concat(c), g = !1, h = fs.createWriteStream("temp/graded-work/" + e);
     h.on("finish", function() {
         return d(e);
     }), ScoreSheet.find({
         essay: {
             $in: b
         }
-    }).select("_id essay score").populate("essay", "_id id link").sort({
+    }).select("_id user essay score").populate("user", "_id name").populate("essay", "_id id link").sort({
         "essay.id": 1
     }).stream().on("data", function(a) {
         g || (h.write(f.map(csvEscape).join("\t") + "\n"), g = !0);
-        var b = a.essay || {}, d = a.score || {}, e = [ b.id ];
+        var b = a.user || {}, d = a.essay || {}, e = a.score || {}, i = [ d.id, b.name ];
         c.forEach(function(a) {
-            e.push(d[a] || "");
-        }), h.write(e.map(csvEscape).join("\t") + "\n");
+            i.push(e[a] || "");
+        }), h.write(i.map(csvEscape).join("\t") + "\n");
     }).on("close", function() {
         h.end();
     }).on("error", function(a) {
