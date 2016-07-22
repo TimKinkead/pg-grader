@@ -76,7 +76,7 @@ angular.module('app').controller('EssayDetailModalController', [
 
         $scope.adminEditGrade = function(scoresheet) {
             $modalInstance.dismiss();
-            $state.go('grade', {scoresheet: scoresheet._id});
+            $state.go('grade', {scoresheet: scoresheet._id, masterScore: scoresheet.masterScore});
         };
 
     }
