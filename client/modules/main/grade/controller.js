@@ -430,12 +430,12 @@ angular.module('app').controller('GradeController', [
                     removeUnloadEvent();
 
                     if (params.masterScore) {
-                        $state.go('essays', {essayFilterBy: 'master scores'});
+                        $state.go('essays', {essayFilterBy: 'master scores', moduleFilterBy: docs.essay.module._id});
                         return;
                     }
 
                     if (user.admin) {
-                        $state.go('essays', {essayFilterBy: 'graded essays', essay: params.essay, viewDetails: true});
+                        $state.go('essays', {essayFilterBy: 'graded essays', moduleFilterBy: docs.essay.module._id, essay: params.essay, viewDetails: true});
                         return;
                     }
 
