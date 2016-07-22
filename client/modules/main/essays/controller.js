@@ -298,6 +298,10 @@ angular.module('app').controller('EssaysController', [
             status.essayFilterBy = $stateParams.essayFilterBy;
         }
 
+        if ($stateParams.moduleFilterBy) {
+            status.moduleFilterBy = $stateParams.moduleFilterBy;
+        }
+
         if ($stateParams['all-essays-graded']) {
             status.allEssaysGraded = true;
             $stateParams['all-essays-graded'] = null;
