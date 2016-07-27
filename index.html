@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Grader by tselby</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Grader</h1>
+      <h2 class="project-tagline">An online platform for scoring student work.</h2>
+      <a href="https://github.com/tselby/pg-grader" class="btn">View on GitHub</a>
+      <a href="https://github.com/tselby/pg-grader/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/tselby/pg-grader/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="grader" class="anchor" href="#grader" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Grader</h1>
+
+<ul>
+<li>Grader is a <a href="http://prevagroup.com">Preva Group</a> project.</li>
+<li>Live Site: <a href="http://grader.prevagroup.com">grader.prevagroup.com</a>
+</li>
+<li>Demo Site: <a href="http://grader-demo.prevagroup.com">grader-demo.prevagroup.com</a>
+</li>
+<li>Contributors: <a href="https://github.com/dsoike" class="user-mention">@dsoike</a>
+</li>
+</ul>
+
+<h3>
+<a id="development-details" class="anchor" href="#development-details" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Development Details</h3>
+
+<ul>
+<li>This project uses a MEAN stack. (<a href="https://docs.mongodb.com/manual">MongoDB</a>, <a href="https://expressjs.com">Express</a>, <a href="https://angularjs.org">Angular</a>, <a href="https://nodejs.org/en">Node</a>)</li>
+<li>The javascript task runner <a href="http://gruntjs.com">Grunt</a> is used to compile code.</li>
+<li>The javascript compiler <a href="https://babeljs.io/">Babel</a> is used to transpile ES2015 javascript.</li>
+<li>Both the live site and demo site are hosted on <a href="https://aws.amazon.com/">AWS</a> and managed via <a href="https://console.aws.amazon.com/opsworks/home?region=us-west-2">OpsWorks</a>.</li>
+</ul>
+
+<h3>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Started</h3>
+
+<ul>
+<li>Download <a href="https://desktop.github.com/">GitHub Desktop</a>.
+
+<ul>
+<li>Use GitHub Desktop to clone this repository (grader) to your local machine.</li>
+</ul>
+</li>
+<li>Download an <a href="http://paulb.gd/comparing-nodejs-ides/">IDE</a>
+
+<ul>
+<li>Use your IDE to open the project files.</li>
+</ul>
+</li>
+<li>Install <a href="https://www.mongodb.org/downloads#production">MongoDB</a>.
+
+<ul>
+<li>Use the <a href="https://www.mongodb.org/downloads#production">MongoDB download page</a>.</li>
+<li>For additional guidance follow a <a href="https://docs.mongodb.org/manual/administration/install-community/">tutorial</a>.</li>
+</ul>
+</li>
+<li>Install <a href="https://nodejs.org/en/">NodeJS</a>.
+
+<ul>
+<li>NodeJS comes with <a href="https://www.npmjs.com/">NPM</a> (Node Package Manager).</li>
+</ul>
+</li>
+<li>Install the project dependencies.
+
+<ul>
+<li>Open a terminal.</li>
+<li>Change directory to the project root (wherever GitHub cloned the project). <code>cd C:\&lt;yourname&gt;\Documents\GitHub\grader</code>
+</li>
+<li>Install the node package dependencies using <a href="https://www.npmjs.com/">NPM</a>.
+
+<ul>
+<li>Run <code>npm install</code>.</li>
+<li>The node package dependencies listed in <code>package.json</code> will be installed in the <code>node_modules</code> directory.</li>
+</ul>
+</li>
+<li>Install the web package dependencies using <a href="http://bower.io/">Bower</a>.
+
+<ul>
+<li>Install Bower globally with <code>npm install bower -g</code>.</li>
+<li>Run <code>bower install</code>.</li>
+<li>The web packages listed in <code>bower.json</code> will be installed in the <code>client/lib</code> directory.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Install <a href="http://gruntjs.com/">Grunt</a>'s command line interface globally.
+
+<ul>
+<li>Run <code>npm install grunt-cli -g</code>.</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="starting-the-application-locally" class="anchor" href="#starting-the-application-locally" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Starting The Application Locally</h3>
+
+<ul>
+<li>Make sure MongoDB's <a href="https://docs.mongodb.org/manual/reference/program/mongod/">mongod process</a> is running.
+
+<ul>
+<li>Open a terminal.</li>
+<li>Change directory to MongoDB's install location. <code>cd C:\Program Files\MongoDB\Server\3.0\bin</code>
+</li>
+<li>Start the mongod process with the command <code>mongod</code>.</li>
+</ul>
+</li>
+<li>Start the grader application.
+
+<ul>
+<li>Open another terminal.</li>
+<li>Change directory to the project root (wherever GitHub cloned the project). <code>cd C:\&lt;yourname&gt;\Documents\GitHub\grader</code>
+</li>
+<li>Start the application with the command <code>grunt</code>.</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="accessing-the-database-through-the-mongodb-shell" class="anchor" href="#accessing-the-database-through-the-mongodb-shell" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Accessing the Database through the MongoDB Shell</h3>
+
+<ul>
+<li>Make sure MongoDB's mongod process is running.
+
+<ul>
+<li>See above.</li>
+</ul>
+</li>
+<li>Start the <a href="https://docs.mongodb.org/manual/reference/program/mongo/">mongo shell</a>.
+
+<ul>
+<li>Change directory to MongoDB's install location. <code>cd C:\Program Files\MongoDB\Server\3.0\bin</code>
+</li>
+<li>Start the mongo shell with the command <code>mongo</code>.</li>
+</ul>
+</li>
+<li>Note: If you add MongoDB's install location to your path environment variable, you can run <code>mongod</code> and <code>mongo</code> from any directory.</li>
+</ul>
+
+<h3>
+<a id="the-project-root-directory" class="anchor" href="#the-project-root-directory" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The Project Root Directory</h3>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>client</strong></td>
+<td>Directory for the front-end (client-side) angular application.</td>
+</tr>
+<tr>
+<td><strong>client-compiled</strong></td>
+<td>Compiled front-end code for running in production.</td>
+</tr>
+<tr>
+<td><strong>node_modules</strong></td>
+<td>Directory for the node package project dependencies installed via NPM.</td>
+</tr>
+<tr>
+<td><strong>server</strong></td>
+<td>Directory for the back-end (server-side) expressjs application.</td>
+</tr>
+<tr>
+<td><strong>server-compiled</strong></td>
+<td>Compiled back-end code for runing in development and production.</td>
+</tr>
+<tr>
+<td><strong>tasks</strong></td>
+<td>Directory for grunt tasks that are run with grunt command line tool.</td>
+</tr>
+<tr>
+<td><strong>temp</strong></td>
+<td>Directory for temporary files.</td>
+</tr>
+<tr>
+<td><strong>.babelrc</strong></td>
+<td>Configuration for the javascript compiler Babel.</td>
+</tr>
+<tr>
+<td><strong>.bowerrc</strong></td>
+<td>Configuration for the location where web packages installed via Bower should be saved.</td>
+</tr>
+<tr>
+<td><strong>.gitignore</strong></td>
+<td>Configuration for the files that should be ignored when committing to GitHub.</td>
+</tr>
+<tr>
+<td><strong>.jshintrc</strong></td>
+<td>Configuration for the 'jshint' grunt task.</td>
+</tr>
+<tr>
+<td><strong>auth.js</strong></td>
+<td>All passwords and keys for the APIs that this project uses.</td>
+</tr>
+<tr>
+<td><strong>bower.json</strong></td>
+<td>The front-end angular application configuration file. It defines the required bower packages.</td>
+</tr>
+<tr>
+<td><strong>config.js</strong></td>
+<td>Configuration file for project information and project files.</td>
+</tr>
+<tr>
+<td><strong>gruntfile.js</strong></td>
+<td>This file bundles all of the grunt tasks.</td>
+</tr>
+<tr>
+<td><strong>LICENSE</strong></td>
+<td>The project license.</td>
+</tr>
+<tr>
+<td><strong>package.json</strong></td>
+<td>The back-end express application configuration file. It defines the required node packages.</td>
+</tr>
+<tr>
+<td><strong>README.md</strong></td>
+<td>The file that you're looking at right now!</td>
+</tr>
+<tr>
+<td><strong>server.js</strong></td>
+<td>This file starts the server.</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="git" class="anchor" href="#git" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Git</h3>
+
+<ul>
+<li>The project code is hosted on <a href="https://github.com/">GitHub</a> at <a href="https://github.com/tselby/pg-grader">github.com/tselby/pg-grader</a>.
+
+<ul>
+<li>All development is performed on the <code>master</code> branch.</li>
+<li>Code is pushed to the <code>production</code> branch via the following terminal commands.
+
+<ul>
+<li>
+<code>git checkout production</code> - switch to the production branch</li>
+<li>
+<code>git pull</code> - sync with the remote production branch</li>
+<li>
+<code>git merge --no-ff master</code> - merge the master branch into the production branch</li>
+<li>
+<code>grunt production</code> - compile the code for running in production and start the server for testing purposes</li>
+<li>
+<code>git add .</code> - stage all changes for commit</li>
+<li>
+<code>git commit -m "Grunt Production"</code> - commit compiled code to production branch</li>
+<li>
+<code>git push</code> - push changes to the remote production branch</li>
+<li>
+<code>git checkout master</code> - switch back to the master branch</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/tselby/pg-grader">Grader</a> is maintained by <a href="https://github.com/tselby">tselby</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
