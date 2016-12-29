@@ -117,13 +117,13 @@ module.exports = [
 			{
 				name: 'Controlling Idea',
 				details: [
-					{score: 1, text: 'Makes a general claim with an unclear focus. '},
+					{score: 1, text: 'Makes a general claim with an unclear focus.'},
 					{score: 1.5},
-					{score: 2, text: 'Establishes a clear claim that addresses the prompt, with an uneven focus. '},
+					{score: 2, text: 'Establishes a clear claim that addresses the prompt, with an uneven focus.'},
 					{score: 2.5},
 					{score: 3, text: 'Establishes and maintains a clear, specific, and credible claim that addresses all aspects of the prompt.'},
 					{score: 3.5},
-					{score: 4, text: 'Establishes and maintains a precise, substantive claim that addresses all aspects of the prompt. Acknowledges limitations and/or the complexity of the issue or topic. '}
+					{score: 4, text: 'Establishes and maintains a precise, substantive claim that addresses all aspects of the prompt. Acknowledges limitations and/or the complexity of the issue or topic.'}
 				]
 			},
 			{
@@ -143,21 +143,21 @@ module.exports = [
 				details: [
 					{score: 1, text: 'Explanation of ideas and source material is irrelevant, incomplete, or inaccurate.'},
 					{score: 1.5},
-					{score: 2, text: 'Explains ideas and source material to support the argument, with some incomplete reasoning or explanations. '},
+					{score: 2, text: 'Explains ideas and source material to support the argument, with some incomplete reasoning or explanations.'},
 					{score: 2.5},
-					{score: 3, text: 'Accurately explains ideas and source material and how they support the argument. '},
+					{score: 3, text: 'Accurately explains ideas and source material and how they support the argument.'},
 					{score: 3.5},
-					{score: 4, text: 'Thoroughly and accurately explains ideas and source material, using logical reasoning to support and develop the argument. '}
+					{score: 4, text: 'Thoroughly and accurately explains ideas and source material, using logical reasoning to support and develop the argument.'}
 				]
 			},
 			{
 				name: 'Organization',
 				details: [
-					{score: 1, text: 'Lacks an evident structure. Makes unclear connections among claims, reasons, and/or evidence. '},
+					{score: 1, text: 'Lacks an evident structure. Makes unclear connections among claims, reasons, and/or evidence.'},
 					{score: 1.5},
 					{score: 2, text: 'Groups ideas and uses transitions to develop the argument, with some lapses in coherence or organization.'},
 					{score: 2.5},
-					{score: 3, text: 'Groups and sequences ideas to develop a cohesive argument. Uses transitions to clarify the relationships among claim(s), reasons, and evidence. '},
+					{score: 3, text: 'Groups and sequences ideas to develop a cohesive argument. Uses transitions to clarify the relationships among claim(s), reasons, and evidence.'},
 					{score: 3.5},
 					{score: 4, text: 'Groups and sequences ideas in a logical progression in which ideas build to create a unified whole. Uses varied transitions to clarify the precise relationships among claim(s), reasons, and evidence.'}
 				]
@@ -204,7 +204,7 @@ module.exports = [
 				details: [
 					{score: 1, text: 'Presents an unclear or unfocused controlling idea.'},
 					{score: 1.5},
-					{score: 2, text: 'Presents a general controlling idea that addresses the prompt, with an uneven focus. '},
+					{score: 2, text: 'Presents a general controlling idea that addresses the prompt, with an uneven focus.'},
 					{score: 2.5},
 					{score: 3, text: 'Presents and maintains a clear controlling idea that addresses all aspects of the prompt.'},
 					{score: 3.5},
@@ -228,9 +228,9 @@ module.exports = [
 				details: [
 					{score: 1, text: 'Explanation of ideas and source material is irrelevant, incomplete, or inaccurate.'},
 					{score: 1.5},
-					{score: 2, text: 'Explanation of ideas and source material is minimal or contains minor errors. '},
+					{score: 2, text: 'Explanation of ideas and source material is minimal or contains minor errors.'},
 					{score: 2.5},
-					{score: 3, text: 'Accurately explains ideas and source material and how they support the controlling idea. '},
+					{score: 3, text: 'Accurately explains ideas and source material and how they support the controlling idea.'},
 					{score: 3.5},
 					{score: 4, text: 'Thoroughly and accurately explains ideas and source material, using reasoning to support and develop the controlling idea.'}
 				]
@@ -287,7 +287,7 @@ module.exports = [
 			{
 				name: 'Controlling Idea',
 				details: [
-					{score: 1, text: 'Makes an unclear or unfocused claim. '},
+					{score: 1, text: 'Makes an unclear or unfocused claim.'},
 					{score: 1.5},
 					{score: 2, text: 'Makes a general claim that addresses the prompt, with an uneven focus.'},
 					{score: 2.5},
@@ -350,11 +350,11 @@ module.exports = [
 				details: [
 					{score: 1, text: 'Does not address additional task demands.'},
 					{score: 1.5},
-					{score: 2, text: 'Addresses additional task demands superficially. '},
+					{score: 2, text: 'Addresses additional task demands superficially.'},
 					{score: 2.5},
 					{score: 3, text: 'Addresses additional task demands adequately to support the argument.'},
 					{score: 3.5},
-					{score: 4, text: 'Addresses additional task demands effectively to strengthen the clarity and development of the argument. '}
+					{score: 4, text: 'Addresses additional task demands effectively to strengthen the clarity and development of the argument.'}
 				]
 			}
 		]
@@ -471,11 +471,11 @@ module.exports = [
 				details: [
 					{score: 1, text: 'Includes few relevant details from sources.'},
 					{score: 1.5},
-					{score: 2, text: '"Summarizes, paraphrases, or quotes relevant details from sources with minor inaccurate or incomplete elements.\nIncludes a list of sources.'},
+					{score: 2, text: 'Summarizes, paraphrases, or quotes relevant details from sources with minor inaccurate or incomplete elements.\nIncludes a list of sources.'},
 					{score: 2.5},
-					{score: 3, text: '"Summarizes, paraphrases, or quotes relevant details from sources.\nIncludes a list of sources.'},
+					{score: 3, text: 'Summarizes, paraphrases, or quotes relevant details from sources.\nIncludes a list of sources.'},
 					{score: 3.5},
-					{score: 4, text: '"Summarizes, paraphrases, or quotes well-chosen details from sources.\nIncludes a complete list of sources.'}
+					{score: 4, text: 'Summarizes, paraphrases, or quotes well-chosen details from sources.\nIncludes a complete list of sources.'}
 				]
 			},
 			{
@@ -520,11 +520,11 @@ module.exports = [
 				details: [
 					{score: 1, text: 'Does not address additional task demands.'},
 					{score: 1.5},
-					{score: 2, text: 'Addresses additional task demands superficially. '},
+					{score: 2, text: 'Addresses additional task demands superficially.'},
 					{score: 2.5},
 					{score: 3, text: 'Addresses additional task demands adequately to support the opinion.'},
 					{score: 3.5},
-					{score: 4, text: 'Addresses additional task demands effectively to strengthen the clarity and development of the opinion. '}
+					{score: 4, text: 'Addresses additional task demands effectively to strengthen the clarity and development of the opinion.'}
 				]
 			}
 		]
@@ -588,7 +588,7 @@ module.exports = [
 				]
 			},
 			{
-				name: 'Conventions (General)',
+				name: 'Conventions',
 				details: [
 					{score: 1, text: 'Major errors in standard English conventions appropriate to the grade level interfere with the clarity of the writing.'},
 					{score: 1.5},
@@ -600,7 +600,8 @@ module.exports = [
 				]
 			},
 			{
-				name: 'Conventions (Grade 3 Examples)',
+				name: 'Conventions (Grade Specific)',
+				note: 'Grade 3 Examples',
 				details: [
 					{score: 1, text: 'Uses simplistic word choice (e.g., plural and grade-level words) with some errors.\nUses capital letters inconsistently.\nUses commas, apostrophes rarely.'},
 					{score: 1.5},
@@ -608,7 +609,7 @@ module.exports = [
 					{score: 2.5},
 					{score: 3, text: 'Uses simple and compound sentences with some errors.\nUses grade-level appropriate vocabulary words.\nCapitalizes proper nouns, titles and sentences appropriately.\nUses commas, apostrophes, possessive nouns, and contractions.'},
 					{score: 3.5},
-					{score: 4, text: '"Uses simple and compound sentences.\nUses grade-level and above-grade-level vocabulary words to enhance writing.\nUses capital letters and apostrophes, possessive nouns, contractions consistently.\nAttempts to use quotations or plural possessive.'}
+					{score: 4, text: 'Uses simple and compound sentences.\nUses grade-level and above-grade-level vocabulary words to enhance writing.\nUses capital letters and apostrophes, possessive nouns, contractions consistently.\nAttempts to use quotations or plural possessive.'}
 				]
 			},
 			{
@@ -685,7 +686,7 @@ module.exports = [
 				]
 			},
 			{
-				name: 'Conventions (General)',
+				name: 'Conventions',
 				details: [
 					{score: 1, text: 'Major errors in standard English conventions appropriate to the grade level interfere with the clarity of the writing.'},
 					{score: 1.5},
@@ -697,7 +698,8 @@ module.exports = [
 				]
 			},
 			{
-				name: 'Conventions (Grade 3 Examples)',
+				name: 'Conventions (Grade Specific)',
+				note: 'Grade 3 Examples',
 				details: [
 					{score: 1, text: 'Uses simplistic word choice (e.g., plural and grade-level words) with some errors.\nUses capital letters inconsistently.\nUses commas, apostrophes rarely.'},
 					{score: 1.5},
@@ -714,11 +716,11 @@ module.exports = [
 				details: [
 					{score: 1, text: 'Does not address additional task demands.'},
 					{score: 1.5},
-					{score: 2, text: 'Addresses additional task demands superficially. '},
+					{score: 2, text: 'Addresses additional task demands superficially.'},
 					{score: 2.5},
 					{score: 3, text: 'Addresses additional task demands adequately to support the opinion.'},
 					{score: 3.5},
-					{score: 4, text: 'Addresses additional task demands effectively to strengthen the clarity and development of the opinion. '}
+					{score: 4, text: 'Addresses additional task demands effectively to strengthen the clarity and development of the opinion.'}
 				]
 			}
 		]
@@ -782,7 +784,7 @@ module.exports = [
 				]
 			},
 			{
-				name: 'Conventions (General)',
+				name: 'Conventions',
 				details: [
 					{score: 1, text: 'Major errors in standard English conventions appropriate to the grade level interfere with the clarity of the writing.'},
 					{score: 1.5},
@@ -794,7 +796,8 @@ module.exports = [
 				]
 			},
 			{
-				name: 'Conventions (Grade 2 Examples)',
+				name: 'Conventions (Grade Specific)',
+				note: 'Grade 2 Examples',
 				details: [
 					{score: 1, text: 'Spells many words incorrectly and phonetically.\nUses capital letters inconsistently.\nUses commas, apostrophes, and end punctuation rarely.'},
 					{score: 1.5},
@@ -879,7 +882,7 @@ module.exports = [
 				]
 			},
 			{
-				name: 'Conventions (General)',
+				name: 'Conventions',
 				details: [
 					{score: 1, text: 'Major errors in standard English conventions appropriate to the grade level interfere with the clarity of the writing.'},
 					{score: 1.5},
@@ -891,7 +894,8 @@ module.exports = [
 				]
 			},
 			{
-				name: 'Conventions (Grade 2 Examples)',
+				name: 'Conventions (Grade Specific)',
+				note: 'Grade 2 Examples',
 				details: [
 					{score: 1, text: 'Spells many words incorrectly and phonetically.\nUses capital letters inconsistently.\nUses commas, apostrophes, and end punctuation rarely.'},
 					{score: 1.5},
@@ -908,11 +912,11 @@ module.exports = [
 				details: [
 					{score: 1, text: 'Does not address additional task demands.'},
 					{score: 1.5},
-					{score: 2, text: 'Addresses additional task demands superficially. '},
+					{score: 2, text: 'Addresses additional task demands superficially.'},
 					{score: 2.5},
 					{score: 3, text: 'Addresses additional task demands adequately to support the opinion.'},
 					{score: 3.5},
-					{score: 4, text: 'Addresses additional task demands effectively to strengthen the clarity and development of the opinion. '}
+					{score: 4, text: 'Addresses additional task demands effectively to strengthen the clarity and development of the opinion.'}
 				]
 			}
 		]
@@ -976,7 +980,7 @@ module.exports = [
 				]
 			},
 			{
-				name: 'Conventions (General)',
+				name: 'Conventions',
 				details: [
 					{score: 1, text: 'Major errors in standard English conventions appropriate to the grade level interfere with the clarity of the writing.'},
 					{score: 1.5},
@@ -988,7 +992,8 @@ module.exports = [
 				]
 			},
 			{
-				name: 'Conventions (Grade 1 Examples)',
+				name: 'Conventions (Grade Specific)',
+				note: 'Grade 1 Examples',
 				details: [
 					{score: 1, text: 'Most words spelled phonetically.\nUse of capital letters inconsistent.\nAppropriate spacing between words.\nLittle to no use of punctuation.'},
 					{score: 1.5},
@@ -1073,7 +1078,7 @@ module.exports = [
 				]
 			},
 			{
-				name: 'Conventions (General)',
+				name: 'Conventions',
 				details: [
 					{score: 1, text: 'Major errors in standard English conventions appropriate to the grade level interfere with the clarity of the writing.'},
 					{score: 1.5},
@@ -1085,7 +1090,8 @@ module.exports = [
 				]
 			},
 			{
-				name: 'Conventions (Grade 1 Examples)',
+				name: 'Conventions (Grade Specific)',
+				note: 'Grade 1 Examples',
 				details: [
 					{score: 1, text: 'Most words spelled phonetically.\nUse of capital letters inconsistent.\nAppropriate spacing between words.\nLittle to no use of punctuation.'},
 					{score: 1.5},
@@ -1102,7 +1108,7 @@ module.exports = [
 				details: [
 					{score: 1, text: 'Does not address additional task demands.'},
 					{score: 1.5},
-					{score: 2, text: 'Addresses additional task demands superficially. '},
+					{score: 2, text: 'Addresses additional task demands superficially.'},
 					{score: 2.5},
 					{score: 3, text: 'Addresses additional task demands adequately to support the opinion.'},
 					{score: 3.5},
@@ -1170,7 +1176,7 @@ module.exports = [
 				]
 			},
 			{
-				name: 'Conventions (General)',
+				name: 'Conventions',
 				details: [
 					{score: 1, text: 'Major errors in standard English conventions appropriate to the grade level interfere with the clarity of the writing.'},
 					{score: 1.5},
@@ -1182,7 +1188,8 @@ module.exports = [
 				]
 			},
 			{
-				name: 'Conventions (Kindergarten Examples)',
+				name: 'Conventions (Grade Specific)',
+				note: 'Kindergarten Examples',
 				details: [
 					{score: 1, text: 'Many unrecognizable letters and words.\nLittle to no spacing between words.\nLittle to no use of capital letters.\nResponse shows little to no progression (top/bottom, left/right).'},
 					{score: 1.5},
@@ -1267,7 +1274,7 @@ module.exports = [
 				]
 			},
 			{
-				name: 'Conventions (General)',
+				name: 'Conventions',
 				details: [
 					{score: 1, text: 'Major errors in standard English conventions appropriate to the grade level interfere with the clarity of the writing.'},
 					{score: 1.5},
@@ -1279,7 +1286,8 @@ module.exports = [
 				]
 			},
 			{
-				name: 'Conventions (Kindergarten Examples)',
+				name: 'Conventions (Grade Specific)',
+				note: 'Kindergarten Examples',
 				details: [
 					{score: 1, text: 'Many unrecognizable letters and words.\nLittle to no spacing between words.\nLittle to no use of capital letters.\nResponse shows little to no progression. (top/bottom, left/right)'},
 					{score: 1.5},
@@ -1296,11 +1304,11 @@ module.exports = [
 				details: [
 					{score: 1, text: 'Does not address additional task demands.'},
 					{score: 1.5},
-					{score: 2, text: 'Addresses additional task demands superficially. '},
+					{score: 2, text: 'Addresses additional task demands superficially.'},
 					{score: 2.5},
 					{score: 3, text: 'Addresses additional task demands adequately to support the opinion.'},
 					{score: 3.5},
-					{score: 4, text: 'Addresses additional task demands effectively to strengthen the clarity and development of the opinion. '}
+					{score: 4, text: 'Addresses additional task demands effectively to strengthen the clarity and development of the opinion.'}
 				]
 			}
 		]
