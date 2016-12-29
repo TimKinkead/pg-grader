@@ -5,11 +5,18 @@
      class="text-center"
      style="height: 65px; padding: 15px; border-top: thin solid; border-bottom: thin solid; background-color: lightblue;">
 
-    <!-- back to essays -->
-    <button ui-sref="essays({essayFilterBy: (params.masterScore) ? 'master scores' : ''})"
+    <!-- cancel / back to essays -->
+    <button ng-if="!params.scoresheet"
+            ui-sref="essays({essayFilterBy: (params.masterScore) ? 'master scores' : ''})"
+            class="btn btn-default pull-left">
+        <!--<i class="glyphicon glyphicon-arrow-left"></i>-->
+        cancel
+    </button>
+    <button ng-if="params.scoresheet"
+            ui-sref="essays({essayFilterBy: (params.masterScore) ? 'master scores' : ''})"
             class="btn btn-default pull-left">
         <i class="glyphicon glyphicon-arrow-left"></i>
-        &nbsp;back to essays
+        back to essays
     </button>
 
     <!-- switch sides -->

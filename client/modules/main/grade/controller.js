@@ -179,9 +179,11 @@ angular.module('app').controller('GradeController', [
 
         var updateIframeHeight = $scope.updateIframeHeight = function() {
             var gradeDash = document.getElementById('grade-dashboard'),
-                iframe = document.getElementById('iframe-text'),
-                newHeight = gradeDash.getBoundingClientRect().bottom - iframe.getBoundingClientRect().top;
-            iframe.style.minHeight = newHeight+'px';
+                iframe = document.getElementById('iframe-text');
+            if (gradeDash && iframe) {
+                var newHeight = gradeDash.getBoundingClientRect().bottom - iframe.getBoundingClientRect().top;
+                iframe.style.minHeight = newHeight+'px';
+            }
         };
 
         $scope.updateIframeHeightDelay = function(delay) {
