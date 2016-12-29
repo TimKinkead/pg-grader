@@ -27,7 +27,7 @@ function startServer() {
 
     function startHttpServer() {
         console.log(chalk.green.bold('\nSTARTING SERVER'));
-        http.createServer(app).listen(process.env.PORT, function() {
+        http.createServer(app).listen(process.env.PORT, function() { // running on '0.0.0.0' makes app available over network?
             console.log(chalk.green(' application started on port '+process.env.PORT));
         });
     }
@@ -85,7 +85,7 @@ console.log(chalk.blue.bold('\nENVIRONMENT VARIABLES'));
     {var: 'NODE_ENV', default: 'development'},
     {var: 'SERVER', default: 'local'},
     {var: 'PORT', default: '3000'},
-    {var: 'DB_CONNECTION', default: 'localhost'},
+    {var: 'DB_CONNECTION', default: '127.0.0.1'}, // sometimes 'localhost' does not resolve to '127.0.0.1' and can't connect
     {var: 'LOGGER', default: 'on'}
 ].forEach(function(env) {
     if (!process.env[env.var]) {process.env[env.var] = env.default;}

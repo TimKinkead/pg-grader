@@ -4,7 +4,8 @@
 // Dependencies
 
 var passport = require('passport'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    jwt = require('jsonwebtoken');
 
 //----------------------------------------------------------------------------------------------------------------------
 // Controllers
@@ -16,6 +17,11 @@ var error = require('../../error'),
 // Methods
 
 var userUtil = _.extend({}, require('./util/user.get.data'));
+
+//----------------------------------------------------------------------------------------------------------------------
+// Variables
+
+var auth = require('../../../../auth.js');
 
 //----------------------------------------------------------------------------------------------------------------------
 // Main
@@ -50,9 +56,27 @@ exports.login = function(req, res, next) {
                 return res.status(500).send(err);
             }
 
-            // done
-            logger.arrow('user authenticated and logged in');
-            return res.status(200).send(userUtil.getData(user, 'default'));
+            // grab user data
+            var userData = userUtil.getData(user._doc, 'default');
+
+            // generate token
+            jwt.sign(
+                {userId: user._id},
+                auth.tokenSecret,
+                {expiresIn: 60*60*24*7},
+                function(err, token) {
+                    if (err) {
+                        error.log(new Error(err));
+                    }
+
+                    if (token) {
+                        userData.token = token;
+                    }
+                    
+                    // done
+                    return res.status(200).send(userData);
+                }
+            );
         });
     })(req, res, next);
 };

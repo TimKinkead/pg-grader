@@ -3,7 +3,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 // Dependencies
 
-var _ = require('lodash');
+var _ = require('lodash'),
+    jwt = require('jsonwebtoken');
 
 //----------------------------------------------------------------------------------------------------------------------
 // Models
@@ -21,6 +22,11 @@ var error = require('../../error'),
 // Methods
 
 var userUtil = _.extend({}, require('./util/user.get.data'));
+
+//----------------------------------------------------------------------------------------------------------------------
+// Variables
+
+var auth = require('../../../../auth.js');
 
 //----------------------------------------------------------------------------------------------------------------------
 // Main
@@ -93,10 +99,28 @@ exports.signUp = function(req, res) {
                         error.log(new Error(err));
                         return res.status(500).send({message: '!login'});
                     }
+                    
+                    // grab user data
+                    const userData = userUtil.getData(user._doc, 'default');
 
-                    // done
-                    logger.arrow('user signed up and logged in');
-                    return res.status(200).send(userUtil.getData(user, 'default'));
+                    // generate token
+                    jwt.sign(
+                        {userId: user._id},
+                        auth.tokenSecret,
+                        {expiresIn: 60*60*24*7},
+                        function(err, token) {
+                            if (err) {
+                                error.log(new Error(err));
+                            }
+                            
+                            if (token) {
+                                userData.token = token;
+                            }
+                            
+                            // done
+                            return res.status(200).send(userData);
+                        }
+                    );
                 });
             }); 
         });

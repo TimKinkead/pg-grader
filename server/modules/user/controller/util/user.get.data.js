@@ -13,7 +13,7 @@ exports.getData = function(user, type) {
                 lastName: user.lastName,
                 email: user.email,
                 group: user.group,
-                admin: user.admin,
+                admin: user.admin,  
                 facilitator: user.facilitator
             };
         
