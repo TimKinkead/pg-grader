@@ -16,6 +16,10 @@ angular.module('app').controller('EssaysController', [
     'CurrentUser',
     function ($scope, $rootScope, $resource, $http, $timeout, $modal, $state, $stateParams, $window, CurrentUser) {
 
+        // show scroll bar on body
+        var htmlBody = document.getElementById('html-body');
+        htmlBody.style.overflowY = 'scroll';
+
         // variables
         var user = $scope.user = CurrentUser.data,
             
@@ -76,7 +80,9 @@ angular.module('app').controller('EssaysController', [
                 wasGradedBy: 0,
                 wasGradedByYou: false,
                 yourScoreSheet: null,
-                masterScoreSheet: null
+                masterScoreSheet: null,
+                downloadLink: 'https://drive.google.com/uc?id='+essay.googleDriveId+'&export=download',
+                openLink: 'https://drive.google.com/file/d/'+essay.googleDriveId+'/view'
             };
             if (essay.graders && essay.graders.length) {
                 var resumeGrading = false;
@@ -151,7 +157,8 @@ angular.module('app').controller('EssaysController', [
                     status.noVisibleEssays = false;
                 }
             });
-            setTimeout(function() { status.processingEssays = false; }, 1);
+            status.processingEssays = false;
+            //setTimeout(function() { status.processingEssays = false; }, 1);
         }
 
         // refresh essay info

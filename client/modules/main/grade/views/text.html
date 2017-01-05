@@ -1,6 +1,6 @@
 <!-- Text -->
 
-<div style="height: 100%; width: 100%; overflow-y: auto; background-color: lightgray;">
+<div style="height: 100%; width: 100%; overflow-y: hidden; background-color: lightgray;">
 
     <!-- flex box display -->
     <div style="display: flex; flex-direction: column;">
@@ -69,13 +69,12 @@
             <span class="badge">
                 {{docs.essay.id}}
             </span>
-            <a href="{{docs.essay.link}}"
-               target="_blank">
+            <a href="{{docs.essay.downloadLink}}">
                 <i class="glyphicon glyphicon-download"
                    style="font-size: 60%;"
                    uib-tooltip="download essay">
                 </i></a>
-            <a href="{{docs.essay.iframeLink}}"
+            <a href="{{docs.essay.openLink}}"
                target="_blank">
                 <i class="glyphicon glyphicon-new-window"
                    style="font-size: 50%;"
@@ -87,6 +86,39 @@
              class="spinner-sm"
              style="margin: auto; margin-top: 5px; z-index: 0;">
         </div>
+
+        <!-- GOOGLE EMBED HTML -->
+        <!--
+        <iframe src="https://docs.google.com/document/d/1gihv2Pb8EQ0NFWYE_NsIURtaXPcaypcJplkv4CUtL2U/pub?embedded=true"></iframe>
+        -->
+
+        <!-- full google docs ui
+        <iframe ng-if="!status.processingEssay && docs.essay.iframeLink"
+                ng-init="updateIframeHeightDelay(1000)"
+                id="iframe-text"
+                ng-src="https://docs.google.com/document/d/1gihv2Pb8EQ0NFWYE_NsIURtaXPcaypcJplkv4CUtL2U/view?embedded=true"
+                frameborder="0"
+                scrolling="yes"
+                height="100%"
+                width="100%"
+                style="flex: 1; z-index: 1; min-height: 600px;">
+        </iframe>
+        -->
+
+
+        <!--
+        <iframe ng-if="!status.processingEssay && docs.essay.iframeLink"
+                ng-init="updateIframeHeightDelay(1000)"
+                id="iframe-text"
+                ng-src="https://docs.google.com/gview?url=https://drive.google.com/uc?id=0B_jghulb7VOCaXFZR2RnUUlJcFE&embedded=true"
+                frameborder="0"
+                scrolling="no"
+                height="100%"
+                width="100%"
+                style="flex: 1; z-index: 1; min-height: 600px;">
+        </iframe>
+        -->
+
         <iframe ng-if="!status.processingEssay && docs.essay.iframeLink"
                 ng-init="updateIframeHeightDelay(1000)"
                 id="iframe-text"

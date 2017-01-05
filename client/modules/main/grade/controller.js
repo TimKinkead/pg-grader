@@ -15,6 +15,10 @@ angular.module('app').controller('GradeController', [
     'CurrentUser',
     function ($scope, $resource, $http, $modal, $window, $state,  $stateParams, $sce, CurrentUser) {
 
+        // hide scroll bar on body
+        var htmlBody = document.getElementById('html-body');
+        htmlBody.style.overflowY = 'hidden';
+
         var user = $scope.user = CurrentUser.data,
 
             status = $scope.status = {
@@ -178,15 +182,17 @@ angular.module('app').controller('GradeController', [
         };
 
         var updateIframeHeight = $scope.updateIframeHeight = function() {
+            console.log('updateIframeHeight');
             var gradeDash = document.getElementById('grade-dashboard'),
                 iframe = document.getElementById('iframe-text');
             if (gradeDash && iframe) {
                 var newHeight = gradeDash.getBoundingClientRect().bottom - iframe.getBoundingClientRect().top;
                 iframe.style.minHeight = newHeight+'px';
+                iframe.style.maxHeight = newHeight+'px';
             }
         };
 
-        $scope.updateIframeHeightDelay = function(delay) {
+        var updateIframeHeightDelay = $scope.updateIframeHeightDelay = function(delay) {
             setTimeout(updateIframeHeight, delay);
         };
 
@@ -238,8 +244,11 @@ angular.module('app').controller('GradeController', [
                     status.masterScore = essay.masterScore;
                     docs.essay = essay;
                     docs.essay.iframeLink = $sce.trustAsResourceUrl(
-                        'https://docs.google.com/gview?url='+essay.link+'&embedded=true'
+                        'https://docs.google.com/gview?url=https://drive.google.com/uc?id='+essay.googleDriveId+'&embedded=true'
                     );
+                    docs.essay.downloadLink = 'https://drive.google.com/uc?id='+essay.googleDriveId+'&export=download';
+                    //docs.essay.openLink = 'https://drive.google.com/open?id='+essay.googleDriveId;
+                    docs.essay.openLink = 'https://drive.google.com/file/d/'+essay.googleDriveId+'/view';
                     if (!params.rubric) { params.rubric = essay.module.rubric; }
                     if (!params.scoresheet && essay.scoresheets && !user.admin) {
                         essay.scoresheets.forEach(function(scoresheet) {
@@ -535,6 +544,13 @@ angular.module('app').controller('GradeController', [
             //console.log('status.nextEssay change:', oV, ' to ', nV);
             if (nV && (nV !== oV || !docs.essay)) {
                 getNextEssay();
+            }
+        });
+
+        $scope.$watch('status.hidePrompt', function(nV, oV) {
+            //console.log('status.nextEssay change:', oV, ' to ', nV);
+            if (nV !== oV) {
+                updateIframeHeightDelay(100);
             }
         });
 

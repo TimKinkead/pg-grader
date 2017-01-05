@@ -20,6 +20,20 @@ var EssaySchema = new Schema({
         unique: true
     },
 
+    googleDriveId: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    
+    /*text: {
+        type: String
+    },
+    
+    textModifiedTime: {
+        type: Date
+    },*/
+
     // module
     module: {
         type: Schema.ObjectId,
@@ -56,7 +70,7 @@ var EssaySchema = new Schema({
     // link (ex: https://s3-us-west-2.amazonaws.com/pg-scoresheet/student+work/BPA_MODULE/BPA-001.docx)
     link: {
         type: String,
-        required: true,
+        //required: true,
         unique: true
     },
 

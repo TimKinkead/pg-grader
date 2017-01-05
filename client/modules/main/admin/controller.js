@@ -26,8 +26,7 @@ angular.module('app').controller('AdminController', [
             initCollections = $scope.initCollections = [
                 'rubric',
                 'module',
-                'group',
-                'essay'
+                'group'
             ];
         
         // initialize `data`

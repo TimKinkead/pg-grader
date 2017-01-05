@@ -133,13 +133,12 @@
                         {{essayIndex}}
                     </div>
                     <div ng-if="field === 'id'">
-                        <a href="https://docs.google.com/viewerng/viewer?url={{essay.link}}"
+                        <a href="{{essay.openLink}}"
                            target="_blank"
                            uib-tooltip="open essay in new tab">
                             {{essay.id}}</a>
                         &nbsp;
-                        <a href="{{essay.link}}"
-                           target="_blank"
+                        <a href="{{essay.downloadLink}}"
                            uib-tooltip="download essay">
                             <i class="glyphicon glyphicon-download"></i>
                         </a>

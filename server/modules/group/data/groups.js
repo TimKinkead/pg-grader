@@ -6,60 +6,64 @@
 
 module.exports = [
 	{
-		id: 'SESSION_1_GROUP_1',
+		id: 'SESSION_2_GROUP_1',
 		name: 'Group 1',
 		subject: 'MS ELA',
-		facilitator: 'Michelle Logan',
+		//facilitator: '',
 		modules: [
-			'NO_GUITAR_BLUES'
+			'Dream-Within-Dream_MS-ELA',
+			'Growing-Up_MS-ELA'
 		]
 	},
 	{
-		id: 'SESSION_1_GROUP_2',
+		id: 'SESSION_2_GROUP_2',
 		name: 'Group 2',
 		subject: 'MS Science',
-		facilitator: 'Erin Coker',
+		//facilitator: '',
 		modules: [
-			'WATER_IN_COLORADO',
-			'FRACKING'
+			'Antibiotic-Resistance_MS-Sci',
+			'Fracking_MS-Sci'
 		]
 	},
 	{
-		id: 'SESSION_1_GROUP_3',
+		id: 'SESSION_2_GROUP_3',
 		name: 'Group 3',
 		subject: 'MS SS',
-		facilitator: 'Mike Emmons',
+		//facilitator: '',
 		modules: [
-			'UN_EDUCATION'
+			'Causes-American-Revolution_MS-SS',
+			'Jamestown_MS-SS'
 		]
 	},
 	{
-		id: 'SESSION_1_GROUP_4',
+		id: 'SESSION_2_GROUP_4',
 		name: 'Group 4',
 		subject: 'HS ELA',
-		facilitator: 'Nicole Renner',
+		//facilitator: '',
 		modules: [
-			'PERIOD_IS_PISSED'
+			'Ex-Machina_HS-ELA',
+			'Words-Matter_HS-ELA'
 		]
 	},
 	{
-		id: 'SESSION_1_GROUP_5',
+		id: 'SESSION_2_GROUP_5',
 		name: 'Group 5',
 		subject: 'HS Science',
-		facilitator: 'Susan Schultz',
+		//facilitator: '',
 		modules: [
-			'NUCLEAR_POWER',
-			'BPA_PLASTIC'
+			'BPA_HS-Sci',
+			'Diet-Disease_HS-Sci',
+			'Nuclear_HS-Sci'
 		]
 	},
 	{
-		id: 'SESSION_1_GROUP_6',
+		id: 'SESSION_2_GROUP_6',
 		name: 'Group 6',
 		subject: 'HS SS',
-		facilitator: 'Mandy Byrd',
+		//facilitator: '',
 		modules: [
-			'CUBAN_MISSILE_CRISIS', 
-			'COLD_WAR_RED_SCARE'
+			'Andrew-Carnegie_HS-SS',
+			'Immigrants_HS-SS'
 		]
 	}
 ];

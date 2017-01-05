@@ -14,6 +14,13 @@ var UserSchema = new Schema({
 
     //_id: {type: ObjectId} // automatically created for each document
 
+    googleDriveAccessToken: {
+        type: String
+    },
+    googleDriveRefreshToken: {
+        type: String
+    },
+    
     // simple unique id
     id: {
         type: Number,

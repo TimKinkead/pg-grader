@@ -57,4 +57,18 @@ module.exports = function(app) {
     app.route('/data/user/count')
         .get(user.count);
 
+    // -- GOOGLE DRIVE --
+
+    // connect google drive account
+    app.route('/data/user/google-drive/connect')
+        .get(user.googleDriveAuthorization);
+
+    // connect google drive account callback
+    app.route('/data/user/google-drive/connect/clbk')
+        .get(user.googleDriveConnect);
+
+    // list google drive files
+    app.route('/data/user/google-drive/files')
+        .get(user.googleDriveFiles);
+    
 };

@@ -12,7 +12,8 @@ module.exports = function(app) {
 
     // get module
     app.route('/data/module')
-        .get(_module.read);
+        .get(_module.read)
+        .put(_module.update);
     
     // list modules
     app.route('/data/module/list')

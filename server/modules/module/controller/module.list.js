@@ -34,6 +34,7 @@ exports.list = function(req, res) {
 
 	// get modules
 	Module.find(query)
+		.sort('name')
 		.exec(function(err, moduleDocs) {
 			if (err) { 
 				err = new Error(err);
