@@ -22,8 +22,14 @@ var mongoose = require('mongoose'),
 exports.count = function(req, res) {
 	logger.filename(__filename);
 
+	var query = {};
+
+	if (req.query.module) {
+		query.module = req.query.module;
+	}
+
 	// count essays
-	Essay.count()
+	Essay.count(query)
 		.exec(function(err, qty) {
 			if (err) { 
 				err = new Error(err);
@@ -32,6 +38,6 @@ exports.count = function(req, res) {
 			}
 			
 			// return qty
-			return res.status(200).send(qty ? qty.toString() : '');
+			return res.status(200).send(qty ? qty.toString() : '0');
 		});
 };

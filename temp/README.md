@@ -1,3 +1,3 @@
 # Temp
 
-This is a temporary folder.
+This directory hold temporary data that is not committed to git.

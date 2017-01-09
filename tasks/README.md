@@ -18,17 +18,15 @@ The files in `tasks/config/*.js` are used to configure built-in tasks. They are 
 
 ### Custom Tasks
 
-Custom tasks are run on the command line via `grunt:<task name>`.
+Custom tasks are run on the command line via `grunt <task name>`.
 
-* **`grunt`** - This will run `grunt:default`.
-  * **`grunt:default`** - This is a pass through for `grunt:development`.
-
-* **`grunt:development`** - Compile & transpile client/server directories and start application in development mode.
-  * **`grunt:client`** - Compile & transpile *client directory only* and start application in development mode.
-  * **`grunt:server`** - Compile & transpile *server directory only* and start application in development mode.
-  * **`grunt:client-dev`** - Compile & transpile *client directory only* for development.
-  * **`grunt:server-dev`** - Compile & transpile *server directory only* for development.
-
-* **`grunt:production`** - Compile & transpile client/server directories and start application in production mode.
-  * **`grunt:client-prod`** - Compile & transpile *client directory only* for production.
-  * **`grunt:server-prod`** - Compile & transpile *server directory only* for production.
+* **`grunt`** - This will run `grunt default`.
+    * **`grunt default`** - This is a pass through for `grunt development`.
+* **`grunt development`** - Compile & transpile client/server directories and start application in development mode.
+    * **`grunt client`** - Compile & transpile *client directory only* and start application in development mode.
+    * **`grunt server`** - Compile & transpile *server directory only* and start application in development mode.
+    * **`grunt client-dev`** - Compile & transpile *client directory only* for development.
+    * **`grunt server-dev`** - Compile & transpile *server directory only* for development.
+* **`grunt production`** - Compile & transpile client/server directories and start application in production mode.
+    * **`grunt client-prod`** - Compile & transpile *client directory only* for production.
+    * **`grunt server-prod`** - Compile & transpile *server directory only* for production.

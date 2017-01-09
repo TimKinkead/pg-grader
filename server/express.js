@@ -2,6 +2,8 @@
 
 var config = require('../config.js');
 
+var auth =require('../auth.js');
+
 //----------------------------------------------------------------------------------------------------------------------
 // Dependencies
 
@@ -21,7 +23,8 @@ var fs = require('fs'),
     helmet = require('helmet'),						            // security
     passport = require('passport'),                             // authentication
     MongoStore = require('connect-mongo')(session),             // mongo specific sessions
-    consolidate = require('consolidate');			            // template engine consolidation library
+    consolidate = require('consolidate'),			            // template engine consolidation library
+    jwt = require('jsonwebtoken');                              // web tokens
 
 //----------------------------------------------------------------------------------------------------------------------
 // Controllers
@@ -117,6 +120,73 @@ module.exports = function(mongoose) {
     app.use(passport.initialize());
     app.use(passport.session());
 
+    // tokens
+    app.use(function(req, res, next) {
+
+        // check user (sessions)
+        /*if (req.user) {
+            next();
+            return;
+        }*/
+
+        // token
+        var token = null;
+
+        // look for token
+        if (req.query && req.query.token) {
+            token = req.query.token;
+        } else if (req.body && req.body.token) {
+            token = req.body.token;
+        } else if (req.headers && req.headers['x-access-token']) {
+            token = req.headers['x-access-token'];
+        }
+
+        // check token
+        if (!token) {
+            next();
+            return;
+        }
+
+        // verify token
+        jwt.verify(
+            token,
+            auth.tokenSecret,
+            function(err, payload) {
+                if (err) {
+                    error.log(new Error(err));
+                    return res.status(500).send('Could not validate your token.');
+                }
+
+                if (!payload || !payload.userId) {
+                    error.log(new Error('!payload || !payload.userId'));
+                    return res.status(500).send('Could not validate your token.');
+                }
+
+                console.log(payload);
+
+                // get user
+                var User = mongoose.model('User');
+                error = require('./modules/error');
+                User.findById(payload.userId, function(err, userDoc) {
+                    if (err) {
+                        error.log(new Error(err));
+                        return res.status(500).send('Could not lookup your user info.');
+                    }
+
+                    if (!userDoc) {
+                        error.log(new Error('!userDoc'));
+                        return res.status(500).send('Could not lookup your user info.');
+                    }
+
+                    console.log(userDoc);
+                    
+                    req.user = userDoc;
+                    next();
+                });
+            }
+        );
+    });
+
     // -- SECURITY --
 
     // use helmet to secure express headers
@@ -145,7 +215,6 @@ module.exports = function(mongoose) {
     ]).forEach(function(routePath) {
         require(path.resolve(routePath))(app);
     });
-    
 
     // set app router & static folder
     // - permission checked in server/modules/core/routes.js

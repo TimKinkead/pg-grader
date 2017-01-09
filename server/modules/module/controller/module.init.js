@@ -34,29 +34,29 @@ exports.init = function(req, res) {
 
 	// get rubrics
 	Rubric.find()
-		.select('_id name')
+		.select('_id id')
 		.exec(function(err, rubricDocs) {
 			if (err) {
 				error.log(new Error(err));
 				return res.status(500).send(err);
 			}
 
-			// construct rubrics name/_id map
-			var rubricByName = {};
+			// construct rubrics by id map
+			var rubricById = {};
 			rubricDocs.forEach(function(rubric) {
-				if (rubric && rubric.name) {
-					rubricByName[rubric.name] = rubric;
-					rubricByName[rubric.name].count = 0;
+				if (rubric && rubric.id) {
+					rubricById[rubric.id] = rubric;
+					rubricById[rubric.id].count = 0;
 				}
 			});
 
 			// upsert modules
 			modules.forEach(function(module, index) {
 
-				if (module && module.rubric && rubricByName[module.rubric]) {
+				if (module && module.rubric && rubricById[module.rubric]) {
 
 					// grab rubric id
-					module.rubric = rubricByName[module.rubric]._id;
+					module.rubric = rubricById[module.rubric]._id;
 
 					// look for existing module
 					Module.findOne({id: module.id})

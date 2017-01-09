@@ -13,8 +13,9 @@ exports.getData = function(user, type) {
                 lastName: user.lastName,
                 email: user.email,
                 group: user.group,
-                admin: user.admin,
-                facilitator: user.facilitator
+                admin: user.admin,  
+                facilitator: user.facilitator,
+                googleDriveAccessToken: (user.googleDriveAccessToken) ? true : false
             };
         
         default:
@@ -30,7 +31,8 @@ exports.getData = function(user, type) {
                 rubricElements: user.rubricElements,
                 scoresheets: user.scoresheets,
                 checkScores: user.checkScores,
-                consensusScores: user.consensusScores
+                consensusScores: user.consensusScores,
+                googleDriveAccessToken: (user.googleDriveAccessToken) ? true : false
             };       
     }
 };

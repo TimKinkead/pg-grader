@@ -127,6 +127,15 @@ angular.module('app').config([
             controller: 'AdminController',
             data: {adminOnly: true}
         });
+
+        // -- Upload Page --
+
+        $stateProvider.state('upload', {
+            url: '/upload',
+            templateUrl: 'modules/main/upload/view.html',
+            controller: 'UploadController',
+            data: {adminOnly: true}
+        });
         
     }
 ]);

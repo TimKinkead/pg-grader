@@ -99,6 +99,11 @@
                         <i class="glyphicon glyphicon-flash"></i>
                         initialize
                     </button>
+                    <button ng-if="collection === 'essay' && data[initCollections[initCollections.length-1]].count > 0"
+                            ui-sref="upload"
+                            class="btn btn-default btn-success pull-right">
+                        manage essays
+                    </button>
                 </div>
                 <span ng-if="status['initializing'+collection]"
                       class="spinner-sm pull-right">
@@ -107,4 +112,3 @@
         </div>
     </div>
 </div>
-

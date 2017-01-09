@@ -13,6 +13,10 @@ var ModuleSchema = new Schema({
 
     //_id: {type: ObjectId} // automatically created for each document
 
+	googleDriveFolderId: {
+		type: String
+	},
+	
 	// unique id
 	id: {
 		type: String,
@@ -39,6 +43,11 @@ var ModuleSchema = new Schema({
 	
 	// subject
 	subject: {
+		type: String
+	},
+	
+	// link (ldc core tools)
+	link: {
 		type: String
 	},
 	

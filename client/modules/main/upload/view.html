@@ -1,0 +1,160 @@
+<!-- Upload -->
+
+<!-- title -->
+<div class="jumbotron"
+     style="background: #677F71; padding-top: 12px; padding-bottom: 18px;">
+    <h2 class="text-center"
+        style="color: whitesmoke;">
+        Manage Essays
+    </h2>
+</div>
+
+<!-- connect google drive button -->
+<div class="well container text-center"
+     style="padding: 10px; margin-bottom: 20px;">
+    <div ng-if="!user.googleDriveAccessToken">
+        <p>
+            Please connect your Google Drive Account so you can upload essays.
+        </p>
+        <button ng-click="connectGoogleDrive()"
+                class="btn btn-success">
+            Connect Google Drive
+        </button>
+    </div>
+    <div ng-if="user.googleDriveAccessToken">
+        <p>
+            If things aren't working quite right, try this:
+        </p>
+        <button ng-click="connectGoogleDrive()"
+                class="btn btn-default">
+            Refresh Google Drive Token
+        </button>
+    </div>
+</div>
+
+<!-- messages -->
+<div ng-if="successMessages.length"
+     class="container"
+     style="max-width: 600px; margin-bottom: 20px;">
+    <div ng-repeat="message in successMessages"
+         class="alert alert-success"
+         style="margin: 10px 0 0;">
+        <span ng-click="closeSuccessMessage($index)"
+              class="close">
+            &times
+        </span>
+        {{message}}
+    </div>
+</div>
+<div ng-if="errorMessages.length"
+     class="container"
+     style="max-width: 600px; margin-bottom: 20px;">
+    <div ng-repeat="message in errorMessages"
+         class="alert alert-danger"
+         style="margin: 10px 0 0;">
+        <span ng-click="closeErrorMessage($index)"
+              class="close">
+            &times
+        </span>
+        {{message}}
+    </div>
+</div>
+
+<!--
+<button ng-click="listGoogleDriveFiles()"
+        class="btn btn-default">
+    list drive files
+</button>
+-->
+
+<div ng-if="user.googleDriveAccessToken"
+     class="container">
+
+    <table ng-if="modules.$resolved"
+           class="table table-bordered">
+        <thead>
+            <th ng-repeat="field in tableFields"
+                class="text-center"
+                style="vertical-align: middle;">
+                {{field|capitalize}}
+            </th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="module in modules | orderBy: 'name'"
+                ng-init="moduleIndex = $index + 1">
+                <td ng-repeat="field in tableFields"
+                    style="vertical-align: middle;">
+
+                    <!-- no -->
+                    <div ng-if="field == 'no'">
+                        {{moduleIndex}}
+                    </div>
+
+                    <!-- module name -->
+                    <div ng-if="field == 'module name'">
+                        {{module.name}}
+                    </div>
+
+                    <!-- google drive folder id -->
+                    <div ng-if="field == 'google drive folder id'"
+                         class="text-center">
+                        <div ng-if="status['processingFolderId'+module._id]"
+                             class="text-center"
+                             style="margin-left: 40%;">
+                            <span class="spinner-sm"></span>
+                        </div>
+                        <div ng-if="!status['processingFolderId'+module._id]">
+                            <div ng-if="module.googleDriveFolderId">
+                                <a href="{{'https://drive.google.com/open?id='+module.googleDriveFolderId}}"
+                                   target="_blank"
+                                   uib-tooltip="open google drive folder">
+                                    {{module.googleDriveFolderId}}
+                                </a>
+                            </div>
+                            <div ng-if="!module.googleDriveFolderId"
+                                 class="text-center">
+                                <button ng-click="selectFolder(module)"
+                                        class="btn btn-success btn-sm">
+                                    Select Folder
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- number of essays -->
+                    <div ng-if="field == 'number of essays'"
+                         class="text-center">
+                        {{essayQtyByModuleId[module._id] ? essayQtyByModuleId[module._id] : ''}}
+                    </div>
+
+                    <!-- sync -->
+                    <div ng-if="field == 'sync'"
+                         class="text-center">
+                        <div ng-if="status['syncingEssays'+module._id]"
+                             class="text-center">
+                            <span class="spinner-sm"></span>
+                        </div>
+                        <div ng-if="!status['syncingEssays'+module._id]">
+                            <div ng-if="module.googleDriveFolderId">
+                                <button ng-click="syncEssays(module)"
+                                        class="btn btn-sm btn-info"
+                                        ng-class="{'btn-success': essayQtyByModuleId[module._id] > 0}"
+                                        uib-tooltip="Sync Essays with Google Drive">
+                                    <i class="glyphicon glyphicon-refresh"></i>
+                                    &nbsp;
+                                    Sync
+                                </button>
+                            </div>
+                            <div ng-if="!module.googleDriveFolderId">
+                                <i class="glyphicon glyphicon-warning-sign"
+                                   style="color: red;"
+                                   uib-tooltip="Please Select Google Drive Folder">
+                                </i>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

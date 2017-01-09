@@ -10,6 +10,7 @@
 </div>
 
 <!-- grade button -->
+<!--
 <div ng-if="!status.allEssaysGraded && user.group"
      class="container text-center"
      style="margin-bottom: 20px;">
@@ -18,14 +19,17 @@
         {{!user.scoresheets ? 'Start Grading' : (status.resumeGrading ? 'Resume Grading' : 'Grade Next Essay')}}
     </button>
 </div>
+-->
 
 <!-- all essays graded -->
+<!--
 <div ng-if="status.allEssaysGraded"
      class="container">
      <div class="alert alert-success text-center">
          All essays have been graded. Thanks for your help!
      </div>
 </div>
+-->
 
 <!-- messages -->
 <div ng-if="successMessages.length"
@@ -56,8 +60,7 @@
 </div>
 
 <!-- essay/module filters -->
-<div ng-if="user.admin || user.facilitator"
-     class="container">
+<div class="container">
     <div class="form-inline well text-center">
 
         <!-- essay drop down -->
@@ -75,14 +78,14 @@
         </div>
 
         <!-- module drop down -->
-        <div ng-if="modules && modules.length > 1"
-             class="form-group">
+        <div class="form-group">
             <label>&nbsp;for&nbsp;</label>
             <select ng-model="status.moduleFilterBy"
                     class="form-control"
                     name="group"
                     required>
-                <option value=""
+                <option ng-if="user.admin"
+                        value=""
                         selected>
                     all modules
                 </option>
@@ -130,12 +133,13 @@
                         {{essayIndex}}
                     </div>
                     <div ng-if="field === 'id'">
-                        <a href="https://docs.google.com/viewerng/viewer?url={{essay.link}}"
-                           target="_blank">
+                        <a href="{{essay.openLink}}"
+                           target="_blank"
+                           uib-tooltip="open essay in new tab">
                             {{essay.id}}</a>
                         &nbsp;
-                        <a href="{{essay.link}}"
-                           target="_blank">
+                        <a href="{{essay.downloadLink}}"
+                           uib-tooltip="download essay">
                             <i class="glyphicon glyphicon-download"></i>
                         </a>
                     </div>
@@ -260,8 +264,16 @@
             </tr>
         </tbody>
     </table>
+
+    <div ng-if="status.noVisibleEssays"
+         class="container text-center">
+        <p style="color: gray;">
+            If no essays are showing please try selecting different options.
+        </p>
+    </div>
 </div>
 
+<!--
 <div ng-if="!user.admin && !user.facilitator && !status.processingEssays"
      class="text-center"
      style="margin-bottom: 20px;">
@@ -276,6 +288,7 @@
         Hide Ungraded Essays
     </button>
 </div>
+-->
 
 <!--
 <div ng-if="skippedEssays.$resolved && skippedEssays.length"

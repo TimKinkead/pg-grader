@@ -37,5 +37,9 @@ module.exports = function(app) {
     // count essays
     app.route('/data/essay/count')
         .get(essay.count);
+    
+    // sync essays with google drive for a module
+    app.route('/data/essay/sync')
+        .get(essay.sync);
 
 };

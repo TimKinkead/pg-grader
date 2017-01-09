@@ -16,11 +16,15 @@ angular.module('app').controller('EssaysController', [
     'CurrentUser',
     function ($scope, $rootScope, $resource, $http, $timeout, $modal, $state, $stateParams, $window, CurrentUser) {
 
+        // show scroll bar on body
+        var htmlBody = document.getElementById('html-body');
+        htmlBody.style.overflowY = 'scroll';
+
         // variables
         var user = $scope.user = CurrentUser.data,
             
             status = $scope.status = {
-                essayFilterBy: (user.admin) ? 'master scores' : 'my essays',
+                essayFilterBy: (user.admin) ? 'graded essays' : 'all essays',
                 moduleFilterBy: null
             },
             params = $scope.params = {},
@@ -32,8 +36,8 @@ angular.module('app').controller('EssaysController', [
                 ['master scores', 'graded essays', 'ungraded essays', 'all essays'] :
                 (
                     user.facilitator ?
-                    ['my essays', 'master scores', 'graded essays', 'ungraded essays', 'all essays'] :
-                    ['my essays', 'all essays']
+                    ['all essays', 'my essays', 'master scores', 'graded essays', 'ungraded essays'] :
+                    ['all essays', 'my essays']
                 ),
 
             essayStats = $scope.essayStats = {},
@@ -44,10 +48,10 @@ angular.module('app').controller('EssaysController', [
             modules = $scope.modules = [],
             
             fields = $scope.fields = (user.admin) ?
-                ['no', 'id', 'module', 'being graded by', 'skipped by', 'graded by', 'everyone', 'master score', 'details'] :
+                ['no', 'id', 'module', 'being graded by', 'skipped by', 'graded by', /*'everyone',*/ 'master score', 'details'] :
                 (
                     user.facilitator ?
-                        ['no', 'id', 'module', 'being graded by', 'skipped by', 'graded by', 'everyone', 'master score', 'grade', 'details'] :
+                        ['no', 'id', 'module', 'being graded by', 'skipped by', 'graded by', /*'everyone',*/ 'master score', 'grade', 'details'] :
                         ['no', 'id', 'module', 'in progress', 'skipped', 'graded', 'master score', 'grade']
                 );
         
@@ -76,7 +80,9 @@ angular.module('app').controller('EssaysController', [
                 wasGradedBy: 0,
                 wasGradedByYou: false,
                 yourScoreSheet: null,
-                masterScoreSheet: null
+                masterScoreSheet: null,
+                downloadLink: 'https://drive.google.com/uc?id='+essay.googleDriveId+'&export=download',
+                openLink: 'https://drive.google.com/file/d/'+essay.googleDriveId+'/view'
             };
             if (essay.graders && essay.graders.length) {
                 var resumeGrading = false;
@@ -144,10 +150,15 @@ angular.module('app').controller('EssaysController', [
 
         function filterEssays() {
             status.processingEssays = true;
+            status.noVisibleEssays = true;
             essays.forEach(function(essay) {
                 essay.visible = showHideEssay(essay);
+                if (essay.visible) {
+                    status.noVisibleEssays = false;
+                }
             });
-            setTimeout(function() { status.processingEssays = false; }, 1);
+            status.processingEssays = false;
+            //setTimeout(function() { status.processingEssays = false; }, 1);
         }
 
         // refresh essay info
@@ -196,13 +207,16 @@ angular.module('app').controller('EssaysController', [
 
         // -------------------------------------------------------------------------------------------------------------
         // Modules
-        
+
         // get modules
         status.processingModules = true;
         modules = $scope.modules = $resource('data/module/list').query(
             {},
             function() {
                 status.processingModules = false;
+                if (modules[0] && modules[0]._id) {
+                    status.moduleFilterBy = modules[0]._id;
+                }
             },
             function(err) {
                 status.processingModules = false;
