@@ -6,6 +6,11 @@ var mongoose = require("mongoose"), Schema = mongoose.Schema, EssaySchema = new 
         required: !0,
         unique: !0
     },
+    googleDriveId: {
+        type: String,
+        required: !0,
+        unique: !0
+    },
     module: {
         type: Schema.ObjectId,
         ref: "Module"
@@ -17,7 +22,6 @@ var mongoose = require("mongoose"), Schema = mongoose.Schema, EssaySchema = new 
     },
     link: {
         type: String,
-        required: !0,
         unique: !0
     },
     masterScore: {

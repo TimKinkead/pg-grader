@@ -1,6 +1,9 @@
 "use strict";
 
 var mongoose = require("mongoose"), Schema = mongoose.Schema, ModuleSchema = new Schema({
+    googleDriveFolderId: {
+        type: String
+    },
     id: {
         type: String,
         required: !0,
@@ -18,6 +21,9 @@ var mongoose = require("mongoose"), Schema = mongoose.Schema, ModuleSchema = new
         type: String
     },
     subject: {
+        type: String
+    },
+    link: {
         type: String
     },
     prompt: {

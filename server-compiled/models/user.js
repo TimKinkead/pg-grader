@@ -1,6 +1,12 @@
 "use strict";
 
 var mongoose = require("mongoose"), Schema = mongoose.Schema, crypto = require("crypto"), UserSchema = new Schema({
+    googleDriveAccessToken: {
+        type: String
+    },
+    googleDriveRefreshToken: {
+        type: String
+    },
     id: {
         type: Number,
         required: !0,

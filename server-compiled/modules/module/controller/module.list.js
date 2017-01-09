@@ -9,7 +9,7 @@ exports.list = function(a, b) {
         _id: {
             $in: a.user.group.modules
         }
-    } : {}, Module.find(c).exec(function(a, c) {
+    } : {}, Module.find(c).sort("name").exec(function(a, c) {
         return a ? (a = new Error(a), error.log(a), b.status(500).send(a)) : b.status(200).send(c);
     });
 };

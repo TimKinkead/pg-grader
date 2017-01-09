@@ -5,11 +5,11 @@ var mongoose = require("mongoose"), Module = mongoose.model("Module"), Rubric = 
 exports.init = function(a, b) {
     logger.filename(__filename);
     var c = require("../data/modules.js"), d = 0;
-    Rubric.find().select("_id name").exec(function(a, e) {
+    Rubric.find().select("_id id").exec(function(a, e) {
         if (a) return error.log(new Error(a)), b.status(500).send(a);
         var f = {};
         return e.forEach(function(a) {
-            a && a.name && (f[a.name] = a, f[a.name].count = 0);
+            a && a.id && (f[a.id] = a, f[a.id].count = 0);
         }), c.forEach(function(a, b) {
             a && a.rubric && f[a.rubric] && (a.rubric = f[a.rubric]._id, Module.findOne({
                 id: a.id

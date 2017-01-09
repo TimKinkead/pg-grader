@@ -1,6 +1,6 @@
 "use strict";
 
-var config = require("../config.js"), fs = require("fs"), http = require("http"), https = require("https"), path = require("path"), express = require("express"), morgan = require("morgan"), bodyParser = require("body-parser"), session = require("express-session"), compress = require("compression"), methodOverride = require("method-override"), cookieParser = require("cookie-parser"), helmet = require("helmet"), passport = require("passport"), MongoStore = require("connect-mongo")(session), consolidate = require("consolidate"), file = require("./modules/file"), error;
+var config = require("../config.js"), auth = require("../auth.js"), fs = require("fs"), http = require("http"), https = require("https"), path = require("path"), express = require("express"), morgan = require("morgan"), bodyParser = require("body-parser"), session = require("express-session"), compress = require("compression"), methodOverride = require("method-override"), cookieParser = require("cookie-parser"), helmet = require("helmet"), passport = require("passport"), MongoStore = require("connect-mongo")(session), consolidate = require("consolidate"), jwt = require("jsonwebtoken"), file = require("./modules/file"), error;
 
 module.exports = function(a) {
     file.globber("server/models/*.js").forEach(function(a) {
@@ -31,7 +31,21 @@ module.exports = function(a) {
         resave: !0,
         secret: "keyboardcatmeowza"
     })), require("./config/passport")(), b.use(passport.initialize()), b.use(passport.session()), 
-    b.use(helmet()), b.set("showStackError", !0), "on" === process.env.LOGGER && (b.use(morgan("dev", {
+    b.use(function(b, c, d) {
+        var e = null;
+        return b.query && b.query.token ? e = b.query.token : b.body && b.body.token ? e = b.body.token : b.headers && b.headers["x-access-token"] && (e = b.headers["x-access-token"]), 
+        e ? void jwt.verify(e, auth.tokenSecret, function(e, f) {
+            if (e) return error.log(new Error(e)), c.status(500).send("Could not validate your token.");
+            if (!f || !f.userId) return error.log(new Error("!payload || !payload.userId")), 
+            c.status(500).send("Could not validate your token.");
+            console.log(f);
+            var g = a.model("User");
+            error = require("./modules/error"), g.findById(f.userId, function(a, e) {
+                return a ? (error.log(new Error(a)), c.status(500).send("Could not lookup your user info.")) : e ? (console.log(e), 
+                b.user = e, void d()) : (error.log(new Error("!userDoc")), c.status(500).send("Could not lookup your user info."));
+            });
+        }) : void d();
+    }), b.use(helmet()), b.set("showStackError", !0), "on" === process.env.LOGGER && (b.use(morgan("dev", {
         immediate: !0
     })), b.use(morgan("dev"))), b.route("/").get(require("./main/index.js")), b.route("/unsupported").get(require("./main/unsupported.js")), 
     file.globber([ "server/modules/**/routes.js", "server/modules/**/routes/*.js" ]).forEach(function(a) {

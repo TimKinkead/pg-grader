@@ -7,5 +7,6 @@ module.exports = function(a) {
     a.route("/data/user/sign-up").post(user.signUp), a.route("/data/user/login").post(user.login), 
     a.route("/data/user/logout").get(user.logout), a.route("/data/user/forgot-password").post(user.forgotPassword), 
     a.route("/data/user/reset-password").post(user.resetPassword), a.route("/data/user/settings").get(user.readSettings).put(user.updateSettings), 
-    a.route("/data/user/count").get(user.count);
+    a.route("/data/user/count").get(user.count), a.route("/data/user/google-drive/connect").get(user.googleDriveAuthorization), 
+    a.route("/data/user/google-drive/connect/clbk").get(user.googleDriveConnect), a.route("/data/user/google-drive/files").get(user.googleDriveFiles);
 };

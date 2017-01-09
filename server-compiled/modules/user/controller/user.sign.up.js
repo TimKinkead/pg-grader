@@ -1,6 +1,6 @@
 "use strict";
 
-var _ = require("lodash"), mongoose = require("mongoose"), User = mongoose.model("User"), error = require("../../error"), logger = require("../../logger"), userUtil = _.extend({}, require("./util/user.get.data"));
+var _ = require("lodash"), jwt = require("jsonwebtoken"), mongoose = require("mongoose"), User = mongoose.model("User"), error = require("../../error"), logger = require("../../logger"), userUtil = _.extend({}, require("./util/user.get.data")), auth = require("../../../../auth.js");
 
 exports.signUp = function(a, b) {
     if (logger.filename(__filename), !a.body.firstName || !a.body.lastName) return b.status(400).send({
@@ -29,9 +29,17 @@ exports.signUp = function(a, b) {
                 return d ? (error.log(new Error(d)), b.status(500).send({
                     error: d
                 })) : (logger.dash("logging in user"), void a.login(c, function(a) {
-                    return a ? (error.log(new Error(a)), b.status(500).send({
+                    if (a) return error.log(new Error(a)), b.status(500).send({
                         message: "!login"
-                    })) : (logger.arrow("user signed up and logged in"), b.status(200).send(userUtil.getData(c, "default")));
+                    });
+                    const d = userUtil.getData(c._doc, "default");
+                    jwt.sign({
+                        userId: c._id
+                    }, auth.tokenSecret, {
+                        expiresIn: 604800
+                    }, function(a, c) {
+                        return a && error.log(new Error(a)), c && (d.token = c), b.status(200).send(d);
+                    });
                 }));
             })) : (error.log(new Error("!id")), b.status(500).send({
                 message: "!id"

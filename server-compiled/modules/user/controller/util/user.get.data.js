@@ -12,7 +12,8 @@ exports.getData = function(a, b) {
             email: a.email,
             group: a.group,
             admin: a.admin,
-            facilitator: a.facilitator
+            facilitator: a.facilitator,
+            googleDriveAccessToken: !!a.googleDriveAccessToken
         };
 
       default:
@@ -28,7 +29,8 @@ exports.getData = function(a, b) {
             rubricElements: a.rubricElements,
             scoresheets: a.scoresheets,
             checkScores: a.checkScores,
-            consensusScores: a.consensusScores
+            consensusScores: a.consensusScores,
+            googleDriveAccessToken: !!a.googleDriveAccessToken
         };
     }
 };
